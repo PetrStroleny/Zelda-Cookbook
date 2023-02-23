@@ -1,16 +1,16 @@
-{"data": 
-    [
-    {
-        "name":"Jahoda",
-        "id":"1"
-    },
-    {
-        "name":"Jablko",
-        "id":"2"
-    },
-    {
-        "name":"Banán",
-        "id":"3"
-    }
-]
+{
+    "data": [
+        {
+            "name": "Jahoda",
+            "id": "1"
+        },
+        {
+            "name": "Jablko",
+            "id": "2"
+        },
+        {
+            "name": "Banán",
+            "id": "3"
+        }
+    ]
 }
