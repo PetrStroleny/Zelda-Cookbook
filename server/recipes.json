@@ -1,0 +1,52 @@
+{"data": [
+    {
+        "id": 1,
+        "numberOfHeaths": 1,
+        "name": "Apple recept",
+        "description": "Toto je jablko",
+        "ingredients": [1, 2]
+    },
+    {
+        "id": 2,
+        "numberOfHeaths": 1,
+        "name":"Wildberry recept",
+        "description": "Toto je malina",
+        "ingredients": [1, 2]
+    },
+    {
+        "id": 3,
+        "numberOfHeaths": 1,
+        "name":"Palm Fruit recept",
+        "description": "Toto je kokos",
+        "ingredients": [1, 2]
+    },
+    {
+        "id": 4,
+        "numberOfHeaths": 3,
+        "name":"Hearty Durian recept",
+        "description": "Toto je durian",
+        "ingredients": [1, 2]
+    },
+    {
+        "id": 5,
+        "numberOfHeaths": 1,
+        "name":"Hydromelon recept",
+        "description": "Toto je meloun",
+        "ingredients": [1, 2],
+        "specialEffect": {
+            "name": "mighty",
+            "duration": 100
+        }
+    },
+    {
+        "id": 6,
+        "numberOfHeaths": 1,
+        "name":"Spicy Pepper recept",
+        "description": "Toto je paprička",
+        "ingredients": [1, 2],
+        "specialEffect": {
+            "name": "chilly",
+            "duration": 100
+        }
+    }
+]}

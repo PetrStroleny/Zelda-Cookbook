@@ -3,21 +3,38 @@
 /////////////
 
 export const Theme = {
-    tints: {
-    white: "#FFFFFF",
-    black: "#1D1D1E",
-      gray: "#B6B6B8",
-      primary: "#1134D7",
+    content: {
+      primary: "#000000",
+      secondary: "#787878",
     },
-  
-    state: {
+    background: {
+      primary: "#FBFBFB",
+      secondary: "#EEEEEE",
+      tertiary: "#E5E5E5",
+      quarternaly: "#D3D3D3",
     },
-  
-    surface: "#F6F6F9",
+    primitives: {
+      blue: "#00BFFA",
+      red: "#F15050",
+      yellow: "#E1C139",
+    },
+    inverse: {
+      content: {
+        primary: "#FFFFFF",
+      }
+    },
     scrollBar: "#A5A5A5",
+    
   
     fontStyles: {
-      footnoteUppercase: "font-size: 12px; line-height: 16px; letter-spacing: .7px; text-transform: capitalize;",
+      h1: "font-weight: 500; font-size: 72px; line-height: 88px;",
+      h2: "font-weight: 500; font-size: 48px; line-height: 56px;",
+      h3: "font-weight: 500; font-size: 28px; line-height: 32px;",
+      h4: "font-weight: 500; font-size: 26px; line-height: 36px;",
+      h5: "font-weight: 500; font-size: 46px; line-height: 54px;",
+
+      b1: "font-weight: 400; font-size: 22px; line-height: 28px;",
+      b2: "font-weight: 400; font-size: 17px; line-height: 21px;",
     },
   
     breakPoints: {

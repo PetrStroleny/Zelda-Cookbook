@@ -1,16 +1,46 @@
-{"data": 
-    [
+{"data": [
     {
-        "name":"Jahoda",
-        "id":"1"
+        "id": 1,
+        "numberOfHeaths": 1,
+        "name": "Apple",
+        "description": "Toto je jablko"
     },
     {
-        "name":"Jablko",
-        "id":"2"
+        "id": 2,
+        "numberOfHeaths": 1,
+        "name":"Wildberry",
+        "description": "Toto je malina"
     },
     {
-        "name":"Banán",
-        "id":"3"
+        "id": 3,
+        "numberOfHeaths": 1,
+        "name":"Palm Fruit",
+        "description": "Toto je kokos"
+    },
+    {
+        "id": 4,
+        "numberOfHeaths": 3,
+        "name":"Hearty Durian",
+        "description": "Toto je durian"
+    },
+    {
+        "id": 5,
+        "numberOfHeaths": 1,
+        "name":"Hydromelon",
+        "description": "Toto je meloun",
+        "specialEffect": {
+            "name": "mighty",
+            "duration": 100
+        }
+    },
+    {
+        "id": 6,
+        "numberOfHeaths": 1,
+        "name":"Spicy Pepper",
+        "description": "Toto je paprička",
+        "specialEffect": {
+            "name": "chilly",
+            "duration": 100
+        }
     }
-]
-}
+]}

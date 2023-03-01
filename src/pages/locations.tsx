@@ -1,53 +1,46 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import FoodCard from "../components/food-card";
 import CardWrapper from "../components/card-wrapper";
-import ErrorPage from "./error-page";
+import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
+import ErrorPage from "./error-page";
 
-export interface SpecialEffect {
-    name: string
-    duration: number
-}
-export interface Ingredient {
+export interface Location {
     id: number
-    numberOfHeaths: number
     name: string
-    description: string
-    specialEffect: SpecialEffect
 }
 
-const Ingredients = () => {
-    const [ingredients, setIngredients] = useState<Ingredient[]>();
+const Locations = () => {
+    const [locations, setLocations] = useState<Location[]>();
     const [loading, setLoading] = useState(false);
     const [errored, setErrored] = useState(false);
 
-    async function fetchIngedients() {
+    async function fetchLocations() {
         try {
-            const res = await fetch('../server/ingredients.json');
+            const res = await fetch('../server/locations.json');
             const json = await res.json();
             
-            setIngredients(json.data);
+            setLocations(json.data);
         } catch (e) {
             console.error(e);
             setErrored(true);
         }
     }
 
-    useEffect(() => {fetchIngedients()}, []);
+    useEffect(() => {fetchLocations()}, []);
 
     if (errored) {
         return <ErrorPage/>;
     }
 
-    if (!ingredients) {
+    if (!locations) {
         return (
             <>
                 <Helmet>
                     <title>Načítání... | ZELDA COOK</title>
                 </Helmet>
                 <PageHeader>
-                    Ingredience
+                    Lokace
                 </PageHeader>
             </>
         );
@@ -56,17 +49,17 @@ const Ingredients = () => {
     return(
         <>
             <Helmet>
-                <meta property="og:title" content="Ingredience | ZELDA COOK"/>
-                <title>Ingredience | ZELDA COOK</title>
+                <meta property="og:title" content="Lokace | ZELDA COOK"/>
+                <title>Lokace | ZELDA COOK</title>
             </Helmet>
             <PageHeader>
-                Ingredience
+                Lokace
             </PageHeader>
             <CardWrapper>
-                {ingredients.map((ingredient, index) => (
-                    <FoodCard
+                {locations.map((location, index) => (
+                    <LocationCard
                         key={index}
-                        {...ingredient}
+                        {...location}
                     />
                 ))}
             </CardWrapper>
@@ -75,4 +68,4 @@ const Ingredients = () => {
 }
 
 
-export default Ingredients;
+export default Locations;

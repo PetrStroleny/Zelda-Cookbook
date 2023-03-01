@@ -1,0 +1,15 @@
+{"data": [
+    {
+        "id": 1,
+        "name": "Akkala",
+        "description": "Toto je akkala",
+        "ingredients": [1, 2]
+    },
+    {
+        "id": 2,
+        "name":"Akkala Highlands",
+        "description": "Toto je malina",
+        "ingredients": [1, 2],
+        "parent-location": 1
+    }
+]}

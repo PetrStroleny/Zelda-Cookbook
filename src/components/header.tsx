@@ -4,9 +4,7 @@ import { Link } from "wouter";
 const Header = () => (
     <Wrapper>
         <Link href="/">
-            <a>
-                <img src="public/menu-icon.svg"/>
-            </a>
+            Zelda Cookbook
         </Link>
         <Link href="/">
             Ingredience
@@ -14,29 +12,16 @@ const Header = () => (
         <Link href="/recepty">
             Recepty
         </Link>
+        <Link href="/lokace">
+            Lokace
+        </Link>
     </Wrapper>
 );
 
 const Wrapper = styled("header")`
-    min-height: 100px;
-    max-height: 100px;
-    padding: 10px;
-    width: 100%;
-    position: fixed;
-    align-items: center;
-    display: flex;
-    background-color: ${p => p.theme.tints.primary};
-    color: ${p => p.theme.tints.white};
-
-
+    border: 1px solid red;
     > a {
-        &:first-of-type {
-            margin-right: 40px;
-        }
-
-        &:not(:last-of-type) {
-            margin-right: 20px;
-        }
+        margin-right: 10px;
     }
 `;
 

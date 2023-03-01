@@ -19,32 +19,12 @@ export const FadingAnimation = keyframes`
 `;
 
 const GlobalStyles = css`
-    @font-face {
-        font-family: "SuisseIntl";
-        font-weight: normal;
-        src: url("/fonts/SuisseIntl-Regular-WebS.woff") format("opentype");
-        font-display: swap;
-    }
 
-    @font-face {
-        font-family: "SuisseIntl";
-        font-weight: 500;
-        src: url("/fonts/SuisseIntl-Medium-WebS.woff") format("opentype");
-        font-display: swap;
-    }
-  
-    @font-face {
-        font-family: "SuisseIntl";
-        font-weight: 600;
-        src: url("/fonts/SuisseIntl-SemiBold-WebS.woff") format("opentype");
-        font-display: swap;
-    }
-  
-    * {
+* {
+        font-family: 'Roboto', sans-serif;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "SuisseIntl";
     }
 
     a {
@@ -68,10 +48,10 @@ const GlobalStyles = css`
         border-left-width: 5px;
         
         @supports not (overflow-y: overlay) {
-            border-color: ${Theme.surface};
+            border-color: ${Theme.background.secondary};
         }
         @supports not (overflow-x: overlay) {
-            border-color: ${Theme.surface};
+            border-color: ${Theme.background.secondary};
         }
     }
   
@@ -81,7 +61,7 @@ const GlobalStyles = css`
 
     body {
         font-size: 14px;
-        background-color: ${Theme.surface};
+        background-color: ${Theme.background.secondary};
     }
 
 
