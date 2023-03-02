@@ -3,31 +3,36 @@
         "id": 1,
         "numberOfHeaths": 1,
         "name": "Apple",
-        "description": "Toto je jablko"
+        "description": "Toto je jablko",
+        "value": 50
     },
     {
         "id": 2,
         "numberOfHeaths": 1,
         "name":"Wildberry",
-        "description": "Toto je malina"
+        "description": "Toto je malina",
+        "value": 50
     },
     {
         "id": 3,
         "numberOfHeaths": 1,
         "name":"Palm Fruit",
-        "description": "Toto je kokos"
+        "description": "Toto je kokos",
+        "value": 50
     },
     {
         "id": 4,
         "numberOfHeaths": 3,
         "name":"Hearty Durian",
-        "description": "Toto je durian"
+        "description": "Toto je durian",
+        "value": 100
     },
     {
         "id": 5,
         "numberOfHeaths": 1,
         "name":"Hydromelon",
         "description": "Toto je meloun",
+        "value": 50,
         "specialEffect": {
             "name": "mighty",
             "duration": 100
@@ -38,6 +43,7 @@
         "numberOfHeaths": 1,
         "name":"Spicy Pepper",
         "description": "Toto je paprička",
+        "value": 50,
         "specialEffect": {
             "name": "chilly",
             "duration": 100

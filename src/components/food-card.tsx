@@ -3,7 +3,7 @@ import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
 
-const Food: FC<Ingredient> = ({ name, description, numberOfHeaths }) => (
+const Food: FC<Ingredient> = ({ name, description, numberOfHeaths, value, specialEffect }) => (
     <Wrapper>
         <p>
             {name}
@@ -15,9 +15,17 @@ const Food: FC<Ingredient> = ({ name, description, numberOfHeaths }) => (
             počet srdíček: {numberOfHeaths}
         </p>
         <p>
+            cena: {value}
+        </p>
+        <p>
             zástupný obrázek
             <img src="public/ingredients/apple.png"/>
-            <img src="public/icons/tough.svg"/>
+            {specialEffect && 
+                <>
+                    <img src={`public/icons/${specialEffect.name}.svg`}/>
+                    <p>{specialEffect.duration}</p>
+                </>
+            }
         </p>
     </Wrapper>
 );

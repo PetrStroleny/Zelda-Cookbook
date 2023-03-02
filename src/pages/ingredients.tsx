@@ -14,7 +14,8 @@ export interface Ingredient {
     numberOfHeaths: number
     name: string
     description: string
-    specialEffect: SpecialEffect
+    specialEffect?: SpecialEffect
+    value: number
 }
 
 const Ingredients = () => {
