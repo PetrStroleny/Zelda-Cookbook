@@ -2,14 +2,80 @@
     {
         "id": 1,
         "name": "Akkala",
-        "description": "Toto je akkala",
-        "ingredients": [1, 2]
+        "description": "Oblast Akkala je nebezpečná oblast na severovýchodě Hyrule. Je to krásný region s mnoha lesy, jezery a travnatými pláněmi – na západě se opírá o pohoří Eldin a na východě o břehy oceánu."
     },
     {
         "id": 2,
-        "name":"Akkala Highlands",
+        "name":"Oblast v jižní části provincie Akkala",
         "description": "Toto je malina",
-        "ingredients": [1, 2],
+        "ingredients": [1, 7, 12, 14, 18, 19, 20],
         "parent-location": 1
+    },
+    {
+        "id": 3,
+        "name":"Deep Akkala",
+        "description": "Oblast na severozápadě provincie Akkala, sousedí s Eldinem.",
+        "ingredients": [1, 8, 9],
+        "parent-location": 1
+    },
+
+    {
+        "id": 4,
+        "name": "Lanayru",
+        "description": "Lanayru je provincie v Breath of the Wild. Je obýván rasou Zora a sídlí zde Božská bestie Váh Ruta. Provincie Lanyaru je domovem Naydry, jednoho ze tří draků v Breath of the Wild. Jeden ze šampionů, Mipha, pochází z provincie Lanayru."
+    },
+    {
+        "id": 5,
+        "name": "Lanayru Great Spring",
+        "description": "V této oblasti se nachází sídlo Zory, stejně jako Divine Beast Vah Ruta, přičemž Vah Ruta se nachází v regionu East Reservoir Lake. Řeka Zora teče z jezera Ruto do oblasti mokřadů Lanaryu.",
+        "ingredients": [4, 6, 7, 14, 15, 18, 19],
+        "parent-location": 4
+    },
+    {
+        "id": 6,
+        "name": "Lanayru Sea",
+        "description": "Toto je akkala",
+        "ingredients": [16, 17],
+        "parent-location": 4
+    },
+    {
+        "id": 7,
+        "name": "Lanayru Wetlands",
+        "description": "Toto je akkala",
+        "ingredients": [4],
+        "parent-location": 4
+    },
+    {
+        "id": 8,
+        "name": "Mount Lanayru",
+        "description": "Toto je akkala",
+        "ingredients": [10, 11],
+        "parent-location": 4
+    },
+    {
+        "id": 9,
+        "name": "Necluda",
+        "description": "Toto je Necluda"
+    },
+    {
+        "id": 10,
+        "name": "East Necluda",
+        "description": "Toto je Necluda",
+        "ingredients": [1, 2, 6, 15, 18],
+        "parent-location": 9
+    },
+    {
+        "id": 11,
+        "name": "West Necluda",
+        "description": "Toto je Necluda",
+        "ingredients": [1, 3, 5, 6, 7, 12, 13],
+        "parent-location": 9
+    },
+    {
+        "id": 12,
+        "name": "Necluda Sea",
+        "description": "Toto je Necluda",
+        "ingredients": [16, 17],
+        "parent-location": 9
     }
 ]}
