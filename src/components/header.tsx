@@ -10,7 +10,7 @@ const Header = () => {
 
     return(
         <Wrapper>
-            <Link href="/">
+            <Link className="active" href="/">
                 Zelda Cookbook
             </Link>
             <Link className={homeActive ? "active" : ""} href="/">
@@ -27,16 +27,17 @@ const Header = () => {
 }
 
 const Wrapper = styled("header")`
-   display: flex;
+    display: flex;
     flex-direction: row;
     align-items: flex-start;
     padding: 32px 40px;
-    a:nth-of-type(1){flex-grow: 1};
-    a:nth-of-type(1){color:${Theme.content.primary}};
 
-    a {
-        margin-right: 20px;
-        font: ${Theme.fontStyles.h4};
+    a:nth-of-type(1){flex-grow: 1};
+
+    > a {
+        margin-right: 40px;
+        ${Theme.fontStyles.h4};
+
         color: ${Theme.content.secondary};
 
         &.active {
