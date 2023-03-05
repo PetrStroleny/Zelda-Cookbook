@@ -6,8 +6,8 @@
     },
     {
         "id": 2,
-        "name":"Oblast v jižní části provincie Akkala",
-        "description": "Toto je malina",
+        "name":"Akkala Highlands",
+        "description": "Oblast v jižní části provincie Akkala",
         "ingredients": [1, 7, 12, 14, 18, 19, 20],
         "parent-location": 1
     },
