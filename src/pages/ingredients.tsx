@@ -12,6 +12,7 @@ export interface SpecialEffect {
 export interface Ingredient {
     id: number
     numberOfHeaths: number
+    extraHearths?: number
     name: string
     description: string
     specialEffect?: SpecialEffect
