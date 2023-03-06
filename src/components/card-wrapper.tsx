@@ -4,7 +4,6 @@ const CardWrapper = styled("div")`
     width: 100%;
     display: grid;
     gap: 20px;
-    border: 1px solid red;
 
     @media only screen and (max-width: ${p => p.theme.breakPoints.mobile}px) {
         gap: 13px;

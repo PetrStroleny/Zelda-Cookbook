@@ -35,6 +35,8 @@ export const Theme = {
 
       b1: "font-weight: 400; font-size: 22px; line-height: 28px;",
       b2: "font-weight: 400; font-size: 17px; line-height: 21px;",
+
+      items: "font-weight: 500; font-size: 16px; line-height: 24px;"
     },
   
     breakPoints: {

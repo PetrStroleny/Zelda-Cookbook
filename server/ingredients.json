@@ -9,28 +9,28 @@
     {
         "id": 2,
         "numberOfHeaths": 1,
-        "name": "Palm Fruit",
+        "name": "Palm fruit",
         "description": "Ovoce z palem, které rostou v blízkosti oceánu. Nenabízí žádné zvláštní účinky, ale při použití jako přísady zvýší zotavení srdce.",
         "value": 4
     },
     {
         "id": 3,
         "numberOfHeaths": 3,
-        "name": "Hearty Durian",
+        "name": "Hearty durian",
         "description": "Mocná vůně tohoto ovoce mu vysloužila přezdívku „král ovoce“. Nabízí nesmírnou regenerační sílu.",
         "value": 15
     },
     {
         "id": 4,
         "numberOfHeaths": 0.5,
-        "name": "Fleet-Lotus Seeds",
+        "name": "Fleet-lotus seeds",
         "description": "Rostlina, která nese tato semena, roste poblíž hluboké vody. Kořeny čerpají živiny z vody, což zvyšuje rychlost vašeho pohybu, když se semínka vaří v pokrmu.",
         "value": 5
     },
     {
         "id": 5,
         "numberOfHeaths": 0.5,
-        "name": "Hylian Shroom",
+        "name": "Hylian shroom",
         "description": "Běžná houba nalezená poblíž stromů kolem Hyrule. Jezte to, abyste obnovili polovinu srdce.",
         "value": 3
     },
@@ -44,7 +44,7 @@
     {
         "id": 7,
         "numberOfHeaths": 0.5,
-        "name": "Silent Shroom",
+        "name": "Silent shroom",
         "description": "Podivná houba, která v noci jemně září v lese. Vařením do pokrmu se odemknou živiny v jeho uzávěru, výsledkem je jídlo, které vám umožní pohybovat se nenápadně.",
         "value": 3
     },
@@ -72,70 +72,70 @@
     {
         "id": 11,
         "numberOfHeaths": 3,
-        "name": "Big Hearty Truffle",
+        "name": "Big searty truffle",
         "description": "Roky nesbírání umožnily, aby se tento vydatný lanýž docela rozrostl. Je nabitý živinami. Když se vaří do pokrmu, dočasně zvýší vaše maximální srdce.",
         "value": 15
     },
     {
         "id": 12,
         "numberOfHeaths": 3,
-        "name": "Hearty Bass",
+        "name": "Hearty bass",
         "description": "Tato velká ryba žije v blízkosti pobřeží. Jeho rozměrné tělo dokáže uložit spoustu živin. Když se vaří do pokrmu, dočasně zvýší vaše maximální srdce.",
         "value": 18
     },
     {
         "id": 13,
         "numberOfHeaths": 3,
-        "name": "Staminoka Bass",
+        "name": "Staminoka bass",
         "description": "Tento Hyrule basák se stal největší rybou tím, že se nikdy nechytil (až doteď). Jeho dlouhá životnost má za následek uvařený pokrm, který obnoví hodně výdrže.",
         "value": 18
     },
     {
         "id": 14,
         "numberOfHeaths": 3,
-        "name": "Mighty Carp",
+        "name": "Mighty carp",
         "description": "Tato sladkovodní ryba žije vedle svého méně mohutného kapra podobného. Sloučenina v játrech podporuje růst svalů. Pokrmy s ním uvařené dočasně zvýší vaši útočnou sílu.",
         "value": 10
     },
     {
         "id": 15,
         "numberOfHeaths": 3,
-        "name": "Armored Carp",
+        "name": "Armored carp",
         "description": "Díky vápenatým usazeninám v šupinách této prastaré ryby jsou tvrdé jako brnění. Vaření do pokrmu posílí vaše kosti a dočasně zvýší vaši obranu.",
         "value": 10
     },
     {
         "id": 16,
         "numberOfHeaths": 3,
-        "name": "Mighty Porky",
+        "name": "Mighty porky",
         "description": "Tato ryba žijící v oceánu má jeden hrubý přístup. Sloučeniny v jeho mase povznášejí vašeho soutěžního ducha, když se vaří v misce, a tím zvyšují vaši útočnou sílu.",
         "value": 10
     },
     {
         "id": 17,
         "numberOfHeaths": 3,
-        "name": "Armored Porky",
+        "name": "Armored porky",
         "description": "Tělo této porgy je pokryto šupinami tvrdými jako brnění. Sloučeniny v jeho šupinách při vaření do pokrmu posilují vaše kosti a dočasně posilují vaši obranu.",
         "value": 10
     },
     {
         "id": 18,
         "numberOfHeaths": 2.5,
-        "name": "Hearty Radish",
+        "name": "Hearty radish",
         "description": "Vzácná ředkev, která nejlépe roste na slunných pláních. Uvařte si ho před jídlem, abyste dočasně zvýšili své maximální srdce.",
         "value": 8
     },
     {
         "id": 19,
         "numberOfHeaths": 4,
-        "name": "Big Hearty Radish",
+        "name": "Big hearty radish",
         "description": "Tato vydatná ředkev vyrostla mnohem větší než průměrná ředkev. Je bohatý na analeptické sloučeniny, které při vaření v pokrmu dočasně zvýší vaše maximální srdce.",
         "value": 15
     },
     {
         "id": 20,
         "numberOfHeaths": 1,
-        "name": "Hyrule Herb",
+        "name": "Hyrule herb",
         "description": "Tato zdravá bylina roste hojně v pláních Hyrule. Vařte ho před jídlem, abyste zvýšili počet srdcí, které obnovuje.",
         "value": 3
     }
