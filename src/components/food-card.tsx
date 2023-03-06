@@ -3,22 +3,20 @@ import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
 
-const Food: FC<Ingredient> = ({ name, description, numberOfHeaths, value, specialEffect }) => (
+const Food: FC<Ingredient> = ({ name, numberOfHeaths, value, specialEffect }) => (
+    
     <Wrapper>
         <p>
             {name}
         </p>
         <p>
-            {description}
+             {numberOfHeaths}
         </p>
         <p>
-            počet srdíček: {numberOfHeaths}
+             {value}
         </p>
         <p>
-            cena: {value}
-        </p>
-        <p>
-            zástupný obrázek
+            
             <img src="public/ingredients/apple.png"/>
             {specialEffect && 
                 <>
@@ -28,13 +26,26 @@ const Food: FC<Ingredient> = ({ name, description, numberOfHeaths, value, specia
             }
         </p>
     </Wrapper>
+    
 );
-
 const Wrapper = styled("div")`
     border: 1px solid green;
-    width: 200px;
-    height: 200px;
+    width: 264px;
+    height: 324px;
+    border-radius: 20px;
+    background-color: #E5E5E5;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    align-content: flex-end;
+
+    > p  { 
+        font-size: 100px;
+
+}
+
 `;
+
 
 
 export default Food;
