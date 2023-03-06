@@ -4,6 +4,7 @@ import FoodCard from "../components/food-card";
 import CardWrapper from "../components/card-wrapper";
 import ErrorPage from "./error-page";
 import PageHeader from "../components/page-header";
+import Filters from "../components/filters";
 
 export interface SpecialEffect {
     name: string
@@ -12,6 +13,7 @@ export interface SpecialEffect {
 export interface Ingredient {
     id: number
     numberOfHeaths: number
+    extraHearths?: number
     name: string
     description: string
     specialEffect?: SpecialEffect
@@ -71,6 +73,7 @@ const Ingredients = () => {
                     />
                 ))}
             </CardWrapper>
+            <Filters/>
         </>
     );
 }

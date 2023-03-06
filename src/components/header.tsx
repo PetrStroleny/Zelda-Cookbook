@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Link, useRoute } from "wouter";
+import { Theme } from "../style-variables";
 
 const Header = () => {
 
@@ -9,7 +10,7 @@ const Header = () => {
 
     return(
         <Wrapper>
-            <Link href="/">
+            <Link className="active" href="/">
                 Zelda Cookbook
             </Link>
             <Link className={homeActive ? "active" : ""} href="/">
@@ -26,12 +27,21 @@ const Header = () => {
 }
 
 const Wrapper = styled("header")`
-    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 32px 40px;
+
+    a:nth-of-type(1){flex-grow: 1};
+
     > a {
-        margin-right: 10px;
+        margin-right: 40px;
+        ${Theme.fontStyles.h4};
+
+        color: ${Theme.content.secondary};
 
         &.active {
-            color: red;
+            color: ${Theme.content.primary};
         }
     }
 `;
