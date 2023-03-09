@@ -5,10 +5,12 @@ import ErrorPage from './pages/error-page';
 import Ingredients from './pages/ingredients';
 import Recipes from './pages/recipes';
 import Locations from './pages/locations';
+import Modal from './components/modal';
 
 function App() {
   return (
     <Router>
+      <Modal name="nazev modalu"/>
       <Header/>
       <Page>
           <Switch>
