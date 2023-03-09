@@ -1,58 +1,220 @@
 {"data": [
     {
         "id": 1,
-        "numberOfHeaths": 1,
-        "name": "Apple recept",
-        "description": "Toto je jablko",
-        "ingredients": [1, 2],
-        "value": 200
+        "numberOfHeaths": 5,
+        "name": "Simmered Fruit",
+        "description": "Tento sladký pokrm se připravuje navršením chutného ovoce na pánev a dusením do měkka.",
+        "ingredients": [
+            [1, 2]
+        ],
+        "value": 50
     },
     {
         "id": 2,
-        "numberOfHeaths": 1,
-        "name":"Wildberry recept",
-        "description": "Toto je malina",
-        "ingredients": [1, 2],
-        "value": 200
+        "numberOfHeaths": 999,
+        "extraHearths": 20,
+        "name": "Hearty Simmered Fruit",
+        "description": "Obnovuje vaše zdraví a dočasně zvyšuje vaše maximální srdce. Tento sladký pokrm se připravuje navršením chutného ovoce na pánev a dusením do měkka.",
+        "ingredients": [
+            [3]
+        ],
+        "value": 100
     },
     {
         "id": 3,
-        "numberOfHeaths": 1,
-        "name":"Palm Fruit recept",
-        "description": "Toto je kokos",
-        "ingredients": [1, 2],
-        "value": 200
+        "numberOfHeaths": 5,
+        "name": "Hasty Simmered Fruit",
+        "description": "Poskytuje zvýšení rychlosti pohybu na nízké úrovni. Tento sladký pokrm se připravuje navršením chutného ovoce na pánev a dusením do měkka.",
+        "ingredients": [
+            [4]
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "hasty",
+            "duration": "2:00"
+        }
     },
     {
         "id": 4,
-        "numberOfHeaths": 3,
-        "name":"Hearty Durian recept",
-        "description": "Toto je durian",
-        "ingredients": [1, 2],
-        "value": 200
+        "numberOfHeaths": 8,
+        "name": "Fruit and Mushroom Mix",
+        "description": "Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2],
+            [5]
+
+        ],
+        "value": 50
     },
     {
         "id": 5,
-        "numberOfHeaths": 1,
-        "name":"Hydromelon recept",
-        "description": "Toto je meloun",
-        "ingredients": [1, 2],
-        "value": 150,
-        "specialEffect": {
-            "name": "mighty",
-            "duration": 100
-        }
+        "numberOfHeaths": 999,
+        "extraHearths": 12,
+        "name": "Hearty Fruit and Mushroom Mix",
+        "description": "Obnovuje vaše zdraví a dočasně zvyšuje vaše maximální srdce. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [3],
+            [11]
+
+        ],
+        "value": 100
     },
     {
         "id": 6,
-        "numberOfHeaths": 1,
-        "name":"Spicy Pepper recept",
-        "description": "Toto je paprička",
-        "ingredients": [1, 2],
-        "value": 200,
+        "numberOfHeaths": 8,
+        "name": "Hasty Fruit and Mushroom Mix",
+        "description": "Poskytuje zvýšení rychlosti pohybu na nízké úrovni. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [4],
+            [5, 6, 7, 8, 9, 10, 11]
+
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "hasty",
+            "duration": "2:00"
+        }
+    },
+    {
+        "id": 7,
+        "numberOfHeaths": 8,
+        "name": "Spicy Fruit and Mushroom Mix",
+        "description": "Poskytuje nízkou odolnost proti chladu. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2, 3, 4],
+            [9]
+
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "spicy",
+            "duration": "2:00"
+        }
+    },
+    {
+        "id": 8,
+        "numberOfHeaths": 8,
+        "name": "Electro Fruit and Mushroom Mix",
+        "description": "Poskytuje nízkou elektrickou odolnost. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2, 3, 4],
+            [8]
+
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "electro",
+            "duration": "2:00"
+        }
+    },
+    {
+        "id": 9,
+        "numberOfHeaths": 8,
+        "name": "Tough Fruit and Mushroom Mix",
+        "description": "Poskytuje posílení obrany na nízké úrovni. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2, 3, 4],
+            [6]
+
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "tough",
+            "duration": "2:00"
+        }
+    },
+    {
+        "id": 10,
+        "numberOfHeaths": 8,
+        "name": "Sneaky Fruit and Mushroom Mix",
+        "description": "Poskytuje nízkoúrovňové stealth posílení. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2, 3, 4],
+            [7]
+
+        ],
+        "value": 100,
+        "specialEffect": {
+            "name": "sneaky",
+            "duration": "2:00"
+        }
+    },
+    {
+        "id": 11,
+        "numberOfHeaths": 8,
+        "name": "Chilly Fruit and Mushroom Mix",
+        "description": "Poskytuje nízkou tepelnou odolnost. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
+        "ingredients": [
+            [1, 2, 3, 4],
+            [10]
+
+        ],
+        "value": 100,
         "specialEffect": {
             "name": "chilly",
-            "duration": 100
+            "duration": "2:00"
         }
+    },
+    {
+        "id": 12,
+        "numberOfHeaths": 2,
+        "name": "Fish Skewer",
+        "description": "Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
+        "ingredients": [
+            [13]
+        ],
+        "value": 25
+    },
+    {
+        "id": 13,
+        "numberOfHeaths": 999,
+        "extraHearths": 6,
+        "name": "Hearty Fish Skewer",
+        "description": "Obnovuje vaše zdraví a dočasně zvyšuje vaše maximální srdce. Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
+        "ingredients": [
+            [12]
+        ],
+        "value": 25
+    },
+    {
+        "id": 14,
+        "numberOfHeaths": 2,
+        "name": "Mighty Fish Skewer",
+        "description": "Poskytuje nízkoúrovňové zesílení útočné síly. Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
+        "ingredients": [
+            [14, 16]
+        ],
+        "value": 25
+    },
+    {
+        "id": 15,
+        "numberOfHeaths": 2,
+        "name": "Tough Fish Skewer",
+        "description": "Poskytuje posílení obrany na nízké úrovni. Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
+        "ingredients": [
+            [15, 17]
+        ],
+        "value": 25
+    },
+    {
+        "id": 16,
+        "numberOfHeaths": 2,
+        "name": "Fried Wild Greens",
+        "description": "Základní zeleninový pokrm vyrobený restováním čerstvých divokých rostlin.",
+        "ingredients": [
+            [15, 17]
+        ],
+        "value": 25
+    },
+    {
+        "id": 17,
+        "numberOfHeaths": 999,
+        "extraHearths": 2,
+        "name": "Hearty Fried Wild Greens",
+        "description": "Obnovuje vaše zdraví a dočasně zvyšuje vaše maximální srdce. Základní zeleninový pokrm vyrobený restováním čerstvých divokých rostlin.",
+        "ingredients": [
+            [15, 17]
+        ],
+        "value": 25
     }
 ]}

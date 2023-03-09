@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
+import LabelMain from "../components/label-main";
 import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
 import ErrorPage from "./error-page";
 
-export interface Location {
+
+export interface SubLocation {
     id: number
     name: string
+    description: string
+    ingredients: number[]
+}
+export interface IngredienceLocation {
+    name: string
+    description: string
+    subLocations: SubLocation[]
 }
 
 const Locations = () => {
-    const [locations, setLocations] = useState<Location[]>();
+    const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [loading, setLoading] = useState(false);
     const [errored, setErrored] = useState(false);
 
@@ -55,14 +64,22 @@ const Locations = () => {
             <PageHeader>
                 Lokace
             </PageHeader>
-            <CardWrapper>
-                {locations.map((location, index) => (
-                    <LocationCard
-                        key={index}
-                        {...location}
-                    />
-                ))}
-            </CardWrapper>
+                {locations.map((location, index) => {
+                
+                    return (
+                        <>
+                            <LabelMain>{location.name}</LabelMain>
+                            <CardWrapper>
+                                {location.subLocations.map((subLocation) => 
+                                    <LocationCard
+                                        key={index}
+                                        {...subLocation}
+                                    />
+                                )}
+                            </CardWrapper>
+                        </>
+                    );
+                })}
         </>
     );
 }

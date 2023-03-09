@@ -1,5 +1,6 @@
-import styled from '@emotion/styled'
-import { Route, Router, Switch } from 'wouter'
+import styled from '@emotion/styled';
+import { Route, Router, Switch, } from 'wouter';
+import { useLocation as useWouterLocation } from "wouter";
 import Header from './components/header';
 import ErrorPage from './pages/error-page';
 import Ingredients from './pages/ingredients';
@@ -7,10 +8,15 @@ import Recipes from './pages/recipes';
 import Locations from './pages/locations';
 import Modal from './components/modal';
 
+export const useLocation = () => {
+  const [location, setLocation] = useWouterLocation();
+  return [location, setLocation, window.location.search];
+};
+
 function App() {
   return (
     <Router>
-      <Modal name="nazev modalu"/>
+      <Modal/>
       <Header/>
       <Page>
           <Switch>

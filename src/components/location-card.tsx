@@ -1,10 +1,9 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { Ingredient } from "../pages/ingredients";
-import {Location} from "../pages/locations";
+import { SubLocation } from "../pages/locations";
 
 
-const LocationCard: FC<Location> = ({ name }) => (
+const LocationCard: FC<SubLocation> = ({ name }) => (
     <Wrapper>
         <p>
             {name}
