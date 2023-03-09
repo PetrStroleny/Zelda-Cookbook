@@ -5,25 +5,37 @@ import { SubLocation } from "../pages/locations";
 
 const LocationCard: FC<SubLocation> = ({ name }) => (
     <Wrapper>
-        <p>
+        <Name>
             {name}
-        </p>
+        </Name>
         <p>
-            zástupný obrázek
-            <img src="public/locations/akkala.jpeg"/>
+            <img src={`public/locations/${name.replace(" ", "_")}.png`}/>
         </p>
     </Wrapper>
 );
 
 const Wrapper = styled("div")`
-    border: 1px solid green;
-    width: 200px;
-    height: 200px;
-
+    width: 316px;
+    height: 308px;
+    border-radius: 20px;
+    background-color: #E5E5E5;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 10px;
+    
     img {
-        height: 100px;
-        width: 100px;
-    }
+        width: 316px;
+        height: 260px;
+        object-fit: fill;
+        border-radius: 20px 20px 0px 0px;
+    
+    } 
+`;
+const Name = styled("p")`
+    color: ${p => p.theme.content.primary};
+    ${p => p.theme.fontStyles.b1}
+
 `;
 
 
