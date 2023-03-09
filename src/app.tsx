@@ -6,6 +6,7 @@ import ErrorPage from './pages/error-page';
 import Ingredients from './pages/ingredients';
 import Recipes from './pages/recipes';
 import Locations from './pages/locations';
+import Modal from './components/modal';
 
 export const useLocation = () => {
   const [location, setLocation] = useWouterLocation();
@@ -14,9 +15,8 @@ export const useLocation = () => {
 
 function App() {
   return (
-    <Router
-
-    >
+    <Router>
+      <Modal/>
       <Header/>
       <Page>
           <Switch>
