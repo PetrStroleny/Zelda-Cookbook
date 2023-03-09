@@ -72,7 +72,7 @@
     {
         "id": 11,
         "numberOfHeaths": 3,
-        "name": "Big searty truffle",
+        "name": "Big-hearty truffle",
         "description": "Roky nesbírání umožnily, aby se tento vydatný lanýž docela rozrostl. Je nabitý živinami. Když se vaří do pokrmu, dočasně zvýší vaše maximální srdce.",
         "value": 15
     },
@@ -128,7 +128,7 @@
     {
         "id": 19,
         "numberOfHeaths": 4,
-        "name": "Big hearty radish",
+        "name": "Big-hearty radish",
         "description": "Tato vydatná ředkev vyrostla mnohem větší než průměrná ředkev. Je bohatý na analeptické sloučeniny, které při vaření v pokrmu dočasně zvýší vaše maximální srdce.",
         "value": 15
     },
