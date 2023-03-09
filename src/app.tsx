@@ -1,14 +1,22 @@
-import styled from '@emotion/styled'
-import { Route, Router, Switch } from 'wouter'
+import styled from '@emotion/styled';
+import { Route, Router, Switch, } from 'wouter';
+import { useLocation as useWouterLocation } from "wouter";
 import Header from './components/header';
 import ErrorPage from './pages/error-page';
 import Ingredients from './pages/ingredients';
 import Recipes from './pages/recipes';
 import Locations from './pages/locations';
 
+export const useLocation = () => {
+  const [location, setLocation] = useWouterLocation();
+  return [location, setLocation, window.location.search];
+};
+
 function App() {
   return (
-    <Router>
+    <Router
+
+    >
       <Header/>
       <Page>
           <Switch>

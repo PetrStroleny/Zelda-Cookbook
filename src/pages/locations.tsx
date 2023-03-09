@@ -13,14 +13,14 @@ export interface SubLocation {
     description: string
     ingredients: number[]
 }
-export interface Location {
+export interface IngredienceLocation {
     name: string
     description: string
     subLocations: SubLocation[]
 }
 
 const Locations = () => {
-    const [locations, setLocations] = useState<Location[]>();
+    const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [loading, setLoading] = useState(false);
     const [errored, setErrored] = useState(false);
 

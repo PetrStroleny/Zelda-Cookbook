@@ -1,11 +1,24 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useRef } from "react";
-import { SubLocation } from "../pages/locations";
-import {  } from "react-router-dom";
-
+import { FC, useEffect } from "react";
 
 interface SearchInputProps {
+    value: string
+    onChange: (value: string) => void
+}
 
+
+// Implementace otevření hledání skrze klávesnici (ctrl+f)
+export function useOpenSearchWithKeyboard(open: () => void) {
+    function handleWindowKeyUp(e: KeyboardEvent) {
+        if (e.key != "f" || !e.metaKey && !e.ctrlKey) return;
+        e.preventDefault();
+        open();
+    }
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleWindowKeyUp);
+        return () => window.removeEventListener("keydown", handleWindowKeyUp);
+    }, []);
 }
 
 export function getSearchValue(): string {
@@ -18,24 +31,15 @@ export function getSearchValue(): string {
     return "";
 }
 
-const SearchInput: FC<SearchInputProps> = ({ }) => {
-    const inputRef = useRef<HTMLInputElement>(null);
+const SearchInput: FC<SearchInputProps> = ({ value, onChange }) => (
+    <Wrapper 
+        autoFocus
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+    >
 
-    useEffect(() => {
-        if (inputRef?.current) {
-            inputRef.current.value = getSearchValue();
-        }
-    }, []);
-
-    return(
-        <Wrapper 
-            ref={inputRef}
-            onChange={(e) => window.history.replaceState({}, "", `${window.location.pathname}?q=${e.target.value}`)}
-        >
-
-        </Wrapper>
-    );
-}
+    </Wrapper>
+);
 
 const Wrapper = styled("input")`
     border: none;
@@ -44,6 +48,8 @@ const Wrapper = styled("input")`
     border-radius: 20px;
     ${p => p.theme.fontStyles.b2};
     padding: 0px 15px;
+    width: 100%;
+    display: flex;
 `;
 
 
