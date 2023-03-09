@@ -34,7 +34,6 @@ function App() {
 }
 
 const Page = styled("div")`
-    height: calc(100% - 100px);
     display: flex;
     flex-direction: column;
     padding: 0px 40px 160px 40px;
