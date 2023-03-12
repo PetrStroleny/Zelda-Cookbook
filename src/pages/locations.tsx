@@ -67,8 +67,9 @@ const Locations = () => {
                 {locations.map((location, index) => {
                 
                     return (
-                        <>
+                        <>  
                             <LabelMain>{location.name}</LabelMain>
+
                             <CardWrapper>
                                 {location.subLocations.map((subLocation) => 
                                     <LocationCard

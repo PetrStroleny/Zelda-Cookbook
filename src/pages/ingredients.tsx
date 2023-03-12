@@ -106,11 +106,9 @@ const Ingredients = () => {
                     
                     return(
                     <FoodCard
-        
                         key={index}
-
                         {...ingredient}
-                        true
+                        isIngredience
                     />
                 )})}
             </CardWrapper>

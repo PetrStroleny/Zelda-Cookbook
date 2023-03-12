@@ -2,7 +2,11 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
-const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect, isIngredience }) => (
+interface FoodCardProps extends Ingredient {
+    isIngredience?: boolean
+}
+
+const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIngredience }) => (
     <Wrapper>
         <HearthsWrapper>
             {numberOfHeaths < 999 && 
@@ -81,4 +85,4 @@ const SpecialEffect = styled("div")`
 `;
 
 
-export default Food;
+export default FoodCard;
