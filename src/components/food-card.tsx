@@ -3,10 +3,10 @@ import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
 interface FoodCardProps extends Ingredient {
-    isIngredience?: boolean
+    isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIngredience }) => (
+const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIngredient }) => (
     <Wrapper>
         <HearthsWrapper>
             {numberOfHeaths < 999 && 
@@ -16,7 +16,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIn
             }
         </HearthsWrapper> 
         <IconWrapper>
-            <img src={`public/${isIngredience ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
         </IconWrapper>
 
         <Name>

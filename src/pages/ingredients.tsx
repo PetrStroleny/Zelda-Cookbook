@@ -108,7 +108,7 @@ const Ingredients = () => {
                     <FoodCard
                         key={index}
                         {...ingredient}
-                        isIngredience
+                        isIngredient
                     />
                 )})}
             </CardWrapper>
