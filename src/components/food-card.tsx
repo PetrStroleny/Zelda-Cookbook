@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
-const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
+const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect, isIngredience }) => (
     <Wrapper>
         <HearthsWrapper>
             {numberOfHeaths < 999 && 
@@ -12,8 +12,9 @@ const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
             }
         </HearthsWrapper> 
         <IconWrapper>
-            <img src={`public/ingredients/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredience ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
         </IconWrapper>
+
         <Name>
             {name}
         </Name>
