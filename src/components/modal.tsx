@@ -72,7 +72,7 @@ const ModalButton = styled("button")`
 const CloseButton = styled("button")`
   border: 0;
   font-size: 1rem;
-  text-shadow: 1px 1px 1px rgba(0,0,0,0.6)0px 5px 15px;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.6) 0px 5px 15px;
   position: absolute;
   top: 10px;
   right: 10px;
