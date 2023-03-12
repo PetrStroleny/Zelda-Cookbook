@@ -28,9 +28,9 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                             }
                                 
                                 
-                            {new Array(numberOfHeaths == 5 ? 5 : numberOfHeaths % 5).fill("").map((_, i) => 
+                            {new Array(numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)).fill("").map((_, i) => 
                                 <img key={i} src="public/icons/heart.svg"/>
-                            )}
+                            )}  
                         </>
                 }
             </div>

@@ -103,7 +103,7 @@ const Ingredients = () => {
                             }
                         }
                     }
-                    
+                    console.log(ingredient.numberOfHeaths);
                     return(
                     <FoodCard
                         key={index}

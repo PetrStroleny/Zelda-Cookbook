@@ -45,6 +45,7 @@ const Wrapper = styled("div")`
   top: 0;
   left: 0;
   position: fixed;
+  z-index: 1;
   background: rgb(238,238,238,0.5);
   display: flex;
   align-items: center;
