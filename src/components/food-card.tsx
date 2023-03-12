@@ -8,7 +8,10 @@ const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
             {numberOfHeaths < 999 && 
                 new Array(Math.floor(numberOfHeaths)).fill("").map((_, i) => 
                     <img key={i} src="public/icons/heart.svg"/>
-                )      
+                )  
+            }
+            {numberOfHeaths == 999 && 
+                (<img src="public/icons/Hearts - Full Recovery.png"/>)    
             }
         </HearthsWrapper> 
         <IconWrapper>
