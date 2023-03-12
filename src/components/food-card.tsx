@@ -6,18 +6,36 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIngredient }) => (
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => (
     <Wrapper>
         <HearthsWrapper>
-            {numberOfHeaths < 999 && 
-                new Array(Math.floor(numberOfHeaths)).fill("").map((_, i) => 
-                    <img key={i} src="public/icons/heart.svg"/>
-                )  
-            }
-            {numberOfHeaths == 999 && 
-                (<img src="public/icons/Hearts - Full Recovery.png"/>)    
-            }
-        </HearthsWrapper> 
+            <div></div>
+            <div>
+                {numberOfHeaths == 999 ?
+                        <>
+                            <img src="public/icons/heart.svg"/>
+                            <FullRecovery>
+                                Full Recovery
+                            </FullRecovery> 
+                        </>
+                    :   
+                        <>
+                            {
+                                <HearthWithIndex>
+                                    <img src="public/icons/heart.svg"/>
+                                    <p>{true ? "x" : "xxx"}</p>
+                                </HearthWithIndex>
+                            }
+                                
+                                
+                            {new Array(Math.floor(numberOfHeaths % 5)).fill("").map((_, i) => 
+                                <img key={i} src="public/icons/heart.svg"/>
+                            )}
+                        </>
+                }
+            </div>
+        </HearthsWrapper>
+
         <IconWrapper>
             <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
         </IconWrapper>
@@ -64,10 +82,14 @@ const Name = styled("p")`
 const HearthsWrapper = styled("div")`
     width: 100%;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
     height: 22px;
+
+    > div:last-of-type {
+        display: flex;
+    }
 `;
 
 const SpecialEffect = styled("div")`
@@ -87,5 +109,25 @@ const SpecialEffect = styled("div")`
     }
 `;
 
+const FullRecovery = styled("p")`
+    color: ${p => p.theme.content.primary};
+    ${p => p.theme.fontStyles.items};
+    margin-left: 3px;
+`;
+
+const HearthWithIndex = styled("div")`
+    position: relative;
+
+    > p {
+        color: ${p => p.theme.inverse.content.primary};
+        background-color: #F1362F;
+        border-radius: 999px;
+        position: absolute;
+        bottom: 6px;
+        font-size: 12px;
+        right: 4px;
+        padding: 0px 2px;
+    }
+`;
 
 export default FoodCard;
