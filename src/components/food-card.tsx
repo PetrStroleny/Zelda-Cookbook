@@ -9,7 +9,7 @@ interface FoodCardProps extends Ingredient {
 const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => (
     <Wrapper>
         <HearthsWrapper>
-            <div></div>
+            <div>xx</div>
             <div>
                 {numberOfHeaths == 999 ?
                         <>
@@ -20,7 +20,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                         </>
                     :   
                         <>
-                            {
+                            {true &&
                                 <HearthWithIndex>
                                     <img src="public/icons/heart.svg"/>
                                     <p>{true ? "x" : "xxx"}</p>
@@ -28,7 +28,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                             }
                                 
                                 
-                            {new Array(Math.floor(numberOfHeaths % 5)).fill("").map((_, i) => 
+                            {new Array(numberOfHeaths == 5 ? 5 : numberOfHeaths % 5).fill("").map((_, i) => 
                                 <img key={i} src="public/icons/heart.svg"/>
                             )}
                         </>
@@ -53,6 +53,23 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
     </Wrapper>
     
 );
+const HearthsWrapper = styled("div")`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    height: 22px;
+
+    > div:first-of-type {
+        background-color: green;
+    }
+
+    > div:last-of-type {
+        display: flex;
+    }
+`;
+
 const Wrapper = styled("div")`
     width: 264px;
     border-radius: 20px;
@@ -79,18 +96,6 @@ const Name = styled("p")`
     width: 100%;
 `;
 
-const HearthsWrapper = styled("div")`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    height: 22px;
-
-    > div:last-of-type {
-        display: flex;
-    }
-`;
 
 const SpecialEffect = styled("div")`
     display: flex;
