@@ -2,7 +2,11 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
-const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
+interface FoodCardProps extends Ingredient {
+    isIngredient?: boolean
+}
+
+const FoodCard: FC<FoodCardProps> = ({ name, numberOfHeaths, specialEffect, isIngredient }) => (
     <Wrapper>
         <HearthsWrapper>
             {numberOfHeaths < 999 && 
@@ -15,8 +19,9 @@ const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
             }
         </HearthsWrapper> 
         <IconWrapper>
-            <img src={`public/ingredients/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
         </IconWrapper>
+
         <Name>
             {name}
         </Name>
@@ -83,4 +88,4 @@ const SpecialEffect = styled("div")`
 `;
 
 
-export default Food;
+export default FoodCard;

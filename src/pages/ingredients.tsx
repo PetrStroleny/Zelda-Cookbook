@@ -14,6 +14,7 @@ export function getSearchValue(): string {
         }
     }
     
+    
     return "";
 }
 
@@ -107,6 +108,7 @@ const Ingredients = () => {
                     <FoodCard
                         key={index}
                         {...ingredient}
+                        isIngredient
                     />
                 )})}
             </CardWrapper>
