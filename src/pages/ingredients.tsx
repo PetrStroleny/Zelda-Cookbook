@@ -103,14 +103,14 @@ const Ingredients = () => {
                             }
                         }
                     }
-                    console.log(ingredient.numberOfHeaths);
+
                     return(
-                    <FoodCard
-                        key={index}
-                        {...ingredient}
-                        isIngredient
-                    />
-                )})}
+                        <FoodCard
+                            key={index}
+                            {...ingredient}
+                            isIngredient
+                        />
+                    )})}
             </CardWrapper>
             <FoodFilters search={searchQuery} setSearch={setSearchQuery} location={locationQuery} setLocation={setLocationQuery}/>
         </>

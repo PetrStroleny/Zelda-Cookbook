@@ -49,6 +49,7 @@ const Wrapper = styled("input")`
     ${p => p.theme.fontStyles.b2};
     padding: 0px 15px;
     width: 100%;
+    height: 100%;
     display: flex;
 `;
 

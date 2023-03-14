@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
@@ -70,14 +71,14 @@ const Locations = () => {
                         <>  
                             <LabelMain>{location.name}</LabelMain>
 
-                            <CardWrapper>
+                            <StyledCardWrapper>
                                 {location.subLocations.map((subLocation) => 
                                     <LocationCard
                                         key={index}
                                         {...subLocation}
                                     />
                                 )}
-                            </CardWrapper>
+                            </StyledCardWrapper>
                         </>
                     );
                 })}
@@ -85,5 +86,8 @@ const Locations = () => {
     );
 }
 
+const StyledCardWrapper = styled(CardWrapper)`
+    grid-template-columns: repeat(auto-fill, minmax(316px, 1fr));
+`;
 
 export default Locations;
