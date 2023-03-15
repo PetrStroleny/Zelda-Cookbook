@@ -5,81 +5,83 @@ import Button from "./button";
 import SearchInput, { useOpenSearchWithKeyboard } from "./search-input";
 
 interface FoodFiltersQuery {
-    search: string
+    searchQuery: string
     setSearch: (value: string) => void
 
-    location: string
+    locationQuery: string
     setLocation: (value: string) => void
 }
 
-export function getLocationValue(): string {
-    for (const query of window?.location?.search.substring(1).split("&")) {
-        if (query.split("=")[0] == "location") {
-            return  decodeURI(query.split("=")[1]);
-        }
-    }
-
-    return "";
-}
-
-const FoodFilters: FC<FoodFiltersQuery> = ({search, setSearch, location, setLocation}) => {
+const FoodFilters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, locationQuery, setLocation}) => {
     const [searchActive, setSearchActive] = useState(false);
-    useOpenSearchWithKeyboard(() => setSearchActive(true));
+    const [location, _] = useLocation();
+    useOpenSearchWithKeyboard(() => setSearchActive(true), () => setSearchActive(false));
+
+    function searchButtonClick() {
+        if (searchActive) {
+            setSearchActive(false);
+            setSearch("");
+            return;
+        }
+
+        setSearchActive(true);
+    }
 
     return(
         <Wrapper>
-
-                <Button onClick = {() => setSearchActive(p => !p)}>
+            {location != "/lokace" &&
+                <Button onClick={searchButtonClick}>
                     <img src={`public/icons/${searchActive ? "close" : "search"}.svg`}/>
                 </Button>
-            {searchActive ?
-                <SearchInput value={search} onChange={setSearch}/>
+            }
+            {searchActive || location == "/lokace" ?
+                <SearchInput value={searchQuery} onChange={setSearch}/>
             :
                 <ButtonsWrapper>
                     <Button 
-                        onClick={() => location != "Akkala Highlands" ? setLocation("Akkala Highlands") : setLocation("")} 
-                        className={location == "Akkala Highlands" ? "active" : ""}
+                        onClick={() => locationQuery != "Akkala Highlands" ? setLocation("Akkala Highlands") : setLocation("")} 
+                        className={locationQuery == "Akkala Highlands" ? "active" : ""}
                     >
                         Akkala Highlands
                     </Button>
                     <Button 
-                        onClick={() => location != "Deep Akkala" ? setLocation("Deep Akkala") : setLocation("")} 
-                        className={location == "Deep Akkala" ? "active" : ""}>
+                        onClick={() => locationQuery != "Deep Akkala" ? setLocation("Deep Akkala") : setLocation("")} 
+                        className={locationQuery == "Deep Akkala" ? "active" : ""}>
                         Deep Akkala
                     </Button>
                     <Button 
-                        onClick={() => location != "Lanayru Great Spring" ? setLocation("Lanayru Great Spring") : setLocation("")} 
-                        className={location == "Lanayru Great Spring" ? "active" : ""}>
+                        onClick={() => locationQuery != "Lanayru Great Spring" ? setLocation("Lanayru Great Spring") : setLocation("")} 
+                        className={locationQuery == "Lanayru Great Spring" ? "active" : ""}>
                         Lanayru Great Spring
                     </Button>
                     <Button 
-                        onClick={() => location !="Lanayru Sea" ? setLocation("Lanayru Sea") : setLocation("")} 
-                        className={location == "Lanayru Sea" ? "active" : ""}>
+                        onClick={() => locationQuery !="Lanayru Sea" ? setLocation("Lanayru Sea") : setLocation("")} 
+                        className={locationQuery == "Lanayru Sea" ? "active" : ""}>
                         Lanayru Sea
                     </Button>
                     <Button 
-                        onClick={() => location !="Lanayru Wetlands" ? setLocation("Lanayru Wetlands") : setLocation("")} 
-                        className={location == "Lanayru Wetlands" ? "active" : ""}>
+                        onClick={() => locationQuery !="Lanayru Wetlands" ? setLocation("Lanayru Wetlands") : setLocation("")} 
+                        className={locationQuery == "Lanayru Wetlands" ? "active" : ""}>
                         Lanayru Wetlands
                     </Button>
                     <Button 
-                        onClick={() => location !="Mount Lanayru" ? setLocation("Mount Lanayru") : setLocation("")} 
-                        className={location == "Mount Lanayru" ? "active" : ""}>
+                        onClick={() => locationQuery !="Mount Lanayru" ? setLocation("Mount Lanayru") : setLocation("")} 
+                        className={locationQuery == "Mount Lanayru" ? "active" : ""}>
                         Mount Lanayru
                     </Button>
                     <Button 
-                        onClick={() => location !="East Necluda" ? setLocation("East Necluda") : setLocation("")} 
-                        className={location == "East Necluda" ? "active" : ""}>
+                        onClick={() => locationQuery !="East Necluda" ? setLocation("East Necluda") : setLocation("")} 
+                        className={locationQuery == "East Necluda" ? "active" : ""}>
                         East Necluda
                     </Button>
                     <Button 
-                        onClick={() => location !="West Necluda" ? setLocation("West Necluda") : setLocation("")} 
-                        className={location == "West Necluda" ? "active" : ""}>
+                        onClick={() => locationQuery !="West Necluda" ? setLocation("West Necluda") : setLocation("")} 
+                        className={locationQuery == "West Necluda" ? "active" : ""}>
                         West Necluda
                     </Button>
                     <Button 
-                        onClick={() => location !="Necluda Sea" ? setLocation("Necluda Sea") : setLocation("")} 
-                        className={location == "Necluda Sea" ? "active" : ""}>
+                        onClick={() => locationQuery !="Necluda Sea" ? setLocation("Necluda Sea") : setLocation("")} 
+                        className={locationQuery == "Necluda Sea" ? "active" : ""}>
                         Necluda Sea
                     </Button>
                 </ButtonsWrapper>

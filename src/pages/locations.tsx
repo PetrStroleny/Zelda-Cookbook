@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";
@@ -20,9 +20,12 @@ export interface IngredienceLocation {
     subLocations: SubLocation[]
 }
 
-const Locations = () => {
+interface LocationsProps {
+    searchQuery: string
+}
+
+const Locations: FC<LocationsProps> = ({searchQuery}) => {
     const [locations, setLocations] = useState<IngredienceLocation[]>();
-    const [loading, setLoading] = useState(false);
     const [errored, setErrored] = useState(false);
 
     async function fetchLocations() {
@@ -72,12 +75,17 @@ const Locations = () => {
                             <LabelMain>{location.name}</LabelMain>
 
                             <StyledCardWrapper>
-                                {location.subLocations.map((subLocation) => 
-                                    <LocationCard
-                                        key={index}
-                                        {...subLocation}
-                                    />
-                                )}
+                                {location.subLocations.map((subLocation) => {
+                                    if (!subLocation.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
+
+                                    return(
+                                        
+                                        <LocationCard
+                                            key={index}
+                                            {...subLocation}
+                                        />
+                                    )
+                                })}
                             </StyledCardWrapper>
                         </>
                     );

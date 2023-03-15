@@ -8,8 +8,13 @@ interface SearchInputProps {
 
 
 // Implementace otevření hledání skrze klávesnici (ctrl+f)
-export function useOpenSearchWithKeyboard(open: () => void) {
+export function useOpenSearchWithKeyboard(open: () => void, close: () => void) {
     function handleWindowKeyUp(e: KeyboardEvent) {
+        if (e.key == "Escape") {
+            close();
+            return;
+        }
+
         if (e.key != "f" || !e.metaKey && !e.ctrlKey) return;
         e.preventDefault();
         open();
@@ -24,6 +29,7 @@ export function useOpenSearchWithKeyboard(open: () => void) {
 export function getSearchValue(): string {
     for (const query of window?.location?.search.substring(1).split("&")) {
         if (query.split("=")[0] == "q") {
+            console.log(query);
             return query.split("=")[1];
         }
     }
