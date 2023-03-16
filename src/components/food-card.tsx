@@ -19,7 +19,15 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
     return (
         <Wrapper>
         <HearthsWrapper>
-            <div>xx</div>
+            <div>
+                {extraHearths != null && 
+                <img src="public/icons/extra-heart.svg"/> 
+                }
+                <p>
+                    {extraHearths != null && "+"}
+                    {extraHearths}
+                </p>
+            </div>
             <div>
                 {numberOfHeaths == 999 ?
                         <>
@@ -30,10 +38,10 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                         </>
                     :   
                         <>
-                            {true &&
+                            {numberOfHeaths >= 6 &&
                                 <HearthWithIndex>
                                     <img src="public/icons/heart.svg"/>
-                                    <p>{true ? "x" : "xxx"}</p>
+                                    <p>5</p>
                                 </HearthWithIndex>
                             }
                                 
@@ -74,7 +82,11 @@ const HearthsWrapper = styled("div")`
     height: 22px;
 
     > div:first-of-type {
-        background-color: green;
+        display: flex;
+        >p{
+            color: ${p => p.theme.content.primary};
+            ${p => p.theme.fontStyles.items};
+        }
     }
 
     > div:last-of-type {
@@ -83,7 +95,7 @@ const HearthsWrapper = styled("div")`
 `;
 
 const Wrapper = styled("div")`
-    width: 264px;
+    
     border-radius: 20px;
     background-color: #E5E5E5;
     display: flex;

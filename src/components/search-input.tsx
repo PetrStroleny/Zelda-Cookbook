@@ -39,6 +39,7 @@ export function getSearchValue(): string {
 
 const SearchInput: FC<SearchInputProps> = ({ value, onChange }) => (
     <Wrapper 
+        placeholder="Hledat"
         autoFocus
         value={value}
         onChange={(e) => onChange(e.target.value)}
