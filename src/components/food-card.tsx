@@ -60,7 +60,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
         </HearthsWrapper>
 
         <IconWrapper>
-            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replaceAll(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${finalImageSource}.png`}/>
         </IconWrapper>
 
         <Name>
