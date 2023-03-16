@@ -174,7 +174,7 @@
         "ingredients": [
             [12]
         ],
-        "value": 25
+        "value": 25 
     },
     {
         "id": 14,
@@ -184,7 +184,11 @@
         "ingredients": [
             [14, 16]
         ],
-        "value": 25
+        "value": 25,
+        "specialEffect": {
+            "name": "mighty",
+            "duration": "2:00"
+        }
     },
     {
         "id": 15,
@@ -194,7 +198,11 @@
         "ingredients": [
             [15, 17]
         ],
-        "value": 25
+        "value": 25,
+        "specialEffect": {
+            "name": "tough",
+            "duration": "2:00"
+        }
     },
     {
         "id": 16,

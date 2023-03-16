@@ -10,6 +10,15 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
 
     const numberOfSingleHearths = numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)
 
+    let finalImageSource = name.replaceAll(" ", "_");
+
+    if (specialEffect != null || name.includes("Hearty")) {
+        let splittedImageSource = finalImageSource.split("_");
+        splittedImageSource.shift();
+        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
+        finalImageSource = splittedImageSource.join("_");
+    }
+
     return (
         <Wrapper>
         <HearthsWrapper>
@@ -51,7 +60,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
         </HearthsWrapper>
 
         <IconWrapper>
-            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replaceAll(" ", "_")}.png`}/>
         </IconWrapper>
 
         <Name>
