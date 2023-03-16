@@ -6,10 +6,33 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => (
-    <Wrapper>
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => {
+
+    const numberOfSingleHearths = numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)
+
+    let finalImageSource = name.replaceAll(" ", "_");
+
+    if (specialEffect != null || name.includes("Hearty")) {
+        let splittedImageSource = finalImageSource.split("_");
+        splittedImageSource.shift();
+        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
+        finalImageSource = splittedImageSource.join("_");
+    }
+
+    return (
+        <Wrapper>
         <HearthsWrapper>
-            <div>xx</div>
+            <div>
+                {extraHearths != null && 
+                    <>
+                        <img style={{marginRight: "6px"}} src="public/icons/extra-heart.svg"/> 
+                        <p>
+                            + 
+                            {" " + extraHearths}
+                        </p>
+                    </>
+                }
+            </div>
             <div>
                 {numberOfHeaths == 999 ?
                         <>
@@ -20,15 +43,15 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                         </>
                     :   
                         <>
-                            {true &&
+                            {numberOfHeaths >= 6 &&
                                 <HearthWithIndex>
                                     <img src="public/icons/heart.svg"/>
-                                    <p>{true ? "x" : "xxx"}</p>
+                                    <p>{numberOfHeaths - numberOfSingleHearths}</p>
                                 </HearthWithIndex>
                             }
                                 
                                 
-                            {new Array(numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)).fill("").map((_, i) => 
+                            {new Array(numberOfSingleHearths).fill("").map((_, i) => 
                                 <img key={i} src="public/icons/heart.svg"/>
                             )}  
                         </>
@@ -37,7 +60,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
         </HearthsWrapper>
 
         <IconWrapper>
-            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replaceAll(" ", "_")}.png`}/>
         </IconWrapper>
 
         <Name>
@@ -51,8 +74,9 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
             </SpecialEffect>
         }
     </Wrapper>
+    );
+}
     
-);
 const HearthsWrapper = styled("div")`
     width: 100%;
     display: flex;
@@ -62,7 +86,11 @@ const HearthsWrapper = styled("div")`
     height: 22px;
 
     > div:first-of-type {
-        background-color: green;
+        display: flex;
+        >p{
+            color: ${p => p.theme.content.primary};
+            ${p => p.theme.fontStyles.items};
+        }
     }
 
     > div:last-of-type {
@@ -128,9 +156,9 @@ const HearthWithIndex = styled("div")`
         background-color: #F1362F;
         border-radius: 999px;
         position: absolute;
-        bottom: 6px;
+        bottom: 5px;
         font-size: 12px;
-        right: 4px;
+        left: 10px;
         padding: 0px 2px;
     }
 `;
