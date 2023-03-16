@@ -6,8 +6,18 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => (
-    <Wrapper>
+const possibleEffects = ["chilly", "electro", "hasty", "mighty", "sneaky", "spicy", "tough"];
+
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => {
+
+    let finalImageSource = name.replaceAll(" ", "_");
+
+    if (SpecialEffect != null) {
+        
+    }
+
+    return (
+        <Wrapper>
         <HearthsWrapper>
             <div>xx</div>
             <div>
@@ -37,7 +47,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
         </HearthsWrapper>
 
         <IconWrapper>
-            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replaceAll(" ", "_")}.png`}/>
         </IconWrapper>
 
         <Name>
@@ -51,8 +61,10 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
             </SpecialEffect>
         }
     </Wrapper>
-    
-);
+    );
+}
+
+
 const HearthsWrapper = styled("div")`
     width: 100%;
     display: flex;
