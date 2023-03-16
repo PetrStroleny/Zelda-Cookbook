@@ -6,14 +6,15 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const possibleEffects = ["chilly", "electro", "hasty", "mighty", "sneaky", "spicy", "tough"];
-
 const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => {
 
     let finalImageSource = name.replaceAll(" ", "_");
 
-    if (SpecialEffect != null) {
-        
+    if (specialEffect != null || name.includes("Hearty")) {
+        let splittedImageSource = finalImageSource.split("_");
+        splittedImageSource.shift();
+        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
+        finalImageSource = splittedImageSource.join("_");
     }
 
     return (
@@ -55,7 +56,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
         </HearthsWrapper>
 
         <IconWrapper>
-            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${name.replaceAll(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${finalImageSource}.png`}/>
         </IconWrapper>
 
         <Name>
