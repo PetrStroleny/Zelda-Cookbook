@@ -7,6 +7,13 @@ const Button = styled("button")`
     background: ${p => p.theme.background.tertiary};
     ${p => p.theme.fontStyles.b1}; 
     cursor: pointer;
+    white-space: nowrap;
+
+    &:focus {
+        outline: none;
+        border: 2px solid ${p => p.theme.primitives.blue};
+        padding: 14px;
+    }
 
     &:hover {
         background-color: #DBDBDB;

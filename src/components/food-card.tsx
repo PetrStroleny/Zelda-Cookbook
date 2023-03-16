@@ -83,7 +83,7 @@ const HearthsWrapper = styled("div")`
 `;
 
 const Wrapper = styled("div")`
-    width: 264px;
+    
     border-radius: 20px;
     background-color: #E5E5E5;
     display: flex;

@@ -32,7 +32,9 @@ const Wrapper = styled("header")`
     align-items: flex-start;
     padding: 32px 40px;
 
-    a:nth-of-type(1){flex-grow: 1};
+    a:nth-of-type(1) {
+        margin-right: auto;
+    }
 
     > a {
         margin-right: 40px;

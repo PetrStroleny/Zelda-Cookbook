@@ -8,8 +8,13 @@ interface SearchInputProps {
 
 
 // Implementace otevření hledání skrze klávesnici (ctrl+f)
-export function useOpenSearchWithKeyboard(open: () => void) {
+export function useOpenSearchWithKeyboard(open: () => void, close: () => void) {
     function handleWindowKeyUp(e: KeyboardEvent) {
+        if (e.key == "Escape") {
+            close();
+            return;
+        }
+
         if (e.key != "f" || !e.metaKey && !e.ctrlKey) return;
         e.preventDefault();
         open();
@@ -24,6 +29,7 @@ export function useOpenSearchWithKeyboard(open: () => void) {
 export function getSearchValue(): string {
     for (const query of window?.location?.search.substring(1).split("&")) {
         if (query.split("=")[0] == "q") {
+            console.log(query);
             return query.split("=")[1];
         }
     }
@@ -33,6 +39,7 @@ export function getSearchValue(): string {
 
 const SearchInput: FC<SearchInputProps> = ({ value, onChange }) => (
     <Wrapper 
+        placeholder="Hledat"
         autoFocus
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -49,6 +56,7 @@ const Wrapper = styled("input")`
     ${p => p.theme.fontStyles.b2};
     padding: 0px 15px;
     width: 100%;
+    height: 100%;
     display: flex;
 `;
 

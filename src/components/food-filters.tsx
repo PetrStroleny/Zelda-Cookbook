@@ -5,65 +5,86 @@ import Button from "./button";
 import SearchInput, { useOpenSearchWithKeyboard } from "./search-input";
 
 interface FoodFiltersQuery {
-    search: string
+    searchQuery: string
     setSearch: (value: string) => void
 
-    location: string
+    locationQuery: string
     setLocation: (value: string) => void
 }
 
-export function getLocationValue(): string {
-    for (const query of window?.location?.search.substring(1).split("&")) {
-        if (query.split("=")[0] == "location") {
-            return  decodeURI(query.split("=")[1]);
-        }
-    }
-
-    return "";
-}
-
-const FoodFilters: FC<FoodFiltersQuery> = ({search, setSearch, location, setLocation}) => {
+const FoodFilters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, locationQuery, setLocation}) => {
     const [searchActive, setSearchActive] = useState(false);
-    useOpenSearchWithKeyboard(() => setSearchActive(true));
+    const [location, _] = useLocation();
+    useOpenSearchWithKeyboard(() => setSearchActive(true), () => setSearchActive(false));
+
+    function searchButtonClick() {
+        if (searchActive) {
+            setSearchActive(false);
+            setSearch("");
+            return;
+        }
+
+        setSearchActive(true);
+    }
 
     return(
         <Wrapper>
-
-                <Button onClick = {() => setSearchActive(p => !p)}>
+            {location != "/lokace" &&
+                <Button onClick={searchButtonClick}>
                     <img src={`public/icons/${searchActive ? "close" : "search"}.svg`}/>
                 </Button>
-            {searchActive ?
-                <SearchInput value={search} onChange={setSearch}/>
+            }
+            {searchActive || location == "/lokace" ?
+                <SearchInput value={searchQuery} onChange={setSearch}/>
             :
-                <>
-                    <Button onClick={() => setLocation("Akkala Highlands")} className={location == "Akkala Highlands" ? "active" : ""}>
+                <ButtonsWrapper>
+                    <Button 
+                        onClick={() => locationQuery != "Akkala Highlands" ? setLocation("Akkala Highlands") : setLocation("")} 
+                        className={locationQuery == "Akkala Highlands" ? "active" : ""}
+                    >
                         Akkala Highlands
                     </Button>
-                    <Button onClick={() => setLocation("Deep Akkala")} className={location == "Deep Akkala" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery != "Deep Akkala" ? setLocation("Deep Akkala") : setLocation("")} 
+                        className={locationQuery == "Deep Akkala" ? "active" : ""}>
                         Deep Akkala
                     </Button>
-                    <Button onClick={() => setLocation("Lanayru Great Spring")} className={location == "Lanayru Great Spring" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery != "Lanayru Great Spring" ? setLocation("Lanayru Great Spring") : setLocation("")} 
+                        className={locationQuery == "Lanayru Great Spring" ? "active" : ""}>
                         Lanayru Great Spring
                     </Button>
-                    <Button onClick={() => setLocation("Lanayru Sea")} className={location == "Lanayru Sea" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="Lanayru Sea" ? setLocation("Lanayru Sea") : setLocation("")} 
+                        className={locationQuery == "Lanayru Sea" ? "active" : ""}>
                         Lanayru Sea
                     </Button>
-                    <Button onClick={() => setLocation("Lanayru Wetlands")} className={location == "Lanayru Wetlands" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="Lanayru Wetlands" ? setLocation("Lanayru Wetlands") : setLocation("")} 
+                        className={locationQuery == "Lanayru Wetlands" ? "active" : ""}>
                         Lanayru Wetlands
                     </Button>
-                    <Button onClick={() => setLocation("Mount Lanayru")} className={location == "Mount Lanayru" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="Mount Lanayru" ? setLocation("Mount Lanayru") : setLocation("")} 
+                        className={locationQuery == "Mount Lanayru" ? "active" : ""}>
                         Mount Lanayru
                     </Button>
-                    <Button onClick={() => setLocation("East Necluda")} className={location == "East Necluda" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="East Necluda" ? setLocation("East Necluda") : setLocation("")} 
+                        className={locationQuery == "East Necluda" ? "active" : ""}>
                         East Necluda
                     </Button>
-                    <Button onClick={() => setLocation("West Necluda")} className={location == "West Necluda" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="West Necluda" ? setLocation("West Necluda") : setLocation("")} 
+                        className={locationQuery == "West Necluda" ? "active" : ""}>
                         West Necluda
                     </Button>
-                    <Button onClick={() => setLocation("Necluda Sea")} className={location == "Necluda Sea" ? "active" : ""}>
+                    <Button 
+                        onClick={() => locationQuery !="Necluda Sea" ? setLocation("Necluda Sea") : setLocation("")} 
+                        className={locationQuery == "Necluda Sea" ? "active" : ""}>
                         Necluda Sea
                     </Button>
-                </>
+                </ButtonsWrapper>
             }
         </Wrapper>
     );
@@ -74,13 +95,49 @@ const Wrapper = styled("div")`
     bottom: 20px;
     left: 20px;
     border-radius: 26px;
-    width: fit-content;
-    width: 1764.32px;
-    height: 80px;
+    width: calc(100% - 40px);
     padding: 10px;
     background-color: ${p => p.theme.background.primary};
     border: 10px ${p => p.theme.background.primary};
     display: flex;
+    align-items: center;
+    height: 80px;
+
+    > button {
+        margin-right: 19px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        min-height: 60px;
+        max-height: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        padding: 0;
+
+        &:after {
+            left: 78px;
+            top: 16px;
+            height: calc(100% - 32px);
+            width: 3px;
+            border-radius: 25px;
+            content: "";
+            position: absolute;
+            background-color: ${p => p.theme.background.secondary};
+        }
+    }
+`;
+
+const ButtonsWrapper = styled("div")`
+    display: flex;
+    overflow-x: auto;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
     > button {
         margin-right: 10px;
@@ -88,35 +145,8 @@ const Wrapper = styled("div")`
         &:last-of-type {
             margin-right: 0;
         }
-
-        &:first-of-type {
-            margin-right: 19px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: fit-content;
-            position: relative;
-            min-height: 60px;
-            max-height: 60px;
-            min-width: 60px;
-            max-width: 60px;
-            padding: 0;
-
-            &:after {
-                right: -9.5px;
-                top: 6px;
-                height: 48px;
-                width: 3px;
-                border-radius: 25px;
-                content: "";
-                position: absolute;
-                background-color: ${p => p.theme.background.secondary};
-            }
-        }
-
     }
 `;
-
 
 
 export default FoodFilters;
