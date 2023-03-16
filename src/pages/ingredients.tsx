@@ -31,15 +31,40 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
     const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [errored, setErrored] = useState(false);
 
+    async function fetchLocations() {
+        try {
+            const res = await fetch('../server/locations.json');
+            const json = await res.json();
+            
+            setLocations(json.data)
+        } catch (e) {
+            console.error(e);
+            setErrored(true);
+        }
+    }
+
     async function fetchIngedients() {
         try {
             const res = await fetch('../server/ingredients.json');
-            const json = await res.json();
-            setIngredients(json.data);
+            const json: {data: Ingredient[]} = await res.json();
+            let filteredIngrediences = [];
 
-            const res2 = await fetch('../server/locations.json');
-            const json2 = await res2.json();
-            setLocations(json2.data)
+            ingredientLoop: for (const ingredient of json.data) {
+                if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) continue ingredientLoop;
+                if (locations) {
+                    firstLoop: for (const location of locations) {
+                        for (const subLocation of location.subLocations) {
+                            if (subLocation.name == locationQuery) {
+                                if (!subLocation.ingredients.includes(ingredient.id)) continue ingredientLoop;
+                                break firstLoop;
+                            }
+                        }
+                    }
+                }
+                filteredIngrediences.push(ingredient);
+            }
+            console.log(filteredIngrediences);
+            setIngredients(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
@@ -47,8 +72,12 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
     }
 
     useEffect(() => {
-        fetchIngedients();
+        fetchLocations();
     }, []);
+
+    useEffect(() => {
+        fetchIngedients();
+    }, [locationQuery, searchQuery, locations]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -77,26 +106,13 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
                 Ingredience
             </PageHeader>
             <CardWrapper>
-                {ingredients.map((ingredient, index) => {
-                    if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
-                    if (locations) {
-                        firstLoop: for (const location of locations) {
-                            for (const subLocation of location.subLocations) {
-                                if (subLocation.name == locationQuery) {
-                                    if (!subLocation.ingredients.includes(ingredient.id)) return;
-                                    break firstLoop;
-                                }
-                            }
-                        }
-                    }
-
-                    return(
+                {ingredients.map((ingredient, index) => (
                         <FoodCard
                             key={index}
                             {...ingredient}
                             isIngredient
                         />
-                    )})}
+                    ))}
             </CardWrapper>
         </>
     );
