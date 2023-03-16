@@ -6,17 +6,23 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => (
-    <Wrapper>
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => {
+
+    const numberOfSingleHearths = numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)
+
+    return (
+        <Wrapper>
         <HearthsWrapper>
             <div>
                 {extraHearths != null && 
-                <img src="public/icons/extra-heart.svg"/> 
+                    <>
+                        <img style={{marginRight: "6px"}} src="public/icons/extra-heart.svg"/> 
+                        <p>
+                            + 
+                            {" " + extraHearths}
+                        </p>
+                    </>
                 }
-                <p>
-                    {extraHearths != null && "+"}
-                    {extraHearths}
-                </p>
             </div>
             <div>
                 {numberOfHeaths == 999 ?
@@ -31,12 +37,12 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                             {numberOfHeaths >= 6 &&
                                 <HearthWithIndex>
                                     <img src="public/icons/heart.svg"/>
-                                    <p>5</p>
+                                    <p>{numberOfHeaths - numberOfSingleHearths}</p>
                                 </HearthWithIndex>
                             }
                                 
                                 
-                            {new Array(numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)).fill("").map((_, i) => 
+                            {new Array(numberOfSingleHearths).fill("").map((_, i) => 
                                 <img key={i} src="public/icons/heart.svg"/>
                             )}  
                         </>
@@ -59,8 +65,9 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
             </SpecialEffect>
         }
     </Wrapper>
+    );
+}
     
-);
 const HearthsWrapper = styled("div")`
     width: 100%;
     display: flex;
@@ -140,9 +147,9 @@ const HearthWithIndex = styled("div")`
         background-color: #F1362F;
         border-radius: 999px;
         position: absolute;
-        bottom: 6px;
+        bottom: 5px;
         font-size: 12px;
-        right: 4px;
+        left: 10px;
         padding: 0px 2px;
     }
 `;
