@@ -6,8 +6,6 @@ import { validateIsNumber } from "../utils/form";
 import Button, { ButtonVariant } from "./button";
 import Input from "./input";
 import { useOpenAndClose } from "./search-input";
-import TextArea from "./text-area";
-
 
 export enum ModalType {
     LOCATION,

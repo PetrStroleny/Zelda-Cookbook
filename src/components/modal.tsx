@@ -1,8 +1,14 @@
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import styled from "@emotion/styled";
 
-export default function Modal() {
+interface ModalProps {
+  label: string
+  description: string
+  imgSrc: string
+}
+
+const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
   const [modal, setModal] = useState(false);
 
   const toggleModal = () => {
@@ -34,7 +40,6 @@ export default function Modal() {
           </Content>
         </Wrapper>
       )}
-
     </>
   );
 }
@@ -82,3 +87,5 @@ const CloseButton = styled("button")`
     color: red;
   }
 `;
+
+export default Modal;

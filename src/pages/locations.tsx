@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useContext } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";
@@ -23,8 +23,19 @@ export interface IngredienceLocation {
 
 const Locations = () => {
     const {locations, searchQuery} = useContext(GlobalContext);
+    const [activeLocations, setActiveLocations] = useState<IngredienceLocation[]>([]);
+
+
+    useEffect(() => {
+        let filteredLocations = [];
+        for (const location of locations) {
+            if (!location.name.toLowerCase().includes(searchQuery.toLowerCase())) continue;
+            filteredLocations.push(location);
+        }
+        setActiveLocations(filteredLocations);
+    }, [locations])
     
-    if (!locations) {
+    if (locations.length == 0) {
         return (
             <>
                 <Helmet>
@@ -46,7 +57,7 @@ const Locations = () => {
             <PageHeader>
                 Lokace
             </PageHeader>
-                {locations.map((location, index) => 
+                {activeLocations.map((location, index) => 
                     <div key={index}>  
                         <LabelMain>{location.name}</LabelMain>
 

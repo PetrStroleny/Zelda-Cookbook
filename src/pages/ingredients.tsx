@@ -29,7 +29,7 @@ const Ingredients = () => {
     const [loading, setLoading] = useState(false);
     const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
-    const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>(ingredients);
+    const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
     const [addModalActive, setAddModalActive] = useState(false);
 
@@ -53,7 +53,7 @@ const Ingredients = () => {
                 filteredIngrediences.push(ingredient);
             }
 
-            setFilteredIngredients(filteredIngrediences);
+            setAcitiveIngredients(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
@@ -64,13 +64,13 @@ const Ingredients = () => {
 
     useEffect(() => {
         fetchIngedients();
-    }, [locationQuery, searchQuery]);
+    }, [locationQuery, searchQuery, ingredients]);
 
     if (errored) {
         return <ErrorPage/>;
     }
 
-    if (!ingredients) {
+    if (ingredients.length == 0) {
         return (
             <>
                 <Helmet>
@@ -113,7 +113,7 @@ const Ingredients = () => {
                 Ingredience
             </PageHeader>
             <CardWrapper>
-                {!loading ? filteredIngredients.map((ingredient, index) => (
+                {!loading ? activeIngredients.map((ingredient, index) => (
                         <FoodCard
                             key={index}
                             {...ingredient}

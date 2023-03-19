@@ -1,4 +1,3 @@
-import { Ingredient } from "../pages/ingredients";
 
 interface ValidateNumberErrors {
     baseError?: string
