@@ -7,7 +7,7 @@
         "ingredients": [
             [1, 2]
         ],
-        "value": 50
+        "price": 50
     },
     {
         "id": 2,
@@ -18,7 +18,7 @@
         "ingredients": [
             [3]
         ],
-        "value": 100
+        "price": 100
     },
     {
         "id": 3,
@@ -28,7 +28,7 @@
         "ingredients": [
             [4]
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "hasty",
             "duration": "2:00"
@@ -44,7 +44,7 @@
             [5]
 
         ],
-        "value": 50
+        "price": 50
     },
     {
         "id": 5,
@@ -57,7 +57,7 @@
             [11]
 
         ],
-        "value": 100
+        "price": 100
     },
     {
         "id": 6,
@@ -69,7 +69,7 @@
             [5, 6, 7, 8, 9, 10, 11]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "hasty",
             "duration": "2:00"
@@ -85,7 +85,7 @@
             [9]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "spicy",
             "duration": "2:00"
@@ -101,7 +101,7 @@
             [8]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "electro",
             "duration": "2:00"
@@ -117,7 +117,7 @@
             [6]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "tough",
             "duration": "2:00"
@@ -133,7 +133,7 @@
             [7]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "sneaky",
             "duration": "2:00"
@@ -149,7 +149,7 @@
             [10]
 
         ],
-        "value": 100,
+        "price": 100,
         "specialEffect": {
             "name": "chilly",
             "duration": "2:00"
@@ -163,7 +163,7 @@
         "ingredients": [
             [13]
         ],
-        "value": 25
+        "price": 25
     },
     {
         "id": 13,
@@ -174,7 +174,7 @@
         "ingredients": [
             [12]
         ],
-        "value": 25 
+        "price": 25 
     },
     {
         "id": 14,
@@ -184,7 +184,7 @@
         "ingredients": [
             [14, 16]
         ],
-        "value": 25,
+        "price": 25,
         "specialEffect": {
             "name": "mighty",
             "duration": "2:00"
@@ -198,7 +198,7 @@
         "ingredients": [
             [15, 17]
         ],
-        "value": 25,
+        "price": 25,
         "specialEffect": {
             "name": "tough",
             "duration": "2:00"
@@ -212,7 +212,7 @@
         "ingredients": [
             [15, 17]
         ],
-        "value": 25
+        "price": 25
     },
     {
         "id": 17,
@@ -223,6 +223,6 @@
         "ingredients": [
             [15, 17]
         ],
-        "value": 25
+        "price": 25
     }
 ]}

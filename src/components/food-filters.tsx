@@ -16,7 +16,7 @@ interface FoodFiltersQuery {
 const FoodFilters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, locationQuery, setLocation}) => {
     const [searchActive, setSearchActive] = useState(false);
     const [location, _] = useLocation();
-    useOpenAndClose(() => setSearchActive(true), () => setSearchActive(false));
+    useOpenAndClose(() => setSearchActive(true), () => {setSearchActive(false); setSearch("")});
     const globalContext = useContext(GlobalContext);
 
 

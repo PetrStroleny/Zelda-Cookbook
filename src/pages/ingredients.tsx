@@ -20,7 +20,7 @@ export interface Ingredient {
     name: string
     description: string
     specialEffect?: SpecialEffect
-    value: number
+    price: number
 }
 
 
@@ -28,6 +28,8 @@ const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
     const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+
+    const [filteredIngredients, setFilteredIngredients] = useState<Ingredient[]>(ingredients);
 
     const [addModalActive, setAddModalActive] = useState(false);
 
@@ -51,7 +53,7 @@ const Ingredients = () => {
                 filteredIngrediences.push(ingredient);
             }
 
-            setIngredients(filteredIngrediences);
+            setFilteredIngredients(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
@@ -111,7 +113,7 @@ const Ingredients = () => {
                 Ingredience
             </PageHeader>
             <CardWrapper>
-                {!loading ? ingredients.map((ingredient, index) => (
+                {!loading ? filteredIngredients.map((ingredient, index) => (
                         <FoodCard
                             key={index}
                             {...ingredient}

@@ -20,8 +20,9 @@ const Recipes = () => {
 
     const {recipes, setRecipes, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
-    const [addModalActive, setAddModalActive] = useState(false);
+    const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
+    const [addModalActive, setAddModalActive] = useState(false);
 
     async function fetchRecipes() {
         try {
@@ -50,7 +51,7 @@ const Recipes = () => {
                 filteredIngrediences.push(recipe);
             }
             
-            setRecipes(filteredIngrediences);
+            setFilteredRecipes(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
@@ -60,8 +61,9 @@ const Recipes = () => {
     }
     
     useEffect(() => {
+        console.log(searchQuery);
         fetchRecipes();
-    }, [locationQuery, searchQuery, recipes]);
+    }, [locationQuery, searchQuery]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -111,7 +113,7 @@ const Recipes = () => {
             </PageHeader>
             
             <CardWrapper>
-                {!loading ? recipes.map((recipe, index) => 
+                {!loading ? filteredRecipes.map((recipe, index) => 
                     <FoodCard
                         key={index}
                         {...recipe}

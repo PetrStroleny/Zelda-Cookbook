@@ -1,17 +1,13 @@
 
-import { FC, useState } from "react";
 import styled from "@emotion/styled";
-import { useOpenAndClose } from "./search-input";
-import Input from "./input";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { validateIsNumber } from "../utils/form";
 import Button, { ButtonVariant } from "./button";
+import Input from "./input";
+import { useOpenAndClose } from "./search-input";
+import TextArea from "./text-area";
 
-interface AddModalProps {
-    hide: () => void
-    submitFunction: (values: any) => void
-    type: ModalType
-}
 
 export enum ModalType {
     LOCATION,
@@ -27,22 +23,37 @@ function getModalLabel(type: ModalType) {
             return "Přidat recept";
         case ModalType.INGREDIENT:
             return "Přidat ingredienci";
-    }
+        }
+}
+            
+interface AddModalProps {
+    hide: () => void
+    submitFunction: (values: any) => void
+    type: ModalType
 }
 
 const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
-    const { control, handleSubmit } = useForm<{ name: string, numberOfHearts: number }>();
+    const { control, handleSubmit } = useForm<{ 
+        name: string, 
+        description: string,
+        numberOfHearts?: number,
+    }>();
+
     const [customHeartsError, setCustomHeartsError] = useState("");
 
     const onSubmit = async (data: any) => {
         await submitFunction(data);
+        hide();
     };
 
     useOpenAndClose(() => {}, hide);
 
     return (
         <Wrapper onClick={hide}>
-            <Content onSubmit={handleSubmit(onSubmit)} onClick={(e) => e.stopPropagation()}>
+            <Content 
+                onSubmit={handleSubmit(onSubmit)} 
+                onClick={(e) => e.stopPropagation()}
+            >
                 <h2>{getModalLabel(type)}</h2>
                 <Input 
                     label="Název"
@@ -50,7 +61,7 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                     rules={{ required: { message: "Vyplňte název", value: true } }}
                     name="name"
                 />
-                { type != ModalType.LOCATION &&
+                {type != ModalType.LOCATION &&
                     <Input 
                         label="Počet srdíček"
                         control={control}
@@ -71,6 +82,8 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                         }}  
                     />
                 }
+                {/* <TextArea/> */}
+                
 
                 <div>
                     <Button onClick={hide} type="button">

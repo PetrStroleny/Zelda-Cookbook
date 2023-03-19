@@ -23,7 +23,6 @@ export function getSearchValue(): string {
       }
   }
   
-  
   return "";
 }
 
