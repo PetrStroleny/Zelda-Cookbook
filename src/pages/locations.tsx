@@ -1,12 +1,11 @@
 import styled from "@emotion/styled";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";
 import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
-import ErrorPage from "./error-page";
-
+import { GlobalContext } from "../utils/global-context";
 
 export interface SubLocation {
     id: number
@@ -20,32 +19,11 @@ export interface IngredienceLocation {
     subLocations: SubLocation[]
 }
 
-interface LocationsProps {
-    searchQuery: string
-}
 
-const Locations: FC<LocationsProps> = ({searchQuery}) => {
-    const [locations, setLocations] = useState<IngredienceLocation[]>();
-    const [errored, setErrored] = useState(false);
 
-    async function fetchLocations() {
-        try {
-            const res = await fetch('../server/locations.json');
-            const json = await res.json();
-            
-            setLocations(json.data);
-        } catch (e) {
-            console.error(e);
-            setErrored(true);
-        }
-    }
-
-    useEffect(() => {fetchLocations()}, []);
-
-    if (errored) {
-        return <ErrorPage/>;
-    }
-
+const Locations = () => {
+    const {locations, searchQuery} = useContext(GlobalContext);
+    
     if (!locations) {
         return (
             <>

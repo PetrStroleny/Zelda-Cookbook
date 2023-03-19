@@ -1,49 +1,34 @@
+import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import FoodCard from "../components/food-card";
+import AddModal, { ModalType } from "../components/add-modal";
+import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
-import { Ingredient } from "./ingredients";
-import { FC, useEffect, useState } from "react";
-import ErrorPage from "./error-page";
+import FoodCard from "../components/food-card";
 import PageHeader from "../components/page-header";
-import FoodFilters from "../components/food-filters";
-import { IngredienceLocation } from "./locations";
+import { addReceipt, GlobalContext } from "../utils/global-context";
+import ErrorPage from "./error-page";
+import { Ingredient } from "./ingredients";
 
 export interface Recipe extends Ingredient {
     ingredients: number[][]
 }
 
-interface RecipesProps {
-    locationQuery: string
-    searchQuery: string
-}
 
-const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
-    const [recipes, setRecipes] = useState<Recipe[]>();
-    const [locations, setLocations] = useState<IngredienceLocation[]>();
+const Recipes = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    async function fetchLocations() {
-        try {
-            const res = await fetch('../server/locations.json');
-            const json = await res.json();
-            
-            setLocations(json.data)
-        } catch (e) {
-            console.error(e);
-            setErrored(true);
-        }
-    }
+    const {recipes, setRecipes, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+
+    const [addModalActive, setAddModalActive] = useState(false);
+
 
     async function fetchRecipes() {
         try {
             setLoading(true);
-            const res = await fetch('../server/recipes.json');
-            const json: {data: Recipe[]} = await res.json();
-            setRecipes(json.data);
             let filteredIngrediences = [];
 
-            recipeLoop: for (const recipe of json.data) {
+            recipeLoop: for (const recipe of recipes) {
                 if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
                 if (locations) {
                     firstLoop: for (const location of locations) {
@@ -73,14 +58,10 @@ const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
             setLoading(false);
         }
     }
-
-    useEffect(() => {
-        fetchLocations();
-    }, []);
-
+    
     useEffect(() => {
         fetchRecipes();
-    }, [locationQuery, searchQuery, locations]);
+    }, [locationQuery, searchQuery, recipes]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -105,37 +86,37 @@ const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
                 <meta property="og:title" content="Recepty | ZELDA COOK"/>
                 <title>Recepty | ZELDA COOK</title>
             </Helmet>
-                <PageHeader>
-                    Recepty
-                </PageHeader>
-            <CardWrapper>
-                {!loading ? recipes.map((recipe, index) => {
-                    if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase()))  return;
-                    if (locations) {
-                        firstLoop: for (const location of locations) {
-                            for (const subLocation of location.subLocations) {
-                                if (subLocation.name == locationQuery) {
-                                    let recipeIngredientInLocation = false;
-                                    for (let i = 0; i < recipe.ingredients.length; i++) {
-                                        for (let x = 0; x < recipe.ingredients[i].length; x++) {
-                                            if (subLocation.ingredients.includes(recipe.ingredients[i][x])) {
-                                                return;
-                                            }
-                                        }
-                                    }
-                                    break firstLoop;
-                                }
-                            }
-                        }
-                    }
 
-                    return(
-                        <FoodCard
-                            key={index}
-                            {...recipe}
-                        />
-                    )
-                }) : <div>Nacitani...</div>}
+            {addModalActive &&
+                <AddModal 
+                    type={ModalType.RECEIPT}
+                    submitFunction={(data) =>
+                        addReceipt(data, recipes, setRecipes)
+                    } 
+                    hide={() => setAddModalActive(false)}
+                />
+            }
+
+            <PageHeader
+                trailing={
+                    <Button 
+                        onClick={() => setAddModalActive(true)}
+                        variant={ButtonVariant.BLUE} 
+                        rounded
+                    >
+                        <img src="public/icons/add.svg"/>
+                    </Button>}
+            >
+                Recepty
+            </PageHeader>
+            
+            <CardWrapper>
+                {!loading ? recipes.map((recipe, index) => 
+                    <FoodCard
+                        key={index}
+                        {...recipe}
+                    />
+                ) : <div>Nacitani...</div>}
             </CardWrapper>
         </>
     );

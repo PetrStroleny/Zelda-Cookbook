@@ -6,9 +6,9 @@ interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, specialEffect, isIngredient }) => {
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, isIngredient }) => {
 
-    const numberOfSingleHearths = numberOfHeaths == 5 ? 5 : Math.floor(numberOfHeaths % 5)
+    const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
 
     let finalImageSource = name.replaceAll(" ", "_");
 
@@ -34,7 +34,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                 }
             </div>
             <div>
-                {numberOfHeaths == 999 ?
+                {numberOfHearts == 999 ?
                         <>
                             <img src="public/icons/heart.svg"/>
                             <FullRecovery>
@@ -43,10 +43,10 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
                         </>
                     :   
                         <>
-                            {numberOfHeaths >= 6 &&
+                            {numberOfHearts >= 6 &&
                                 <HearthWithIndex>
                                     <img src="public/icons/heart.svg"/>
-                                    <p>{numberOfHeaths - numberOfSingleHearths}</p>
+                                    <p>{numberOfHearts - numberOfSingleHearths}</p>
                                 </HearthWithIndex>
                             }
                                 

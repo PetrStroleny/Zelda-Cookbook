@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useLocation } from "wouter";
+import { GlobalContext } from "../utils/global-context";
 import Button from "./button";
-import SearchInput, { useOpenSearchWithKeyboard } from "./search-input";
+import SearchInput, { useOpenAndClose } from "./search-input";
 
 interface FoodFiltersQuery {
     searchQuery: string
@@ -15,7 +16,9 @@ interface FoodFiltersQuery {
 const FoodFilters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, locationQuery, setLocation}) => {
     const [searchActive, setSearchActive] = useState(false);
     const [location, _] = useLocation();
-    useOpenSearchWithKeyboard(() => setSearchActive(true), () => setSearchActive(false));
+    useOpenAndClose(() => setSearchActive(true), () => setSearchActive(false));
+    const globalContext = useContext(GlobalContext);
+
 
     function searchButtonClick() {
         if (searchActive) {
@@ -38,52 +41,17 @@ const FoodFilters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, locationQuer
                 <SearchInput value={searchQuery} onChange={setSearch}/>
             :
                 <ButtonsWrapper>
-                    <Button 
-                        onClick={() => locationQuery != "Akkala Highlands" ? setLocation("Akkala Highlands") : setLocation("")} 
-                        className={locationQuery == "Akkala Highlands" ? "active" : ""}
-                    >
-                        Akkala Highlands
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery != "Deep Akkala" ? setLocation("Deep Akkala") : setLocation("")} 
-                        className={locationQuery == "Deep Akkala" ? "active" : ""}>
-                        Deep Akkala
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery != "Lanayru Great Spring" ? setLocation("Lanayru Great Spring") : setLocation("")} 
-                        className={locationQuery == "Lanayru Great Spring" ? "active" : ""}>
-                        Lanayru Great Spring
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="Lanayru Sea" ? setLocation("Lanayru Sea") : setLocation("")} 
-                        className={locationQuery == "Lanayru Sea" ? "active" : ""}>
-                        Lanayru Sea
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="Lanayru Wetlands" ? setLocation("Lanayru Wetlands") : setLocation("")} 
-                        className={locationQuery == "Lanayru Wetlands" ? "active" : ""}>
-                        Lanayru Wetlands
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="Mount Lanayru" ? setLocation("Mount Lanayru") : setLocation("")} 
-                        className={locationQuery == "Mount Lanayru" ? "active" : ""}>
-                        Mount Lanayru
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="East Necluda" ? setLocation("East Necluda") : setLocation("")} 
-                        className={locationQuery == "East Necluda" ? "active" : ""}>
-                        East Necluda
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="West Necluda" ? setLocation("West Necluda") : setLocation("")} 
-                        className={locationQuery == "West Necluda" ? "active" : ""}>
-                        West Necluda
-                    </Button>
-                    <Button 
-                        onClick={() => locationQuery !="Necluda Sea" ? setLocation("Necluda Sea") : setLocation("")} 
-                        className={locationQuery == "Necluda Sea" ? "active" : ""}>
-                        Necluda Sea
-                    </Button>
+                    {globalContext.locations.map(mainLocation => 
+                        mainLocation.subLocations.map((subLocation, index) =>
+                            <Button 
+                                key={index}
+                                onClick={() => locationQuery != subLocation.name ? setLocation(subLocation.name) : setLocation("")} 
+                                className={locationQuery == subLocation.name ? "active" : ""}
+                            >
+                                {subLocation.name}
+                            </Button>
+                        )
+                    )}
                 </ButtonsWrapper>
             }
         </Wrapper>

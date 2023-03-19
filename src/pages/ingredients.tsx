@@ -1,10 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import AddModal, { ModalType } from "../components/add-modal";
+import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
 import PageHeader from "../components/page-header";
+import { addIngredient, GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
-import { IngredienceLocation, SubLocation } from "./locations";
 
 
 export interface SpecialEffect {
@@ -13,7 +15,7 @@ export interface SpecialEffect {
 }
 export interface Ingredient {
     id: number
-    numberOfHeaths: number
+    numberOfHearts: number
     extraHearths?: number
     name: string
     description: string
@@ -21,37 +23,20 @@ export interface Ingredient {
     value: number
 }
 
-interface IngredientsProps {
-    locationQuery: string
-    searchQuery: string
-}
 
-const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
-    const [ingredients, setIngredients] = useState<Ingredient[]>();
-    const [locations, setLocations] = useState<IngredienceLocation[]>();
+const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
+    const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
-    async function fetchLocations() {
-        try {
-            const res = await fetch('../server/locations.json');
-            const json = await res.json();
-            
-            setLocations(json.data)
-        } catch (e) {
-            console.error(e);
-            setErrored(true);
-        }
-    }
+    const [addModalActive, setAddModalActive] = useState(false);
 
-    async function fetchIngedients() {
+    function fetchIngedients() {
         try {
             setLoading(true);
-            const res = await fetch('../server/ingredients.json');
-            const json: {data: Ingredient[]} = await res.json();
             let filteredIngrediences = [];
 
-            ingredientLoop: for (const ingredient of json.data) {
+            ingredientLoop: for (const ingredient of ingredients) {
                 if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) continue ingredientLoop;
                 if (locations) {
                     firstLoop: for (const location of locations) {
@@ -76,12 +61,8 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
     }
 
     useEffect(() => {
-        fetchLocations();
-    }, []);
-
-    useEffect(() => {
         fetchIngedients();
-    }, [locationQuery, searchQuery, locations]);
+    }, [locationQuery, searchQuery]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -106,7 +87,27 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
                 <meta property="og:title" content="Ingredience | ZELDA COOK"/>
                 <title>Ingredience | ZELDA COOK</title>
             </Helmet>
-            <PageHeader>
+
+            {addModalActive &&
+                <AddModal 
+                    type={ModalType.INGREDIENT}
+                    submitFunction={(data) =>
+                        addIngredient(data, ingredients, setIngredients)
+                    } 
+                    hide={() => setAddModalActive(false)}
+                />
+            }
+
+            <PageHeader 
+                trailing={
+                    <Button 
+                        onClick={() => setAddModalActive(true)}
+                        variant={ButtonVariant.BLUE} 
+                        rounded
+                    >
+                        <img src="public/icons/add.svg"/>
+                    </Button>
+                }>
                 Ingredience
             </PageHeader>
             <CardWrapper>

@@ -13,10 +13,12 @@ export const Theme = {
       tertiary: "#E5E5E5",
       quarternaly: "#D3D3D3",
     },
+    
     primitives: {
       blue: "#00BFFA",
       red: "#F15050",
       yellow: "#E1C139",
+      green: "#D1FFBD",
     },
     inverse: {
       content: {
