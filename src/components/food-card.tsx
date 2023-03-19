@@ -12,7 +12,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHeaths, speci
 
     let finalImageSource = name.replaceAll(" ", "_");
 
-    if (specialEffect != null || name.includes("Hearty")) {
+    if (!isIngredient && (specialEffect != null || name.includes("Hearty"))) {
         let splittedImageSource = finalImageSource.split("_");
         splittedImageSource.shift();
         splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);

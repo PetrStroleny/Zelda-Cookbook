@@ -68,28 +68,24 @@ const Locations: FC<LocationsProps> = ({searchQuery}) => {
             <PageHeader>
                 Lokace
             </PageHeader>
-                {locations.map((location, index) => {
-                
-                    return (
-                        <>  
-                            <LabelMain>{location.name}</LabelMain>
+                {locations.map((location, index) => 
+                    <div key={index}>  
+                        <LabelMain>{location.name}</LabelMain>
 
-                            <StyledCardWrapper>
-                                {location.subLocations.map((subLocation) => {
-                                    if (!subLocation.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
+                        <StyledCardWrapper>
+                            {location.subLocations.map((subLocation, index) => {
+                                if (!subLocation.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
 
-                                    return(
-                                        
-                                        <LocationCard
-                                            key={index}
-                                            {...subLocation}
-                                        />
-                                    )
-                                })}
-                            </StyledCardWrapper>
-                        </>
-                    );
-                })}
+                                return(
+                                    <LocationCard
+                                    {...subLocation}
+                                    key={index}
+                                    />
+                                )
+                            })}
+                        </StyledCardWrapper>
+                    </div>
+                )}
         </>
     );
 }

@@ -30,6 +30,7 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
     const [ingredients, setIngredients] = useState<Ingredient[]>();
     const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [errored, setErrored] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     async function fetchLocations() {
         try {
@@ -45,6 +46,7 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
 
     async function fetchIngedients() {
         try {
+            setLoading(true);
             const res = await fetch('../server/ingredients.json');
             const json: {data: Ingredient[]} = await res.json();
             let filteredIngrediences = [];
@@ -63,11 +65,13 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
                 }
                 filteredIngrediences.push(ingredient);
             }
-            console.log(filteredIngrediences);
+
             setIngredients(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -106,13 +110,15 @@ const Ingredients: FC<IngredientsProps> = ({locationQuery, searchQuery}) => {
                 Ingredience
             </PageHeader>
             <CardWrapper>
-                {ingredients.map((ingredient, index) => (
+                {!loading ? ingredients.map((ingredient, index) => (
                         <FoodCard
                             key={index}
                             {...ingredient}
                             isIngredient
                         />
-                    ))}
+                    )) :
+                    <div>Nacitani....</div>
+                }
             </CardWrapper>
         </>
     );

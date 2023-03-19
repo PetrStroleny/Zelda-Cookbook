@@ -21,23 +21,66 @@ const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
     const [recipes, setRecipes] = useState<Recipe[]>();
     const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [errored, setErrored] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    async function fetchRecipes() {
+    async function fetchLocations() {
         try {
-            const res = await fetch('../server/recipes.json');
+            const res = await fetch('../server/locations.json');
             const json = await res.json();
-            setRecipes(json.data);
-
-            const res2 = await fetch('../server/locations.json');
-            const json2 = await res2.json();
-            setLocations(json2.data)
+            
+            setLocations(json.data)
         } catch (e) {
             console.error(e);
             setErrored(true);
         }
     }
 
-    useEffect(() => {fetchRecipes()}, []);
+    async function fetchRecipes() {
+        try {
+            setLoading(true);
+            const res = await fetch('../server/recipes.json');
+            const json: {data: Recipe[]} = await res.json();
+            setRecipes(json.data);
+            let filteredIngrediences = [];
+
+            recipeLoop: for (const recipe of json.data) {
+                if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
+                if (locations) {
+                    firstLoop: for (const location of locations) {
+                        for (const subLocation of location.subLocations) {
+                            if (subLocation.name == locationQuery) {
+                                for (let i = 0; i < recipe.ingredients.length; i++) {
+                                    for (let x = 0; x < recipe.ingredients[i].length; x++) {
+                                        if (subLocation.ingredients.includes(recipe.ingredients[i][x])) {
+                                            continue recipeLoop;;
+                                        }
+                                    }
+                                }
+                                break firstLoop;
+                            }
+                        }
+                    }
+                }
+
+                filteredIngrediences.push(recipe);
+            }
+            
+            setRecipes(filteredIngrediences);
+        } catch (e) {
+            console.error(e);
+            setErrored(true);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchLocations();
+    }, []);
+
+    useEffect(() => {
+        fetchRecipes();
+    }, [locationQuery, searchQuery, locations]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -66,7 +109,7 @@ const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
                     Recepty
                 </PageHeader>
             <CardWrapper>
-                {recipes.map((recipe, index) => {
+                {!loading ? recipes.map((recipe, index) => {
                     if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase()))  return;
                     if (locations) {
                         firstLoop: for (const location of locations) {
@@ -92,7 +135,7 @@ const Recipes: FC<RecipesProps> = ({locationQuery, searchQuery}) => {
                             {...recipe}
                         />
                     )
-                })}
+                }) : <div>Nacitani...</div>}
             </CardWrapper>
         </>
     );
