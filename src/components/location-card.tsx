@@ -14,16 +14,12 @@ const LocationCard: FC<SubLocation> = ({ name }) => (
 );
 
 const Wrapper = styled("div")`
-    width: 316px;
-    height: 308px;
     border-radius: 20px;
     background-color: #E5E5E5;
     display: flex;
     flex-direction: column;
-    
-    
-
 `;
+
 const Name = styled("p")`
     color: ${p => p.theme.content.primary};
     ${p => p.theme.fontStyles.b1}
@@ -31,11 +27,10 @@ const Name = styled("p")`
 `;
 
 const StyledImg = styled("img")`
-    width: 316px;
-        height: 260px;
-        object-fit: cover;
-        border-radius: 20px 20px 0px 0px;
-    
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 20px 20px 0px 0px;  
 `;
 
 

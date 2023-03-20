@@ -16,6 +16,7 @@ const Wrapper = styled("div")`
    display: flex;
    align-items: center;
    justify-content: space-between;
+   margin-bottom: 56px;
 `;
 
 const H1 = styled("h1")`

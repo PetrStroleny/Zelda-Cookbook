@@ -34,7 +34,7 @@ const Input: FC<InputProps> = ({
     return (
         <Wrapper>
             {label &&
-                <InputLabel>
+                <InputLabel htmlFor={name}>
                     {label}
                 </InputLabel>
             }
@@ -65,10 +65,11 @@ const Wrapper = styled("div")`
     width: 100%;
 `;
 
-export const InputLabel = styled("h4")`
+export const InputLabel = styled("label")`
     ${p => p.theme.fontStyles.h4};
     color: ${p => p.theme.content.primary};
     margin-bottom: 10px;
+    cursor: pointer;
 `;
 
 const StyledInput = styled("input") <{ errored?: boolean, hide?: boolean }>`

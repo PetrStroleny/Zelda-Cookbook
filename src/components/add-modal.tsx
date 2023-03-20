@@ -111,13 +111,15 @@ const Wrapper = styled("div")`
 
 const Content = styled("form")`
     background-color: ${p => p.theme.background.primary};
-    padding: 14px 28px;
+    padding: 18px 28px;
     border-radius: 16px;
     box-shadow: rgba(0, 0, 0, 0.592) 0px 5px 15px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 50%; 
+    overflow-y: auto;
+    max-height: 100%;
 
     > h2 {
         ${p => p.theme.fontStyles.h2};

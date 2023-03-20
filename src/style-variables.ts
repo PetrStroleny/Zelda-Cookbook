@@ -42,7 +42,7 @@ export const Theme = {
     },
   
     breakPoints: {
-      mobile: 1000,
+      mobile: 750,
     },
   }
   
