@@ -44,9 +44,8 @@ const TextArea: FC<TextAreaProps> = ({
                 id={name}
                 onChange={(e) => field.onChange(e.target.value)}
                 errored={(!!fieldState.error || errored )}
-                {...props} 
+                {...props}               
             />
-
             <InputUnderInformation>
                 {((!!fieldState.error || errored) && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
                 {((!!fieldState.error || errored) && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
@@ -65,7 +64,26 @@ const Wrapper = styled("div")`
 `;
 
 const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }>`
-
+    padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
+    max-width: 100%;
+    min-width: 100%;
+    max-height: 350px;
+    min-height: 100px;
+    border-radius: 8px;
+    height: 60px;
+    background: ${p => p.theme.background.primary};
+    color: ${p => p.theme.content.primary};
+    border: 1px solid ${p => p.theme.background.secondary};
+    outline: none;
+    ${p => p.theme.fontStyles.items};
+    #resizer {
+     display: none;
+}
+        >label{
+            display: flex;
+            align-self: stretch;
+        }
+    
 `;
 
 export default TextArea;

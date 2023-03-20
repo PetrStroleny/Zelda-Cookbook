@@ -6,6 +6,7 @@ import { validateIsNumber } from "../utils/form";
 import Button, { ButtonVariant } from "./button";
 import Input from "./input";
 import { useOpenAndClose } from "./search-input";
+import TextArea from "./text-area";
 
 export enum ModalType {
     LOCATION,
@@ -80,7 +81,15 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                         }}  
                     />
                 }
-                {/* <TextArea/> */}
+                {<TextArea
+                    label="Popis"
+                    control={control}
+                    errored
+                    name="description"
+                    maxLength={750}
+                    
+                    />
+                }
                 
 
                 <div>
@@ -121,6 +130,7 @@ const Content = styled("form")`
     overflow-y: auto;
     max-height: 100%;
 
+
     > h2 {
         ${p => p.theme.fontStyles.h2};
     }
@@ -131,5 +141,4 @@ const Content = styled("form")`
         gap: 20px;
     }
 `;
-
 export default AddModal;
