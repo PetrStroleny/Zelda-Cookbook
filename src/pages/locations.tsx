@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";
 import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
-import ErrorPage from "./error-page";
-
+import { GlobalContext } from "../utils/global-context";
 
 export interface SubLocation {
     id: number
@@ -19,30 +19,23 @@ export interface IngredienceLocation {
     subLocations: SubLocation[]
 }
 
+
+
 const Locations = () => {
-    const [locations, setLocations] = useState<IngredienceLocation[]>();
-    const [loading, setLoading] = useState(false);
-    const [errored, setErrored] = useState(false);
+    const {locations, searchQuery} = useContext(GlobalContext);
+    const [activeLocations, setActiveLocations] = useState<IngredienceLocation[]>([]);
 
-    async function fetchLocations() {
-        try {
-            const res = await fetch('../server/locations.json');
-            const json = await res.json();
-            
-            setLocations(json.data);
-        } catch (e) {
-            console.error(e);
-            setErrored(true);
+
+    useEffect(() => {
+        let filteredLocations = [];
+        for (const location of locations) {
+            if (!location.name.toLowerCase().includes(searchQuery.toLowerCase())) continue;
+            filteredLocations.push(location);
         }
-    }
-
-    useEffect(() => {fetchLocations()}, []);
-
-    if (errored) {
-        return <ErrorPage/>;
-    }
-
-    if (!locations) {
+        setActiveLocations(filteredLocations);
+    }, [locations])
+    
+    if (locations.length == 0) {
         return (
             <>
                 <Helmet>
@@ -64,25 +57,30 @@ const Locations = () => {
             <PageHeader>
                 Lokace
             </PageHeader>
-                {locations.map((location, index) => {
-                
-                    return (
-                        <>
-                            <LabelMain>{location.name}</LabelMain>
-                            <CardWrapper>
-                                {location.subLocations.map((subLocation) => 
+                {activeLocations.map((location, index) => 
+                    <div key={index}>  
+                        <LabelMain>{location.name}</LabelMain>
+
+                        <StyledCardWrapper>
+                            {location.subLocations.map((subLocation, index) => {
+                                if (!subLocation.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
+
+                                return(
                                     <LocationCard
-                                        key={index}
-                                        {...subLocation}
+                                    {...subLocation}
+                                    key={index}
                                     />
-                                )}
-                            </CardWrapper>
-                        </>
-                    );
-                })}
+                                )
+                            })}
+                        </StyledCardWrapper>
+                    </div>
+                )}
         </>
     );
 }
 
+const StyledCardWrapper = styled(CardWrapper)`
+    grid-template-columns: repeat(auto-fill, minmax(316px, 1fr));
+`;
 
 export default Locations;

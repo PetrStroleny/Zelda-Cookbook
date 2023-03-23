@@ -3,34 +3,107 @@ import { Route, Router, Switch, } from 'wouter';
 import { useLocation as useWouterLocation } from "wouter";
 import Header from './components/header';
 import ErrorPage from './pages/error-page';
-import Ingredients from './pages/ingredients';
-import Recipes from './pages/recipes';
-import Locations from './pages/locations';
+import Ingredients, { Ingredient } from './pages/ingredients';
+import Recipes, { Recipe } from './pages/recipes';
+import Locations, { IngredienceLocation } from './pages/locations';
 import Modal from './components/modal';
+import FoodFilters from './components/food-filters';
+import { useEffect, useState } from 'react';
+import { GlobalContext } from './utils/global-context';
 
 export const useLocation = () => {
   const [location, setLocation] = useWouterLocation();
   return [location, setLocation, window.location.search];
-};
+}
+
+export function getSearchValue(): string {
+  for (const query of window?.location?.search.substring(1).split("&")) {
+      if (query.split("=")[0] == "q") {
+          return query.split("=")[1];
+      }
+  }
+  
+  return "";
+}
+
+export function getLocationValue(): string {
+  for (const query of window?.location?.search.substring(1).split("&")) {
+      if (query.split("=")[0] == "location") {
+          return  decodeURI(query.split("=")[1]);
+      }
+  }
+
+  return "";
+}
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState(getSearchValue());
+  const [locationQuery, setLocationQuery] = useState(getLocationValue());
+  const [location, _] = useLocation();
+
+  const [errored, setErrored] = useState(false);
+  const [locations, setLocations] = useState<IngredienceLocation[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+        await fetchData()
+    };
+
+    getData();
+  }, []);
+
+  useEffect(() => {
+    window.history.replaceState({}, "", `${window.location.pathname}${(locationQuery || searchQuery) ? "?" : ""}${searchQuery ? `q=${encodeURI(searchQuery)}` : ""}${locationQuery ? `location=${encodeURI(locationQuery)}` : ""}`)
+  }, [searchQuery, locationQuery, location]);
+
+  async function fetchData() {
+      try {
+          const resLoc = await fetch("../server/locations.json");
+          const jsonLoc = await resLoc.json();
+          setLocations(jsonLoc.data);
+
+          const resRec = await fetch("../server/recipes.json");
+          const jsonRec = await resRec.json();
+          setRecipes(jsonRec.data);
+
+          const resIngr = await fetch("../server/ingredients.json");
+          const jsonIngr= await resIngr.json();
+          setIngredients(jsonIngr.data);
+      } catch (e) {
+          console.error(e);
+          setErrored(true);
+      }
+  }
+
+
   return (
     <Router>
-      <Modal/>
-      <Header/>
-      <Page>
-          <Switch>
-            <Route path="/" component={Ingredients}/>
+      <GlobalContext.Provider value={{
+        searchQuery, setSearchQuery,
+        locationQuery, setLocationQuery,
+        locations, setLocations, recipes, setRecipes, ingredients, setIngredients
+      }}>
+        <Modal/>
+        <Header/>
+        <Page>
+            {errored ? <ErrorPage/> :
+              <Switch>
+                <Route path="/" component={Ingredients}/>
 
-            <Route path="/recepty" component={Recipes}/>
+                <Route path="/recepty" component={Recipes}/>
 
-            <Route path="/lokace" component={Locations}/>
+                <Route path="/lokace" component={Locations}/>
 
-            <Route component={ErrorPage} />
-          </Switch>
-      </Page>
+                <Route component={ErrorPage} />
+              </Switch>
+            }
+            <FoodFilters searchQuery={searchQuery} setSearch={setSearchQuery} locationQuery={locationQuery} setLocation={setLocationQuery}/>
+        </Page>
+      </GlobalContext.Provider>
     </Router>
-  )
+  );
 }
 
 const Page = styled("div")`

@@ -1,4 +1,6 @@
 import { FC, useState } from "react";
+
+import { FC, useState } from "react";
 import styled from "@emotion/styled";
 import LocationCard from "./location-card";
 
@@ -6,6 +8,13 @@ interface ModalProps {
   label: string;
   description: string;
   imgSrc: string;
+}
+
+const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
+interface ModalProps {
+  label: string
+  description: string
+  imgSrc: string
 }
 
 const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
@@ -59,6 +68,8 @@ const Wrapper = styled("div")`
   position: fixed;
   z-index: 1;
   background: rgba(238, 238, 238, 0.5);
+  z-index: 1;
+  background: rgb(238,238,238,0.5);
   display: flex;
   align-items: center;
   justify-content: center;

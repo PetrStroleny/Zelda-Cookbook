@@ -2,18 +2,67 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { Ingredient } from "../pages/ingredients";
 
-const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
-    <Wrapper>
+interface FoodCardProps extends Ingredient {
+    isIngredient?: boolean
+}
+
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, isIngredient }) => {
+
+    const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
+
+    let finalImageSource = name.replaceAll(" ", "_");
+
+    if (!isIngredient && (specialEffect != null || name.includes("Hearty"))) {
+        let splittedImageSource = finalImageSource.split("_");
+        splittedImageSource.shift();
+        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
+        finalImageSource = splittedImageSource.join("_");
+    }
+
+    return (
+        <Wrapper>
         <HearthsWrapper>
-            {numberOfHeaths < 999 && 
-                new Array(Math.floor(numberOfHeaths)).fill("").map((_, i) => 
-                    <img key={i} src="public/icons/heart.svg"/>
-                )      
-            }
-        </HearthsWrapper> 
+            <div>
+                {extraHearths != null && 
+                    <>
+                        <img style={{marginRight: "6px"}} src="public/icons/extra-heart.svg"/> 
+                        <p>
+                            + 
+                            {" " + extraHearths}
+                        </p>
+                    </>
+                }
+            </div>
+            <div>
+                {numberOfHearts == 999 ?
+                        <>
+                            <img src="public/icons/heart.svg"/>
+                            <FullRecovery>
+                                Full Recovery
+                            </FullRecovery> 
+                        </>
+                    :   
+                        <>
+                            {numberOfHearts >= 6 &&
+                                <HearthWithIndex>
+                                    <img src="public/icons/heart.svg"/>
+                                    <p>{numberOfHearts - numberOfSingleHearths}</p>
+                                </HearthWithIndex>
+                            }
+                                
+                                
+                            {new Array(numberOfSingleHearths).fill("").map((_, i) => 
+                                <img key={i} src="public/icons/heart.svg"/>
+                            )}  
+                        </>
+                }
+            </div>
+        </HearthsWrapper>
+
         <IconWrapper>
-            <img src={`public/ingredients/${name.replace(" ", "_")}.png`}/>
+            <img src={`public/${isIngredient ? "ingredients": "recipes"}/${finalImageSource}.png`}/>
         </IconWrapper>
+
         <Name>
             {name}
         </Name>
@@ -25,10 +74,32 @@ const Food: FC<Ingredient> = ({ name, numberOfHeaths, specialEffect }) => (
             </SpecialEffect>
         }
     </Wrapper>
+    );
+}
     
-);
+const HearthsWrapper = styled("div")`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    height: 22px;
+
+    > div:first-of-type {
+        display: flex;
+        >p{
+            color: ${p => p.theme.content.primary};
+            ${p => p.theme.fontStyles.items};
+        }
+    }
+
+    > div:last-of-type {
+        display: flex;
+    }
+`;
+
 const Wrapper = styled("div")`
-    width: 264px;
+    
     border-radius: 20px;
     background-color: #E5E5E5;
     display: flex;
@@ -53,14 +124,6 @@ const Name = styled("p")`
     width: 100%;
 `;
 
-const HearthsWrapper = styled("div")`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 20px;
-    height: 22px;
-`;
 
 const SpecialEffect = styled("div")`
     display: flex;
@@ -79,5 +142,25 @@ const SpecialEffect = styled("div")`
     }
 `;
 
+const FullRecovery = styled("p")`
+    color: ${p => p.theme.content.primary};
+    ${p => p.theme.fontStyles.items};
+    margin-left: 3px;
+`;
 
-export default Food;
+const HearthWithIndex = styled("div")`
+    position: relative;
+
+    > p {
+        color: ${p => p.theme.inverse.content.primary};
+        background-color: #F1362F;
+        border-radius: 999px;
+        position: absolute;
+        bottom: 5px;
+        font-size: 12px;
+        left: 10px;
+        padding: 0px 2px;
+    }
+`;
+
+export default FoodCard;

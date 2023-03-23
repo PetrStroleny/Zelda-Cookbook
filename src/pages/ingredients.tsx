@@ -1,21 +1,13 @@
-import { useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import AddModal, { ModalType } from "../components/add-modal";
+import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
-import FoodFilters, { getLocationValue } from "../components/food-filters";
 import PageHeader from "../components/page-header";
+import { addIngredient, GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
-import { IngredienceLocation, SubLocation } from "./locations";
 
-export function getSearchValue(): string {
-    for (const query of window?.location?.search.substring(1).split("&")) {
-        if (query.split("=")[0] == "q") {
-            return query.split("=")[1];
-        }
-    }
-    
-    return "";
-}
 
 export interface SpecialEffect {
     name: string
@@ -23,51 +15,62 @@ export interface SpecialEffect {
 }
 export interface Ingredient {
     id: number
-    numberOfHeaths: number
+    numberOfHearts: number
     extraHearths?: number
     name: string
     description: string
     specialEffect?: SpecialEffect
-    value: number
+    price: number
 }
 
+
 const Ingredients = () => {
-    const [ingredients, setIngredients] = useState<Ingredient[]>();
-    const [locations, setLocations] = useState<IngredienceLocation[]>();
     const [errored, setErrored] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(getSearchValue());
-    const [locationQuery, setLocationQuery] = useState(getLocationValue());
+    const [loading, setLoading] = useState(false);
+    const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
-    async function fetchIngedients() {
+    const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
+
+    const [addModalActive, setAddModalActive] = useState(false);
+
+    function fetchIngedients() {
         try {
-            const res = await fetch('../server/ingredients.json');
-            const json = await res.json();
-            setIngredients(json.data);
+            setLoading(true);
+            let filteredIngrediences = [];
 
-            const res2 = await fetch('../server/locations.json');
-            const json2 = await res2.json();
-            setLocations(json2.data)
+            ingredientLoop: for (const ingredient of ingredients) {
+                if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) continue ingredientLoop;
+                if (locations) {
+                    firstLoop: for (const location of locations) {
+                        for (const subLocation of location.subLocations) {
+                            if (subLocation.name == locationQuery) {
+                                if (!subLocation.ingredients.includes(ingredient.id)) continue ingredientLoop;
+                                break firstLoop;
+                            }
+                        }
+                    }
+                }
+                filteredIngrediences.push(ingredient);
+            }
+
+            setAcitiveIngredients(filteredIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        window.history.replaceState({}, "", `${window.location.pathname}${(locationQuery || searchQuery) ? "?" : ""}${searchQuery ? `q=${encodeURI(searchQuery)}` : ""}${locationQuery ? `location=${encodeURI(locationQuery)}` : ""}`)
-    }, [searchQuery, locationQuery]);
-
-    useEffect(() => {
         fetchIngedients();
-        setSearchQuery(getSearchValue());
-        setLocationQuery(getLocationValue());
-    }, []);
+    }, [locationQuery, searchQuery, ingredients]);
 
     if (errored) {
         return <ErrorPage/>;
     }
 
-    if (!ingredients) {
+    if (ingredients.length == 0) {
         return (
             <>
                 <Helmet>
@@ -86,31 +89,40 @@ const Ingredients = () => {
                 <meta property="og:title" content="Ingredience | ZELDA COOK"/>
                 <title>Ingredience | ZELDA COOK</title>
             </Helmet>
-            <PageHeader>
+
+            {addModalActive &&
+                <AddModal 
+                    type={ModalType.INGREDIENT}
+                    submitFunction={(data) =>
+                        addIngredient(data, ingredients, setIngredients)
+                    } 
+                    hide={() => setAddModalActive(false)}
+                />
+            }
+
+            <PageHeader 
+                trailing={
+                    <Button 
+                        onClick={() => setAddModalActive(true)}
+                        variant={ButtonVariant.BLUE} 
+                        rounded
+                    >
+                        <img src="public/icons/add.svg"/>
+                    </Button>
+                }>
                 Ingredience
             </PageHeader>
             <CardWrapper>
-                {ingredients.map((ingredient, index) => {
-                    if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase()))  return;
-                    if (locations) {
-                        for (const location of locations) {
-                            for (const subLocation of location.subLocations) {
-                                if (subLocation.name == locationQuery) {
-                                    if (!subLocation.ingredients.includes(ingredient.id)) return;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    
-                    return(
-                    <FoodCard
-                        key={index}
-                        {...ingredient}
-                    />
-                )})}
+                {!loading ? activeIngredients.map((ingredient, index) => (
+                        <FoodCard
+                            key={index}
+                            {...ingredient}
+                            isIngredient
+                        />
+                    )) :
+                    <div>Nacitani....</div>
+                }
             </CardWrapper>
-            <FoodFilters search={searchQuery} setSearch={setSearchQuery} location={locationQuery} setLocation={setLocationQuery}/>
         </>
     );
 }
