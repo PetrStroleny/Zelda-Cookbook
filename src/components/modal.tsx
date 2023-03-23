@@ -1,6 +1,4 @@
 import { FC, useState } from "react";
-
-import { FC, useState } from "react";
 import styled from "@emotion/styled";
 import LocationCard from "./location-card";
 
@@ -10,12 +8,7 @@ interface ModalProps {
   imgSrc: string;
 }
 
-const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
-interface ModalProps {
-  label: string
-  description: string
-  imgSrc: string
-}
+
 
 const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
   const [modal, setModal] = useState(false);
