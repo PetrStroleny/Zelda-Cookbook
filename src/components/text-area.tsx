@@ -66,7 +66,7 @@ const Wrapper = styled("div")`
 const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }>`
     padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
     max-width: 100%;
-    min-width: 100%;
+    width: 100%;
     max-height: 350px;
     min-height: 100px;
     border-radius: 8px;
@@ -76,14 +76,11 @@ const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }
     border: 1px solid ${p => p.theme.background.secondary};
     outline: none;
     ${p => p.theme.fontStyles.items};
-    #resizer {
-     display: none;
-}
-        >label{
-            display: flex;
-            align-self: stretch;
-        }
-    
+
+    &:focus{
+        border: 2px solid ${p => p.theme.primitives.blue};
+        padding: ${p => p.hide ? "0px 52px 0px 16px" : "0px 16px"};
+    }
 `;
 
 export default TextArea;
