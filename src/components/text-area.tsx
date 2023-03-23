@@ -67,7 +67,7 @@ const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }
     padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
     max-width: 100%;
     width: 100%;
-    max-height: 350px;
+    max-height: 250px;
     min-height: 100px;
     border-radius: 8px;
     height: 60px;
