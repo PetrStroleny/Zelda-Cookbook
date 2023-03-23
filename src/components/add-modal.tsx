@@ -7,6 +7,7 @@ import Button, { ButtonVariant } from "./button";
 import Input from "./input";
 import { useOpenAndClose } from "./search-input";
 import TextArea from "./text-area";
+import Dropdown from "./dropdown"
 
 export enum ModalType {
     LOCATION,
@@ -79,6 +80,14 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                                 }
                             )
                         }}  
+                    />
+                }
+                {<Dropdown
+                    label="Lokace"
+                    control={control}
+                    errored
+                    name="decription"
+                    
                     />
                 }
                 {<TextArea
