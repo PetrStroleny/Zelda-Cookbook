@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddModal, { ModalType } from "../components/add-modal";
+import AddModal, { AddFrom, ModalType } from "../components/add-modal";
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
@@ -27,7 +27,7 @@ export interface Ingredient {
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setLocations, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
     const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
@@ -93,8 +93,28 @@ const Ingredients = () => {
             {addModalActive &&
                 <AddModal 
                     type={ModalType.INGREDIENT}
-                    submitFunction={(data) =>
-                        addIngredient(data, ingredients, setIngredients)
+                    submitFunction={(data: AddFrom) =>
+                       { 
+                            const currentID = activeIngredients[activeIngredients.length - 1].id + 1;
+                            addIngredient({id: currentID, ...data}, ingredients, setIngredients);
+                            let currentLocation = locations;
+
+                            for (let i = 0; i < locations.length; i++) {
+                                for (let x = 0; x < locations[i].subLocations.length; x++) {
+                                    if (locations[i].subLocations[x].id == data.location) {
+                                        let editingLocation = locations[i].subLocations[x];
+                                        editingLocation.ingredients = [...editingLocation.ingredients, currentID];
+
+                                        currentLocation[i].subLocations[x] = editingLocation;
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            setLocations(currentLocation);
+
+                            console.log(locations);
+                        }
                     } 
                     hide={() => setAddModalActive(false)}
                 />

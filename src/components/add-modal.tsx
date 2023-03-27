@@ -32,14 +32,21 @@ interface AddModalProps {
     type: ModalType
 }
 
+export interface AddFrom {
+    name: string, 
+    description: string,
+    numberOfHearts: number,
+    location: number,
+    price: number,
+}
+
 const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
-    const { control, handleSubmit } = useForm<{ 
-        name: string, 
-        description: string,
-        numberOfHearts?: number,
-    }>();
+    const { control, handleSubmit } = useForm<AddFrom>({defaultValues: {
+        location: 1,
+    }});
 
     const [customHeartsError, setCustomHeartsError] = useState("");
+    const [customPriceError, setCustomPriceError] = useState("");
 
     const onSubmit = async (data: any) => {
         await submitFunction(data);
@@ -61,6 +68,35 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                     rules={{ required: { message: "Vyplňte název", value: true } }}
                     name="name"
                 />
+
+                <TextArea
+                    label="Popis"
+                    control={control}
+                    rules={{ required: { message: "Vyplňte popis", value: true } }}
+                    name="description"
+                    maxLength={750}
+                />
+
+                <Input
+                    label="Cena"
+                    control={control}
+                    name="price"
+                    customError={customPriceError}
+                    maxLength={3}
+                    rules={{ 
+                        required: { message: "Vyplňte cenu ingredience", value: true },
+                        validate: (value: string) => validateIsNumber(
+                            value, 
+                            setCustomPriceError, 
+                            999,
+                            false,
+                            {
+                                negativeError: "Cena ingredience musí být menší nežli 999",
+                            }
+                        )
+                    }}  
+                />
+                    
                 {type != ModalType.LOCATION &&
                     <Input 
                         label="Počet srdíček"
@@ -86,17 +122,7 @@ const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
                     label="Lokace"
                     control={control}
                     errored
-                    name="decription"
-                    
-                    />
-                }
-                {<TextArea
-                    label="Popis"
-                    control={control}
-                    errored
-                    name="description"
-                    maxLength={750}
-                    
+                    name="location"
                     />
                 }
                 
