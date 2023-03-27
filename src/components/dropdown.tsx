@@ -8,7 +8,7 @@ interface DropdownProps extends ComponentProps<"select"> {
     control: Control<any>
     name: string
     placeholder?: string
-    defaultValue?: string | number
+    defaultValue?: number
     rules?: any
     errored?: boolean
     customError?: string
@@ -19,15 +19,14 @@ interface DropdownProps extends ComponentProps<"select"> {
 const Dropdown: FC<DropdownProps> = ({
     control,
     rules,
-    defaultValue,
     errored,
     name,
     customError,
     label,
     location,
     ...props }) => {
-    const { field, fieldState } = useController({ name, rules, control, defaultValue, });
-    const inputValue: string = field?.value ?? "";
+
+    const { field, fieldState } = useController({ name, rules, control});
 
     return (
         <Wrapper>
@@ -39,19 +38,19 @@ const Dropdown: FC<DropdownProps> = ({
 
             <StyledDropdown
                 id={name}
-                onChange={(e) => field.onChange(e.target.value)}
+                onChange={(e) => field.onChange(Number(e.target.value))}
                 errored={(!!fieldState.error || errored )}
                 {...props}               
-                >
-                <option value="Akkala Highlands">Akkala Highlands</option>
-                <option value="Deep Akkkala">Deep Akkkala</option>
-                <option value="Lanayru Great Spring">Lanayru Great Spring</option>
-                <option value="Lanayru Sea">Lanayru Sea</option>
-                <option value="Lanayru Wetlands">Lanayru Wetlands</option>
-                <option value="Mount Lanayru">Mount Lanayru</option>
-                <option value="East Necluda">East Necluda</option>
-                <option value="West Necluda">West Necluda</option>
-                <option value="Necluda Sea">Necluda Sea</option>
+            >
+                <option value={1}>Akkala Highlands</option>
+                <option value={2}>Deep Akkkala</option>
+                <option value={3}>Lanayru Great Spring</option>
+                <option value={4}>Lanayru Sea</option>
+                <option value={5}>Lanayru Wetlands</option>
+                <option value={6}>Mount Lanayru</option>
+                <option value={7}>East Necluda</option>
+                <option value={8}>West Necluda</option>
+                <option value={9}>Necluda Sea</option>
             </StyledDropdown>
             
             <InputUnderInformation>
