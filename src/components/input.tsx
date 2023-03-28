@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, ComponentProps, FC, useRef } from "react";
-import { Control, useController, UseFormRegister } from "react-hook-form";
+import { ComponentProps, FC } from "react";
+import { Control, useController } from "react-hook-form";
 
 import ErrorMessage from "./error-message";
 
@@ -11,18 +11,16 @@ interface InputProps extends ComponentProps<"input"> {
     placeholder?: string
     defaultValue?: string | number
     rules?: any
-    errored?: boolean
     customError?: string
     maxLength?: number
     label?: string
+    number?: boolean
 }
 
 const Input: FC<InputProps> = ({
     control,
     rules,
-    type,
     defaultValue,
-    errored,
     name,
     customError,
     maxLength,
@@ -44,13 +42,13 @@ const Input: FC<InputProps> = ({
                 id={name}
                 value={inputValue}
                 onChange={(e) => field.onChange(e.target.value)}
-                errored={(!!fieldState.error || errored )}
+                errored={Boolean(fieldState.error)}
                 {...props} 
             />
 
             <InputUnderInformation>
-                {((!!fieldState.error || errored) && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
-                {((!!fieldState.error || errored) && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
+                {(!!fieldState.error && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
+                {(!!fieldState.error && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
                 
                 <MaxLengthDiv>
                     {inputValue?.length ?? 0} / {maxLength ? maxLength : 150}

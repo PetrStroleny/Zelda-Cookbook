@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddModal, { AddFrom, ModalType } from "../components/add-modal";
+import AddModal, { ModalType } from "../components/add-modal";
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
@@ -23,6 +23,13 @@ export interface Ingredient {
     price: number
 }
 
+interface AddIngredientInfo {
+    name: string, 
+    description: string,
+    numberOfHearts: number,
+    location: number,
+    price: number,
+}
 
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
@@ -93,10 +100,14 @@ const Ingredients = () => {
             {addModalActive &&
                 <AddModal 
                     type={ModalType.INGREDIENT}
-                    submitFunction={(data: AddFrom) =>
+                    submitFunction={(data: AddIngredientInfo) =>
                        { 
                             const currentID = activeIngredients[activeIngredients.length - 1].id + 1;
-                            addIngredient({id: currentID, ...data}, ingredients, setIngredients);
+                            let editedData = data;
+                            editedData.numberOfHearts = Number(data.numberOfHearts);
+                            editedData.price = Number(editedData.price);
+
+                            addIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
                             let currentLocation = locations;
 
                             for (let i = 0; i < locations.length; i++) {
@@ -112,8 +123,6 @@ const Ingredients = () => {
                             }
 
                             setLocations(currentLocation);
-
-                            console.log(locations);
                         }
                     } 
                     hide={() => setAddModalActive(false)}

@@ -70,7 +70,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, speci
             <SpecialEffect>
                     <img src={`public/icons/${specialEffect.name}.svg`}/>
                     <img src="public/icons/time.svg"/>
-                    <p>{specialEffect.duration}</p>
+                    <p>{Math.floor(specialEffect.duration / 60)}:{specialEffect.duration % 60 < 10 ? `0${specialEffect.duration % 60}` : specialEffect.duration % 60}</p>
             </SpecialEffect>
         }
     </Wrapper>

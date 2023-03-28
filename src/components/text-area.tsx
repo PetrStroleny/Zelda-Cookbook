@@ -12,7 +12,6 @@ interface TextAreaProps extends ComponentProps<"textarea"> {
     placeholder?: string
     defaultValue?: string | number
     rules?: any
-    errored?: boolean
     customError?: string
     maxLength?: number
     label?: string
@@ -22,7 +21,6 @@ const TextArea: FC<TextAreaProps> = ({
     control,
     rules,
     defaultValue,
-    errored,
     name,
     customError,
     maxLength,
@@ -43,12 +41,12 @@ const TextArea: FC<TextAreaProps> = ({
                 maxLength={maxLength ? maxLength : 150}
                 id={name}
                 onChange={(e) => field.onChange(e.target.value)}
-                errored={(!!fieldState.error || errored )}
+                errored={Boolean(fieldState.error)}
                 {...props}               
             />
             <InputUnderInformation>
-                {((!!fieldState.error || errored) && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
-                {((!!fieldState.error || errored) && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
+                {(fieldState.error && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
+                {(fieldState.error && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
                 
                 <MaxLengthDiv>
                     {inputValue?.length ?? 0} / {maxLength ? maxLength : 150}

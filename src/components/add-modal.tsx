@@ -32,16 +32,8 @@ interface AddModalProps {
     type: ModalType
 }
 
-export interface AddFrom {
-    name: string, 
-    description: string,
-    numberOfHearts: number,
-    location: number,
-    price: number,
-}
-
 const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
-    const { control, handleSubmit } = useForm<AddFrom>({defaultValues: {
+    const { control, handleSubmit } = useForm({defaultValues: {
         location: 1,
     }});
 
