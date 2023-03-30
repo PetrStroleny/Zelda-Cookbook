@@ -23,11 +23,18 @@ export interface Ingredient {
     price: number
 }
 
+interface AddIngredientInfo {
+    name: string, 
+    description: string,
+    numberOfHearts: number,
+    location: number,
+    price: number,
+}
 
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setLocations, locations, locationQuery, searchQuery} = useContext(GlobalContext);
 
     const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
@@ -93,8 +100,30 @@ const Ingredients = () => {
             {addModalActive &&
                 <AddModal 
                     type={ModalType.INGREDIENT}
-                    submitFunction={(data) =>
-                        addIngredient(data, ingredients, setIngredients)
+                    submitFunction={(data: AddIngredientInfo) =>
+                       { 
+                            const currentID = activeIngredients[activeIngredients.length - 1].id + 1;
+                            let editedData = data;
+                            editedData.numberOfHearts = Number(data.numberOfHearts);
+                            editedData.price = Number(editedData.price);
+
+                            addIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
+                            let currentLocation = locations;
+
+                            for (let i = 0; i < locations.length; i++) {
+                                for (let x = 0; x < locations[i].subLocations.length; x++) {
+                                    if (locations[i].subLocations[x].id == data.location) {
+                                        let editingLocation = locations[i].subLocations[x];
+                                        editingLocation.ingredients = [...editingLocation.ingredients, currentID];
+
+                                        currentLocation[i].subLocations[x] = editingLocation;
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            setLocations(currentLocation);
+                        }
                     } 
                     hide={() => setAddModalActive(false)}
                 />
