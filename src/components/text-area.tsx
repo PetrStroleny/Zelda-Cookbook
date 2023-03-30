@@ -69,7 +69,7 @@ const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }
     border-radius: 8px;
     background: ${p => p.theme.background.primary};
     color: ${p => p.theme.content.primary};
-    border: 1px solid ${p => p.theme.background.secondary};
+    border: 1px solid ${p => p.errored ? p.theme.primitives.red : p.theme.background.secondary};
     outline: none;
     resize: vertical;
     ${p => p.theme.fontStyles.items};
