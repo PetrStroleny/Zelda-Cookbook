@@ -1,11 +1,11 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddModal, { ModalType } from "../components/add-modal";
+import AddModal from "../components/add-modal";
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
 import PageHeader from "../components/page-header";
-import { addReceipt, GlobalContext } from "../utils/global-context";
+import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 import { Ingredient } from "./ingredients";
 
@@ -90,12 +90,11 @@ const Recipes = () => {
 
             {addModalActive &&
                 <AddModal 
-                    type={ModalType.RECEIPT}
-                    submitFunction={(data) =>
-                        addReceipt(data, recipes, setRecipes)
-                    } 
+                    submit={(data) => {}}
                     hide={() => setAddModalActive(false)}
-                />
+                >
+                    <h2>Přidat Recept</h2>
+                </AddModal>
             }
 
             <PageHeader

@@ -4,6 +4,11 @@ import { Control, useController, UseFormRegister } from "react-hook-form";
 import ErrorMessage from "./error-message";
 import { InputLabel, InputUnderInformation, MaxLengthDiv } from "./input";
 
+interface DropdownItem {
+    value: any
+    label: string
+}
+
 interface DropdownProps extends ComponentProps<"select"> {
     control: Control<any>
     name: string
@@ -13,7 +18,7 @@ interface DropdownProps extends ComponentProps<"select"> {
     errored?: boolean
     customError?: string
     label?: string
-    location?: {}
+    items: DropdownItem[]
 }
 
 const Dropdown: FC<DropdownProps> = ({
@@ -23,7 +28,6 @@ const Dropdown: FC<DropdownProps> = ({
     name,
     customError,
     label,
-    location,
     ...props }) => {
 
     const { field, fieldState } = useController({ name, rules, control});
@@ -41,7 +45,10 @@ const Dropdown: FC<DropdownProps> = ({
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 errored={(!!fieldState.error || errored )}
                 {...props}               
-            >
+            >   
+                {props.items.map((item, index) =>
+                    <option key={index} value={item.value}>{item.label}</option>
+                )}
                 <option value={1}>Akkala Highlands</option>
                 <option value={2}>Deep Akkkala</option>
                 <option value={3}>Lanayru Great Spring</option>
