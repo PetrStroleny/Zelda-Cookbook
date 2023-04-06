@@ -31,7 +31,7 @@
         "price": 100,
         "specialEffect": {
             "name": "hasty",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -72,7 +72,7 @@
         "price": 100,
         "specialEffect": {
             "name": "hasty",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -88,7 +88,7 @@
         "price": 100,
         "specialEffect": {
             "name": "spicy",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -104,7 +104,7 @@
         "price": 100,
         "specialEffect": {
             "name": "electro",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -120,7 +120,7 @@
         "price": 100,
         "specialEffect": {
             "name": "tough",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -136,7 +136,7 @@
         "price": 100,
         "specialEffect": {
             "name": "sneaky",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -152,7 +152,7 @@
         "price": 100,
         "specialEffect": {
             "name": "chilly",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -187,7 +187,7 @@
         "price": 25,
         "specialEffect": {
             "name": "mighty",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {
@@ -201,7 +201,7 @@
         "price": 25,
         "specialEffect": {
             "name": "tough",
-            "duration": "2:00"
+            "duration": 120
         }
     },
     {

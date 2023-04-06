@@ -1,10 +1,15 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddModal, { ModalType } from "../components/add-modal";
+import { useForm } from "react-hook-form";
+import AddModal from "../components/add-modal";
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
+import Dropdown from "../components/dropdown";
 import FoodCard from "../components/food-card";
+import Input from "../components/input";
 import PageHeader from "../components/page-header";
+import TextArea from "../components/text-area";
+import { validateIsNumber } from "../utils/form";
 import { addIngredient, GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 
@@ -23,11 +28,36 @@ export interface Ingredient {
     price: number
 }
 
+interface AddIngredientInfo {
+    name: string, 
+    description: string,
+    numberOfHearts: number,
+    location: number,
+    price: number,
+}
+
+const locationDropdownItems = [
+    {value: 1, label: "Akkala Highlands"},
+    {value: 2, label: "Deep Akkkala"},
+    {value: 3, label: "Lanayru Great Spring"},
+    {value: 4, label: "Lanayru Sea"},
+    {value: 5, label: "Lanayru Wetlands"},
+    {value: 6, label: "Mount Lanayru"},
+    {value: 7, label: "East Necluda"},
+    {value: 8, label: "West Necluda"},
+    {value: 9, label: "Necluda Sea"},
+]
 
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {ingredients, setIngredients, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setLocations, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+
+    const { control, handleSubmit } = useForm<AddIngredientInfo>({defaultValues: {
+        location: 1,
+    }});
+    const [customHeartsError, setCustomHeartsError] = useState("");
+    const [customPriceError, setCustomPriceError] = useState("");
 
     const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
@@ -62,6 +92,31 @@ const Ingredients = () => {
         }
     }
 
+    function onSubmit(data: AddIngredientInfo) {
+        const currentID = activeIngredients[activeIngredients.length - 1].id + 1;
+        let editedData = data;
+        editedData.numberOfHearts = Number(data.numberOfHearts);
+        editedData.price = Number(editedData.price);
+
+        addIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
+        let currentLocation = locations;
+
+        for (let i = 0; i < locations.length; i++) {
+            for (let x = 0; x < locations[i].subLocations.length; x++) {
+                if (locations[i].subLocations[x].id == data.location) {
+                    let editingLocation = locations[i].subLocations[x];
+                    editingLocation.ingredients = [...editingLocation.ingredients, currentID];
+
+                    currentLocation[i].subLocations[x] = editingLocation;
+                    continue;
+                }
+            }
+        }
+
+        setLocations(currentLocation);
+        setAddModalActive(false);
+    }
+
     useEffect(() => {
         fetchIngedients();
     }, [locationQuery, searchQuery, ingredients]);
@@ -92,12 +147,72 @@ const Ingredients = () => {
 
             {addModalActive &&
                 <AddModal 
-                    type={ModalType.INGREDIENT}
-                    submitFunction={(data) =>
-                        addIngredient(data, ingredients, setIngredients)
-                    } 
+                    submit={handleSubmit(onSubmit)} 
                     hide={() => setAddModalActive(false)}
-                />
+                >   
+                    <h2>Přidat ingredienci</h2>
+                    <Input 
+                        label="Název"
+                        control={control}
+                        rules={{ required: { message: "Vyplňte název", value: true } }}
+                        name="name"
+                    />
+
+                    <TextArea
+                        label="Popis"
+                        control={control}
+                        rules={{ required: { message: "Vyplňte popis", value: true } }}
+                        name="description"
+                        maxLength={750}
+                    />
+
+                    <Input
+                        label="Cena"
+                        control={control}
+                        name="price"
+                        customError={customPriceError}
+                        maxLength={3}
+                        rules={{ 
+                            required: { message: "Vyplňte cenu ingredience", value: true },
+                            validate: (value: string) => validateIsNumber(
+                                value, 
+                                setCustomPriceError, 
+                                999,
+                                false,
+                                {
+                                    negativeError: "Cena ingredience musí být menší nežli 999",
+                                }
+                            )
+                        }}  
+                    />
+                        
+                    <Input 
+                        label="Počet srdíček"
+                        control={control}
+                        name="numberOfHearts"
+                        maxLength={3}
+                        customError={customHeartsError}
+                        rules={{ 
+                            required: { message: "Vyplňte počet srdíček", value: true },
+                            validate: (value: string) => validateIsNumber(
+                                value, 
+                                setCustomHeartsError, 
+                                999,
+                                false,
+                                {
+                                    negativeError: "Počet srdíček musí být větší nežli 0",
+                                }
+                            )
+                        }}  
+                    />
+                    <Dropdown
+                        items={locationDropdownItems}
+                        label="Lokace"
+                        control={control}
+                        errored
+                        name="location"
+                    />
+                </AddModal>
             }
 
             <PageHeader 

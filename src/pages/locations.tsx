@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FC, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";

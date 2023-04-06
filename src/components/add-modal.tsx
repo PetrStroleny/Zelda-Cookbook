@@ -1,105 +1,24 @@
 
 import styled from "@emotion/styled";
-import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
-import { validateIsNumber } from "../utils/form";
+import { FC } from "react";
 import Button, { ButtonVariant } from "./button";
-import Input from "./input";
 import { useOpenAndClose } from "./search-input";
-import TextArea from "./text-area";
-import Dropdown from "./dropdown"
-
-export enum ModalType {
-    LOCATION,
-    RECEIPT,
-    INGREDIENT,
-}
-
-function getModalLabel(type: ModalType) {
-    switch(type) {
-        case ModalType.LOCATION:
-            return "Přidat lokaci";
-        case ModalType.RECEIPT:
-            return "Přidat recept";
-        case ModalType.INGREDIENT:
-            return "Přidat ingredienci";
-        }
-}
-            
 interface AddModalProps {
     hide: () => void
-    submitFunction: (values: any) => void
-    type: ModalType
+    submit: (data: any) => void
+    children: JSX.Element | JSX.Element[]
 }
 
-const AddModal: FC<AddModalProps> = ({hide, submitFunction, type}) => {
-    const { control, handleSubmit } = useForm<{ 
-        name: string, 
-        description: string,
-        numberOfHearts?: number,
-    }>();
-
-    const [customHeartsError, setCustomHeartsError] = useState("");
-
-    const onSubmit = async (data: any) => {
-        await submitFunction(data);
-        hide();
-    };
-
+const AddModal: FC<AddModalProps> = ({hide, submit, children}) => {
     useOpenAndClose(() => {}, hide);
 
     return (
         <Wrapper onClick={hide}>
             <Content 
-                onSubmit={handleSubmit(onSubmit)} 
+                onSubmit={submit} 
                 onClick={(e) => e.stopPropagation()}
             >
-                <h2>{getModalLabel(type)}</h2>
-                <Input 
-                    label="Název"
-                    control={control}
-                    rules={{ required: { message: "Vyplňte název", value: true } }}
-                    name="name"
-                />
-                {type != ModalType.LOCATION &&
-                    <Input 
-                        label="Počet srdíček"
-                        control={control}
-                        name="numberOfHearts"
-                        maxLength={3}
-                        customError={customHeartsError}
-                        rules={{ 
-                            required: { message: "Vyplňte počet srdíček", value: true },
-                            validate: (value: string) => validateIsNumber(
-                                value, 
-                                setCustomHeartsError, 
-                                999,
-                                false,
-                                {
-                                    negativeError: "Počet srdíček musí být větší nežli 0",
-                                }
-                            )
-                        }}  
-                    />
-                }
-                {<Dropdown
-                    label="Lokace"
-                    control={control}
-                    errored
-                    name="decription"
-                    
-                    />
-                }
-                {<TextArea
-                    label="Popis"
-                    control={control}
-                    errored
-                    name="description"
-                    maxLength={750}
-                    
-                    />
-                }
-                
+                {children}
 
                 <div>
                     <Button onClick={hide} type="button">

@@ -12,7 +12,6 @@ interface TextAreaProps extends ComponentProps<"textarea"> {
     placeholder?: string
     defaultValue?: string | number
     rules?: any
-    errored?: boolean
     customError?: string
     maxLength?: number
     label?: string
@@ -22,7 +21,6 @@ const TextArea: FC<TextAreaProps> = ({
     control,
     rules,
     defaultValue,
-    errored,
     name,
     customError,
     maxLength,
@@ -43,12 +41,12 @@ const TextArea: FC<TextAreaProps> = ({
                 maxLength={maxLength ? maxLength : 150}
                 id={name}
                 onChange={(e) => field.onChange(e.target.value)}
-                errored={(!!fieldState.error || errored )}
+                errored={Boolean(fieldState.error)}
                 {...props}               
             />
             <InputUnderInformation>
-                {((!!fieldState.error || errored) && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
-                {((!!fieldState.error || errored) && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
+                {(fieldState.error && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
+                {(fieldState.error && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
                 
                 <MaxLengthDiv>
                     {inputValue?.length ?? 0} / {maxLength ? maxLength : 150}
@@ -65,16 +63,15 @@ const Wrapper = styled("div")`
 
 const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }>`
     padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
-    max-width: 100%;
     width: 100%;
-    max-height: 350px;
+    max-height: 250px;
     min-height: 100px;
     border-radius: 8px;
-    height: 60px;
     background: ${p => p.theme.background.primary};
     color: ${p => p.theme.content.primary};
-    border: 1px solid ${p => p.theme.background.secondary};
+    border: 1px solid ${p => p.errored ? p.theme.primitives.red : p.theme.background.secondary};
     outline: none;
+    resize: vertical;
     ${p => p.theme.fontStyles.items};
 
     &:focus{
