@@ -34,7 +34,7 @@ const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
           <Content>
             <Image src="public\ingredients\Tracy.jpg.jpg" alt="LocationImg" />
             <ModalDetails>
-              <Label>{label} DAREK TUNEGA PYČ0</Label>
+              <Label>{label} DAREK HHEHEEHE</Label>
               <Description>{description} Description of the testing part of this unreal genius 200IQ modal</Description>
               <RedStripe />
               <Ingredients>Ingredients:</Ingredients>
