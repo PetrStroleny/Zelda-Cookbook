@@ -72,9 +72,9 @@ const Content = styled("div")`
   border-radius: 20px;
   background-color: ${p => p.theme.background.primary};
   padding: 14px 28px;
-  border-radius: 16px;
-  max-width: 900px;
-  min-width: 600px;
+  border-radius: 12px;
+  max-width: 1200px;
+  min-width: 900px;
   box-shadow: rgba(0, 0, 0, 0.592) 0px 5px 15px;
   display: flex;
   align-items: flex-start;
@@ -83,29 +83,35 @@ const Content = styled("div")`
 const Image = styled("img")`
   width: 50%;
   height: 360px;
-  border-radius: 20px;
+  border-radius: 17px;
 `;
 
 const ModalDetails = styled("div")`
   width: 50%;
   margin-left: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const Label = styled("h2")`
   font-size: 24px;
   font-weight: 700;
+  padding-top: 40px;
   margin-bottom: 12px;
 `;
 
 const Description = styled("p")`
   font-size: 18px;
-  line-height: 1.5;
-  margin-bottom: 20px;
+  line-height: 1.05;
+  padding-top: 20px;
+  margin-bottom: 5px;
 `;
 
 const Ingredients = styled("p")`
   font-size: 18px;
   font-weight: 700;
+  padding-top: 20px;
   margin-bottom: 10px;
 `;
 
@@ -119,7 +125,7 @@ const RedStripe = styled("div")`
   width: 100%;
   height: 5px;
   background: linear-gradient(to right, #686A6C , #8d1006);
-  margin-right: 20px;
+  margin-top: 20px;
 `;
 
 const CloseButton = styled("button")`
@@ -135,6 +141,7 @@ const CloseButton = styled("button")`
     color: red;
   }
 `;
+
 
 
 
