@@ -4,9 +4,10 @@ import { Ingredient } from "../pages/ingredients";
 
 interface FoodCardProps extends Ingredient {
     isIngredient?: boolean
+    onClick?: () => void
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, isIngredient }) => {
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, onClick, isIngredient }) => {
 
     const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
 
@@ -20,7 +21,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, speci
     }
 
     return (
-        <Wrapper>
+        <Wrapper onClick={onClick}>
         <HearthsWrapper>
             <div>
                 {extraHearths != null && 
@@ -99,7 +100,7 @@ const HearthsWrapper = styled("div")`
 `;
 
 const Wrapper = styled("div")`
-    
+    cursor: pointer; 
     border-radius: 20px;
     background-color: #E5E5E5;
     display: flex;
@@ -107,6 +108,14 @@ const Wrapper = styled("div")`
     align-items: center;
     align-content: flex-end;
     padding: 22px;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:active {
+        opacity: 0.6;
+    }
 `;
 
 const IconWrapper = styled("div")`

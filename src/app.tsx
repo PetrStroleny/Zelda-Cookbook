@@ -85,7 +85,6 @@ function App() {
         locationQuery, setLocationQuery,
         locations, setLocations, recipes, setRecipes, ingredients, setIngredients
       }}>
-        <Modal/>
         <Header/>
         <Page>
             {errored ? <ErrorPage/> :

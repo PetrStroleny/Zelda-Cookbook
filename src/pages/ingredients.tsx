@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import AddModal from "../components/add-modal";
+import Modal, {ModalProps} from '../components/modal';
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import Dropdown from "../components/dropdown";
@@ -52,6 +53,8 @@ const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
     const {ingredients, setIngredients, setLocations, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+
+    const [modalData, setModalData] = useState<Omit<ModalProps, "close"> | null>(null);
 
     const { control, handleSubmit } = useForm<AddIngredientInfo>({defaultValues: {
         location: 1,
@@ -145,6 +148,15 @@ const Ingredients = () => {
                 <title>Ingredience | ZELDA COOK</title>
             </Helmet>
 
+            {modalData != null && 
+                <Modal 
+                    imgSrc={modalData.imgSrc} 
+                    label={modalData.label}
+                    description={modalData.description} 
+                    close={() => setModalData(null)}
+                />
+            }
+
             {addModalActive &&
                 <AddModal 
                     submit={handleSubmit(onSubmit)} 
@@ -230,6 +242,11 @@ const Ingredients = () => {
             <CardWrapper>
                 {!loading ? activeIngredients.map((ingredient, index) => (
                         <FoodCard
+                            onClick={() => setModalData({
+                                imgSrc: `public/ingredients/${ingredient.name.replaceAll(" ", "_")}.png`,
+                                label: ingredient.name,
+                                description: ingredient.description
+                            })}
                             key={index}
                             {...ingredient}
                             isIngredient

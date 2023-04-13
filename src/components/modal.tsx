@@ -2,56 +2,35 @@ import { FC, useState } from "react";
 import styled from "@emotion/styled";
 import LocationCard from "./location-card";
 
-interface ModalProps {
+export interface ModalProps {
   label: string;
   description: string;
-  imgSrc: string;
+  close: () => void;
+  imgSrc?: string;
 }
 
 
 
-const Modal: FC<ModalProps> = ({ label, description, imgSrc }) => {
-  const [modal, setModal] = useState(false);
-
-  const toggleModal = () => {
-    setModal(!modal);
-  };
-
-  if (modal) {
-    document.body.classList.add("active-modal");
-  } else {
-    document.body.classList.remove("active-modal");
-  }
-
-  return (
-    <>
-      <CloseButton onClick={toggleModal} className="btn-modal">
-        Close
-      </CloseButton>
-
-      {modal && (
-        <Wrapper onClick={toggleModal}>
-          <Content>
-            <Image src="public\ingredients\Tracy.jpg.jpg" alt="LocationImg" />
-            <ModalDetails>
-              <Label>{label} DAREK HHEHEEHE</Label>
-              <Description>{description} Description of the testing part of this unreal genius 200IQ modal</Description>
-              <RedStripe />
-              <Ingredients>Ingredients:</Ingredients>
-              <IngredientsList>
-                <li>Japko</li>
-                <li>Raytshe</li>
-                <li>груша</li>
-              </IngredientsList>
-              
-            </ModalDetails>
-            
-          </Content>
-        </Wrapper>
-      )}
-    </>
-  );
-};
+const Modal: FC<ModalProps> = ({ label, description, imgSrc, close }) => (
+    <Wrapper onClick={close}>
+      <Content>
+        <Image src={imgSrc} alt="LocationImg" />
+        <ModalDetails>
+          <Label>{label}</Label>
+          <Description>{description}</Description>
+          <RedStripe />
+          <Ingredients>Ingredients:</Ingredients>
+          <IngredientsList>
+            <li>Japko</li>
+            <li>Raytshe</li>
+            <li>груша</li>
+          </IngredientsList>
+          
+        </ModalDetails>
+        
+      </Content>
+    </Wrapper>
+);
 
 const Wrapper = styled("div")`
   width: 100%;
@@ -71,7 +50,7 @@ const Wrapper = styled("div")`
 const Content = styled("div")`
   border-radius: 20px;
   background-color: ${p => p.theme.background.primary};
-  padding: 14px 28px;
+  padding: 20px;
   border-radius: 12px;
   max-width: 1200px;
   min-width: 900px;
@@ -84,6 +63,7 @@ const Image = styled("img")`
   width: 50%;
   height: 360px;
   border-radius: 17px;
+  object-fit: contain;
 `;
 
 const ModalDetails = styled("div")`
