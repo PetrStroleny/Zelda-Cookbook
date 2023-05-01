@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useRoute } from "wouter";
 import { Theme } from "../style-variables";
 import Button from "./button";
@@ -20,10 +20,8 @@ const Header = () => {
             <Link className="active" href="/">
                 Zelda Cookbook
             </Link>
-
-
                 <Button 
-                    style={{zIndex: "40"}}
+                    style={{zIndex: "2"}}
                     onClick={() => setMobileMenuActive(p => !p)} 
                     rounded 
                     className="hide-on-desktop"

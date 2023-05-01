@@ -1,6 +1,6 @@
-{"data": [
+[
     {
-        "id": 1,
+        "id": 17,
         "numberOfHearts": 5,
         "name": "Simmered Fruit",
         "description": "Tento sladký pokrm se připravuje navršením chutného ovoce na pánev a dusením do měkka.",
@@ -10,7 +10,7 @@
         "price": 50
     },
     {
-        "id": 2,
+        "id": 16,
         "numberOfHearts": 999,
         "extraHearths": 20,
         "name": "Hearty Simmered Fruit",
@@ -21,7 +21,7 @@
         "price": 100
     },
     {
-        "id": 3,
+        "id": 15,
         "numberOfHearts": 5,
         "name": "Hasty Simmered Fruit",
         "description": "Poskytuje zvýšení rychlosti pohybu na nízké úrovni. Tento sladký pokrm se připravuje navršením chutného ovoce na pánev a dusením do měkka.",
@@ -35,7 +35,7 @@
         }
     },
     {
-        "id": 4,
+        "id": 14,
         "numberOfHearts": 8,
         "name": "Fruit and Mushroom Mix",
         "description": "Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -47,7 +47,7 @@
         "price": 50
     },
     {
-        "id": 5,
+        "id": 13,
         "numberOfHearts": 999,
         "extraHearths": 12,
         "name": "Hearty Fruit and Mushroom Mix",
@@ -60,7 +60,7 @@
         "price": 100
     },
     {
-        "id": 6,
+        "id": 12,
         "numberOfHearts": 8,
         "name": "Hasty Fruit and Mushroom Mix",
         "description": "Poskytuje zvýšení rychlosti pohybu na nízké úrovni. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -76,7 +76,7 @@
         }
     },
     {
-        "id": 7,
+        "id": 11,
         "numberOfHearts": 8,
         "name": "Spicy Fruit and Mushroom Mix",
         "description": "Poskytuje nízkou odolnost proti chladu. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -92,7 +92,7 @@
         }
     },
     {
-        "id": 8,
+        "id": 10,
         "numberOfHearts": 8,
         "name": "Electro Fruit and Mushroom Mix",
         "description": "Poskytuje nízkou elektrickou odolnost. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -124,7 +124,7 @@
         }
     },
     {
-        "id": 10,
+        "id": 8,
         "numberOfHearts": 8,
         "name": "Sneaky Fruit and Mushroom Mix",
         "description": "Poskytuje nízkoúrovňové stealth posílení. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -140,7 +140,7 @@
         }
     },
     {
-        "id": 11,
+        "id": 7,
         "numberOfHearts": 8,
         "name": "Chilly Fruit and Mushroom Mix",
         "description": "Poskytuje nízkou tepelnou odolnost. Toto jídlo kontrastuje sladkost ovoce s pikantností hub.",
@@ -156,7 +156,7 @@
         }
     },
     {
-        "id": 12,
+        "id": 6,
         "numberOfHearts": 2,
         "name": "Fish Skewer",
         "description": "Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
@@ -166,7 +166,7 @@
         "price": 25
     },
     {
-        "id": 13,
+        "id": 5,
         "numberOfHearts": 999,
         "extraHearths": 6,
         "name": "Hearty Fish Skewer",
@@ -177,7 +177,7 @@
         "price": 25 
     },
     {
-        "id": 14,
+        "id": 4,
         "numberOfHearts": 2,
         "name": "Mighty Fish Skewer",
         "description": "Poskytuje nízkoúrovňové zesílení útočné síly. Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
@@ -191,7 +191,7 @@
         }
     },
     {
-        "id": 15,
+        "id": 3,
         "numberOfHearts": 2,
         "name": "Tough Fish Skewer",
         "description": "Poskytuje posílení obrany na nízké úrovni. Jednoduchý pokrm vyrobený vařením kousků čerstvé ryby na jehle.",
@@ -205,7 +205,7 @@
         }
     },
     {
-        "id": 16,
+        "id": 2,
         "numberOfHearts": 2,
         "name": "Fried Wild Greens",
         "description": "Základní zeleninový pokrm vyrobený restováním čerstvých divokých rostlin.",
@@ -215,7 +215,7 @@
         "price": 25
     },
     {
-        "id": 17,
+        "id": 1,
         "numberOfHearts": 999,
         "extraHearths": 2,
         "name": "Hearty Fried Wild Greens",
@@ -225,4 +225,4 @@
         ],
         "price": 25
     }
-]}
+]

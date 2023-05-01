@@ -7,18 +7,25 @@ interface FoodCardProps extends Ingredient {
     onClick?: () => void
 }
 
+export function removeSpecialEffectFromName(name: string, specialEffectNotNull: boolean) {
+    let replacedName = name.replaceAll(" ", "_");
+    if (specialEffectNotNull || name.includes("Hearty")) {
+        let splittedImageSource = replacedName.split("_");
+        splittedImageSource.shift();
+        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
+        return splittedImageSource.join("_");
+    }
+
+    return replacedName;
+}
+
 const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, onClick, isIngredient }) => {
 
     const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
 
     let finalImageSource = name.replaceAll(" ", "_");
-
-    if (!isIngredient && (specialEffect != null || name.includes("Hearty"))) {
-        let splittedImageSource = finalImageSource.split("_");
-        splittedImageSource.shift();
-        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
-        finalImageSource = splittedImageSource.join("_");
-    }
+    
+    finalImageSource = removeSpecialEffectFromName(finalImageSource, specialEffect != null);
 
     return (
         <Wrapper onClick={onClick}>

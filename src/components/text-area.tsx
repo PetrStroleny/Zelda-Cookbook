@@ -41,6 +41,7 @@ const TextArea: FC<TextAreaProps> = ({
                 maxLength={maxLength ? maxLength : 150}
                 id={name}
                 onChange={(e) => field.onChange(e.target.value)}
+                value={inputValue}
                 errored={Boolean(fieldState.error)}
                 {...props}               
             />
@@ -62,7 +63,7 @@ const Wrapper = styled("div")`
 `;
 
 const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }>`
-    padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
+    padding: ${p => p.hide ? "12px 53px 0px 17px" : "12px 17px"};
     width: 100%;
     max-height: 250px;
     min-height: 100px;
@@ -76,7 +77,7 @@ const StyledTextArea = styled("textarea") <{ errored?: boolean, hide?: boolean }
 
     &:focus{
         border: 2px solid ${p => p.theme.primitives.blue};
-        padding: ${p => p.hide ? "0px 52px 0px 16px" : "0px 16px"};
+        padding: ${p => p.hide ? "12px 52px 0px 16px" : "12px 16px"};
     }
 `;
 

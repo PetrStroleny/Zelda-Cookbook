@@ -3,23 +3,24 @@ import styled from "@emotion/styled";
 import { Theme } from "../style-variables";
 
 export enum ButtonVariant {
-    GREEN,
     BLUE,
     PRIMARY,
+    RED,
 }
 
 function getButtonColor(variant: ButtonVariant) {
     switch(variant) {
-        case ButtonVariant.GREEN:
+        case ButtonVariant.RED:
             return css`
-                background-color: ${Theme.primitives.green};
+                background-color: ${Theme.primitives.red};
+                color: ${Theme.inverse.content.primary};
 
                 &:hover {
-                    background-color: #9DF19D;
+                    opacity: 0.8;
                 }
 
                 &:active {
-                    background-color: #94D894;
+                    opacity: 0.6;
                 }
             `;
         case ButtonVariant.BLUE:
@@ -28,11 +29,11 @@ function getButtonColor(variant: ButtonVariant) {
                 color: ${Theme.inverse.content.primary};
 
                 &:hover {
-                    background-color: #32B1D8;
+                    opacity: 0.8;
                 }
 
                 &:active {
-                    background-color: #359AB9;
+                    opacity: 0.6;
                 }
             `;
         case ButtonVariant.PRIMARY:
@@ -40,11 +41,11 @@ function getButtonColor(variant: ButtonVariant) {
                 background-color: ${Theme.background.tertiary};
 
                 &:hover {
-                    background-color: #DBDBDB;
+                    opacity: 0.8;
                 }
 
                 &:active {
-                    background-color: #CCCCCC;
+                    opacity: 0.6;
                 }
             `;
     }
@@ -52,7 +53,7 @@ function getButtonColor(variant: ButtonVariant) {
 
 const Button = styled("button")<{rounded?: boolean, variant?: ButtonVariant}>`
     border-radius: ${p => p.rounded ? 9999 : 20}px;
-    padding: ${p => p.rounded ? 2 : 16}px;
+    padding: ${p => p.rounded ? 6 : 16}px;
     height: fit-content;
     border: none;
     display: flex;
@@ -67,7 +68,7 @@ const Button = styled("button")<{rounded?: boolean, variant?: ButtonVariant}>`
     &:focus {
         outline: none;
         border: 2px solid ${p => p.variant == ButtonVariant.BLUE ? p.theme.background.tertiary : p.theme.primitives.blue};
-        padding: ${p => p.rounded ? 0 : 14}px;
+        padding: ${p => p.rounded ? 4 : 14}px;
     }
 
     &.active {
@@ -75,11 +76,11 @@ const Button = styled("button")<{rounded?: boolean, variant?: ButtonVariant}>`
         background-color: ${p => p.theme.primitives.blue};
 
         &:hover {
-            background-color: #11A6D3;
+            opacity: 0.8;
         }
-        
+
         &:active {
-            background-color: #159CC4;
+            opacity: 0.6;
         }
     }
 `;

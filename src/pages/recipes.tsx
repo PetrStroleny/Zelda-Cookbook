@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddModal from "../components/add-modal";
+import AddOrEditRecipe from "../components/add-or-edit-recipe";
 import Button, { ButtonVariant } from "../components/button";
 import CardWrapper from "../components/card-wrapper";
 import FoodCard from "../components/food-card";
@@ -13,12 +13,11 @@ export interface Recipe extends Ingredient {
     ingredients: number[][]
 }
 
-
 const Recipes = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {recipes, setRecipes, locations, locationQuery, searchQuery} = useContext(GlobalContext);
+    const {recipes, locations, locationQuery, searchQuery, setModalQuery, specialEffectQuery} = useContext(GlobalContext);
 
     const [activeRecipes, setActiveRecipes] = useState<Recipe[]>([]);
 
@@ -31,6 +30,7 @@ const Recipes = () => {
 
             recipeLoop: for (const recipe of recipes) {
                 if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
+                if (specialEffectQuery && recipe.specialEffect?.name != specialEffectQuery) continue recipeLoop;
                 if (locations) {
                     firstLoop: for (const location of locations) {
                         for (const subLocation of location.subLocations) {
@@ -62,7 +62,7 @@ const Recipes = () => {
     
     useEffect(() => {
         fetchRecipes();
-    }, [locationQuery, searchQuery, recipes]);
+    }, [locationQuery, searchQuery, recipes, specialEffectQuery]);
 
     if (errored) {
         return <ErrorPage/>;
@@ -88,14 +88,7 @@ const Recipes = () => {
                 <title>Recepty | ZELDA COOK</title>
             </Helmet>
 
-            {addModalActive &&
-                <AddModal 
-                    submit={(data) => {}}
-                    hide={() => setAddModalActive(false)}
-                >
-                    <h2>Přidat Recept</h2>
-                </AddModal>
-            }
+            {addModalActive && <AddOrEditRecipe hide={() => setAddModalActive(false)}/>}
 
             <PageHeader
                 trailing={
@@ -113,6 +106,7 @@ const Recipes = () => {
             <CardWrapper>
                 {!loading ? activeRecipes.map((recipe, index) => 
                     <FoodCard
+                        onClick={() => setModalQuery(`recipe-${recipe.id}-0`)}
                         key={index}
                         {...recipe}
                     />

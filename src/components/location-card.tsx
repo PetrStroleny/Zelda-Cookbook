@@ -2,11 +2,14 @@ import styled from "@emotion/styled";
 import { FC } from "react";
 import { SubLocation } from "../pages/locations";
 
+interface LocationCardProps extends SubLocation {
+    onClick: () => void
+}
 
-const LocationCard: FC<SubLocation> = ({ name }) => (
-    <Wrapper>
+const LocationCard: FC<LocationCardProps> = ({ name, onClick }) => (
+    <Wrapper onClick={onClick}>
         
-        <StyledImg src={`public/locations/${name.replace(" ", "_")}.png`}/>
+        <StyledImg src={`public/locations/${name.replaceAll(" ", "_")}.png`}/>
         <Name>
             {name}
         </Name>
@@ -18,6 +21,15 @@ const Wrapper = styled("div")`
     background-color: #E5E5E5;
     display: flex;
     flex-direction: column;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    &:active {
+        opacity: 0.6;
+    }
 `;
 
 const Name = styled("p")`

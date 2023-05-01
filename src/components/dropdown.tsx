@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, ComponentProps, FC, useRef } from "react";
-import { Control, useController, UseFormRegister } from "react-hook-form";
+import { ComponentProps, FC } from "react";
+import { Control, useController } from "react-hook-form";
 import ErrorMessage from "./error-message";
-import { InputLabel, InputUnderInformation, MaxLengthDiv } from "./input";
+import { InputLabel, InputUnderInformation } from "./input";
 
 interface DropdownItem {
     value: any
@@ -15,7 +15,6 @@ interface DropdownProps extends ComponentProps<"select"> {
     placeholder?: string
     defaultValue?: number
     rules?: any
-    errored?: boolean
     customError?: string
     label?: string
     items: DropdownItem[]
@@ -24,14 +23,13 @@ interface DropdownProps extends ComponentProps<"select"> {
 const Dropdown: FC<DropdownProps> = ({
     control,
     rules,
-    errored,
     name,
     customError,
     label,
     ...props }) => {
 
     const { field, fieldState } = useController({ name, rules, control});
-
+        
     return (
         <Wrapper>
             {label &&
@@ -42,27 +40,39 @@ const Dropdown: FC<DropdownProps> = ({
 
             <StyledDropdown
                 id={name}
-                onChange={(e) => field.onChange(Number(e.target.value))}
-                errored={(!!fieldState.error || errored )}
+                onChange={(e) =>  {
+                    if (props.multiple) {
+                        let activeOptions = [];
+                        for (const option of e.target.options) {
+                            if (option.selected) {
+                                activeOptions.push(isNaN(Number(option.value)) ? option.value : Number(option.value));
+                            }
+                        }
+                        
+                        field.onChange(activeOptions);
+
+                        return;
+                    }
+
+                    field.onChange(isNaN(Number(e.target.value)) ? e.target.value : Number(e.target.value))}
+                }
+                errored={Boolean(fieldState.error)}
                 {...props}               
             >   
                 {props.items.map((item, index) =>
-                    <option key={index} value={item.value}>{item.label}</option>
+                    <option 
+                        key={index} 
+                        selected={props.multiple ? field.value.includes(item.value) : field.value == item.value} 
+                        value={item.value}
+                    >
+                        {item.label}
+                    </option>
                 )}
-                <option value={1}>Akkala Highlands</option>
-                <option value={2}>Deep Akkkala</option>
-                <option value={3}>Lanayru Great Spring</option>
-                <option value={4}>Lanayru Sea</option>
-                <option value={5}>Lanayru Wetlands</option>
-                <option value={6}>Mount Lanayru</option>
-                <option value={7}>East Necluda</option>
-                <option value={8}>West Necluda</option>
-                <option value={9}>Necluda Sea</option>
             </StyledDropdown>
             
             <InputUnderInformation>
-                {((!!fieldState.error || errored) && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
-                {((!!fieldState.error || errored) && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
+                {(!!fieldState.error && fieldState?.error?.message) && <ErrorMessage>{fieldState.error.message}</ErrorMessage>}
+                {(!!fieldState.error && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
                 
             </InputUnderInformation>
         </Wrapper>
@@ -74,19 +84,27 @@ const Wrapper = styled("div")`
     width: 100%;
 `;
 
-const StyledDropdown = styled("select") <{ errored?: boolean, hide?: boolean }>`
+const StyledDropdown = styled("select") <{ errored?: boolean, hide?: boolean, multiple?: boolean }>`
     padding: ${p => p.hide ? "0px 53px 0px 17px" : "0px 17px"};
     width: 100%;
+    height: ${p => p.multiple ? "180px" : "60px"};
     border-radius: 8px;
-    height: 60px;
     background: ${p => p.theme.background.primary};
     color: ${p => p.theme.content.primary};
-    border: 1px solid ${p => p.theme.background.secondary};
+    border: 1px solid ${p => p.errored ? p.theme.primitives.red : p.theme.background.secondary};
     outline: none;
     ${p => p.theme.fontStyles.items};
     
-    >option{
+    > option {
         font-size: 18px;
+        height: ${p => p.multiple ? "30px" : "60px"};
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        padding: 5px;
+        &:not(:last-of-type) {
+            margin-bottom: 1px;
+        }
     }
     
 `;

@@ -5,7 +5,14 @@ import CardWrapper from "../components/card-wrapper";
 import LabelMain from "../components/label-main";
 import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
-import { GlobalContext } from "../utils/global-context";
+import { GlobalContext, addLocation } from "../utils/global-context";
+import AddOrEditModal from "../components/add-or-edit-modal";
+import { useForm } from "react-hook-form";
+import Input from "../components/input";
+import TextArea from "../components/text-area";
+import Dropdown from "../components/dropdown";
+import Button, { ButtonVariant } from "../components/button";
+import AddOrEditLocation from "../components/add-or-edit-location";
 
 export interface SubLocation {
     id: number
@@ -14,17 +21,38 @@ export interface SubLocation {
     ingredients: number[]
 }
 export interface IngredienceLocation {
+    id: number
     name: string
     description: string
     subLocations: SubLocation[]
 }
 
-
+interface AddLocationInfo {
+    name: string
+    description: string
+    regionName: string
+    ingredients: number[]
+}
 
 const Locations = () => {
-    const {locations, searchQuery} = useContext(GlobalContext);
+    const {locations, searchQuery, setModalQuery, ingredients, setLocations} = useContext(GlobalContext);
     const [activeLocations, setActiveLocations] = useState<IngredienceLocation[]>([]);
+    const [addModalActive, setAddModalActive] = useState(false);
 
+    const { control, handleSubmit, reset } = useForm<AddLocationInfo>({defaultValues: {
+        ingredients: [],
+        regionName: "Akkala"
+    }});
+    
+    function onSubmit(data: AddLocationInfo) {
+        const currentID = locations[0].subLocations[0].id + 1;
+        let editedData: any = data;
+        delete editedData.region;
+
+        addLocation({id: currentID, ...editedData}, data.regionName, locations, setLocations);
+
+        setAddModalActive(false);
+    }
 
     useEffect(() => {
         let filteredLocations = [];
@@ -33,7 +61,11 @@ const Locations = () => {
             filteredLocations.push(location);
         }
         setActiveLocations(filteredLocations);
-    }, [locations])
+    }, [locations]);
+
+    useEffect(() => {
+        reset();
+    }, [addModalActive]);
     
     if (locations.length == 0) {
         return (
@@ -54,7 +86,18 @@ const Locations = () => {
                 <meta property="og:title" content="Lokace | ZELDA COOK"/>
                 <title>Lokace | ZELDA COOK</title>
             </Helmet>
-            <PageHeader>
+            {addModalActive && <AddOrEditLocation hide={() => setAddModalActive(false)}/>}
+            
+            <PageHeader
+                trailing={
+                    <Button 
+                        onClick={() => setAddModalActive(true)}
+                        variant={ButtonVariant.BLUE} 
+                        rounded
+                    >
+                        <img src="public/icons/add.svg"/>
+                </Button>}
+            >
                 Lokace
             </PageHeader>
                 {activeLocations.map((location, index) => 
@@ -67,8 +110,9 @@ const Locations = () => {
 
                                 return(
                                     <LocationCard
-                                    {...subLocation}
-                                    key={index}
+                                        onClick={() => setModalQuery(`location-${subLocation.id}-0`)}
+                                        {...subLocation}
+                                        key={index}
                                     />
                                 )
                             })}

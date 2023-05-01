@@ -28,7 +28,7 @@ const Input: FC<InputProps> = ({
     ...props }) => {
     const { field, fieldState } = useController({ name, rules, control, defaultValue });
     const inputValue: string = field?.value ?? "";
-
+        
     return (
         <Wrapper>
             {label &&
@@ -51,7 +51,7 @@ const Input: FC<InputProps> = ({
                 {(!!fieldState.error && (!fieldState?.error?.message && customError)) && <ErrorMessage>{customError}</ErrorMessage>}
                 
                 <MaxLengthDiv>
-                    {inputValue?.length ?? 0} / {maxLength ? maxLength : 150}
+                    {inputValue.toString()?.length ?? 0} / {maxLength ? maxLength : 150}
                 </MaxLengthDiv>
             </InputUnderInformation>
         </Wrapper>

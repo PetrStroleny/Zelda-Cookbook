@@ -12,11 +12,12 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@types/react-router-dom": "5.3.3",
+    "fs": "^0.0.1-security",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.43.7",
-    "react-router-dom": "5.3.0",
+    "react-router-dom": "^5.3.0",
     "wouter": "^2.10.0"
   },
   "devDependencies": {

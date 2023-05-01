@@ -1,15 +1,16 @@
 
 import styled from "@emotion/styled";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Button, { ButtonVariant } from "./button";
 import { useOpenAndClose } from "./search-input";
-interface AddModalProps {
+interface AddOrEditModalProps {
     hide: () => void
     submit: (data: any) => void
     children: JSX.Element | JSX.Element[]
+    editing: boolean
 }
 
-const AddModal: FC<AddModalProps> = ({hide, submit, children}) => {
+const AddOrEditModal: FC<AddOrEditModalProps> = ({hide, submit, children, editing}) => {
     useOpenAndClose(() => {}, hide);
 
     return (
@@ -25,7 +26,7 @@ const AddModal: FC<AddModalProps> = ({hide, submit, children}) => {
                         Zrušit
                     </Button>
                     <Button variant={ButtonVariant.BLUE} type="submit">
-                        Přidat
+                        {editing ? "Uložit změny" : "Přidat"}
                     </Button>
                 </div>
             </Content>
@@ -44,6 +45,7 @@ const Wrapper = styled("div")`
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 3;
 `;
 
 const Content = styled("form")`
@@ -56,8 +58,14 @@ const Content = styled("form")`
     gap: 20px;
     width: 50%; 
     overflow-y: auto;
-    max-height: 100%;
+    max-height: calc(100% - 80px);
 
+    @media only screen and (max-width: ${p => p.theme.breakPoints.mobile}px) {
+        border-radius: unset;
+        max-height: 100%;
+        margin-top: unset;
+        width: 100%;
+    }
 
     > h2 {
         ${p => p.theme.fontStyles.h2};
@@ -69,4 +77,4 @@ const Content = styled("form")`
         gap: 20px;
     }
 `;
-export default AddModal;
+export default AddOrEditModal;

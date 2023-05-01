@@ -62,8 +62,11 @@ const GlobalStyles = css`
     body {
         font-size: 14px;
         background-color: ${Theme.background.secondary};
-    }
 
+        &.scroll-disabled {
+            overflow-y: hidden;
+        }
+    }
 
     .hide-on-desktop {
         @media screen and (min-width: ${Theme.breakPoints.mobile}px) {
