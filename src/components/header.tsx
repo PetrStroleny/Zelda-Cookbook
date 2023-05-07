@@ -70,6 +70,14 @@ const Wrapper = styled("header")`
         margin-right: auto;
         ${Theme.fontStyles.h4};
         color: ${Theme.content.primary};
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &:active {
+            opacity: 0.6;
+        }
     }
 `;
 
@@ -78,6 +86,14 @@ const LinksWrapper = styled("div")<{mobileMenuActive: boolean}>`
         margin-right: 40px;
         ${Theme.fontStyles.h4};
         color: ${Theme.content.secondary};
+
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &:active {
+            opacity: 0.6;
+        }
 
         &.active {
             color: ${Theme.content.primary};

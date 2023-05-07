@@ -57,12 +57,13 @@ const Dropdown: FC<DropdownProps> = ({
                     field.onChange(isNaN(Number(e.target.value)) ? e.target.value : Number(e.target.value))}
                 }
                 errored={Boolean(fieldState.error)}
+                value={field.value}
                 {...props}               
             >   
                 {props.items.map((item, index) =>
                     <option 
                         key={index} 
-                        selected={props.multiple ? field.value.includes(item.value) : field.value == item.value} 
+                        //selected={props.multiple ? field.value.includes(item.value) : field.value == item.value} 
                         value={item.value}
                     >
                         {item.label}

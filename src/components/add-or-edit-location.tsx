@@ -6,6 +6,7 @@ import AddOrEditModal from "./add-or-edit-modal";
 import Dropdown from "./dropdown";
 import Input from "./input";
 import TextArea from "./text-area";
+import { Helmet } from "react-helmet";
 
 interface AddOrEditLocationProps {
     hide: () => void
@@ -30,6 +31,9 @@ const AddOrEditLocation: FC<AddOrEditLocationProps> = ({hide, initialValues}) =>
 
     useEffect(() => {
         reset();
+        document.body.classList.add("scroll-disabled");
+
+        return () => document.body.classList.remove("scroll-disabled");
     }, []);
 
     function onSubmit(data: AddOrEditLocationInfo) {
@@ -47,44 +51,50 @@ const AddOrEditLocation: FC<AddOrEditLocationProps> = ({hide, initialValues}) =>
     }
 
     return (
-        <AddOrEditModal 
-            editing={initialValues != undefined}
-            submit={handleSubmit(onSubmit)} 
-            hide={hide}
-        >   
-           <h2>Přidat Lokaci</h2>
-            <Input 
-                label="Název"
-                control={control}
-                rules={{ required: { message: "Vyplňte název", value: true } }}
-                name="name"
-            />
+        <>
+            <Helmet>
+                <meta property="og:title" content="Přidat lokaci | ZELDA COOK"/>
+                <title>Přidat lokaci | ZELDA COOK</title>
+            </Helmet>
+            <AddOrEditModal 
+                editing={initialValues != undefined}
+                submit={handleSubmit(onSubmit)} 
+                hide={hide}
+            >   
+            <h2>Přidat Lokaci</h2>
+                <Input 
+                    label="Název"
+                    control={control}
+                    rules={{ required: { message: "Vyplňte název", value: true } }}
+                    name="name"
+                />
 
-            <TextArea
-                label="Popis"
-                control={control}
-                rules={{ required: { message: "Vyplňte popis", value: true } }}
-                name="description"
-                maxLength={750}
-            />
+                <TextArea
+                    label="Popis"
+                    control={control}
+                    rules={{ required: { message: "Vyplňte popis", value: true } }}
+                    name="description"
+                    maxLength={750}
+                />
 
-            <Dropdown
-                items={locations.map(location => ({value: location.name, label: location.name}))}
-                label="Region"
-                control={control}
-                rules={{required: { message: "Vyberte region lokace", value: true }}}
-                name="regionName"
-            />
+                <Dropdown
+                    items={locations.map(location => ({value: location.name, label: location.name}))}
+                    label="Region"
+                    control={control}
+                    rules={{required: { message: "Vyberte region lokace", value: true }}}
+                    name="regionName"
+                />
 
-            <Dropdown
-                items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
-                label="Ingredience"
-                control={control}
-                rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
-                multiple
-                name="ingredients"
-            />
-        </AddOrEditModal>
+                <Dropdown
+                    items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
+                    label="Ingredience"
+                    control={control}
+                    rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
+                    multiple
+                    name="ingredients"
+                />
+            </AddOrEditModal>
+        </>
     );
 }
 

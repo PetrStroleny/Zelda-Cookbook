@@ -7,6 +7,7 @@ import AddOrEditModal from "./add-or-edit-modal";
 import Dropdown from "./dropdown";
 import Input from "./input";
 import TextArea from "./text-area";
+import { Helmet } from "react-helmet";
 
 interface AddOrEditRecipeProps {
     hide: () => void
@@ -39,6 +40,9 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, initialValues}) => {
 
     useEffect(() => {
         reset();
+        document.body.classList.add("scroll-disabled");
+
+        return () => document.body.classList.remove("scroll-disabled");
     }, []);
 
     function onSubmit(data: AddOrEditRecipeInfo) {
@@ -67,103 +71,109 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, initialValues}) => {
     }
 
     return (
-        <AddOrEditModal 
-            editing={initialValues != undefined}
-            submit={handleSubmit(onSubmit)} 
-            hide={hide}
-        >   
-            <h2>Přidat Recept</h2>
-            <Input 
-                label="Název"
-                control={control}
-                rules={{ required: { message: "Vyplňte název", value: true } }}
-                name="name"
-            />
-
-            <TextArea
-                label="Popis"
-                control={control}
-                rules={{ required: { message: "Vyplňte popis", value: true } }}
-                name="description"
-                maxLength={750}
-            />
-
-            <Input
-                label="Cena"
-                control={control}
-                name="price"
-                customError={customPriceError}
-                maxLength={3}
-                rules={{ 
-                    required: { message: "Vyplňte cenu ingredience", value: true },
-                    validate: (value: string) => validateIsNumber(
-                        value, 
-                        setCustomPriceError, 
-                        999,
-                        false,
-                        {
-                            negativeError: "Cena receptu musí být menší nežli 999",
-                        }
-                    )
-                }}  
-            />
-                
-            <Input 
-                label="Počet srdíček"
-                control={control}
-                name="numberOfHearts"
-                maxLength={3}
-                customError={customHeartsError}
-                rules={{ 
-                    required: { message: "Vyplňte počet srdíček", value: true },
-                    validate: (value: string) => validateIsNumber(
-                        value, 
-                        setCustomHeartsError, 
-                        999,
-                        false,
-                        {
-                            negativeError: "Počet srdíček musí být větší nežli 0",
-                        }
-                    )
-                }}  
-            />
-            <Dropdown
-                items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
-                label="Ingredience"
-                control={control}
-                rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
-                multiple
-                name="ingredients"
-            />
-
-            <Dropdown
-                items={specialEffects}
-                label="Speciální effekt"
-                control={control}
-                name="specialEffect"
-            />
-            {specialEffectValue != "Bez efektu" ?
-                <Input
-                    label="Doba trvání speciálního efektu"
+        <>
+            <Helmet>
+                <meta property="og:title" content="Přidat recept | ZELDA COOK"/>
+                <title>Přidat recept | ZELDA COOK</title>
+            </Helmet>
+            <AddOrEditModal 
+                editing={initialValues != undefined}
+                submit={handleSubmit(onSubmit)} 
+                hide={hide}
+            >   
+                <h2>Přidat Recept</h2>
+                <Input 
+                    label="Název"
                     control={control}
-                    name="specialEffectDuration"
-                    customError={customDurationError}
-                    maxLength={4}
+                    rules={{ required: { message: "Vyplňte název", value: true } }}
+                    name="name"
+                />
+
+                <TextArea
+                    label="Popis"
+                    control={control}
+                    rules={{ required: { message: "Vyplňte popis", value: true } }}
+                    name="description"
+                    maxLength={750}
+                />
+
+                <Input
+                    label="Cena"
+                    control={control}
+                    name="price"
+                    customError={customPriceError}
+                    maxLength={3}
                     rules={{ 
-                        required: { message: "Vyplňte dobu trvání speciálního efektu", value: true },
+                        required: { message: "Vyplňte cenu ingredience", value: true },
                         validate: (value: string) => validateIsNumber(
                             value, 
-                            setCustomDurationError, 
-                            1800,
+                            setCustomPriceError, 
+                            999,
                             false,
                             {
-                                negativeError: "Maximální doba trvání je 1800 minut",
+                                negativeError: "Cena receptu musí být menší nežli 999",
                             }
                         )
                     }}  
-                /> : <></>
-            }
-        </AddOrEditModal>
+                />
+                    
+                <Input 
+                    label="Počet srdíček"
+                    control={control}
+                    name="numberOfHearts"
+                    maxLength={3}
+                    customError={customHeartsError}
+                    rules={{ 
+                        required: { message: "Vyplňte počet srdíček", value: true },
+                        validate: (value: string) => validateIsNumber(
+                            value, 
+                            setCustomHeartsError, 
+                            999,
+                            false,
+                            {
+                                negativeError: "Počet srdíček musí být větší nežli 0",
+                            }
+                        )
+                    }}  
+                />
+                    <Dropdown
+                        items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
+                        label="Ingredience"
+                        control={control}
+                        rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
+                        multiple
+                        name="ingredients"
+                    />
+
+                <Dropdown
+                    items={specialEffects}
+                    label="Speciální effekt"
+                    control={control}
+                    name="specialEffect"
+                />
+                {specialEffectValue != "Bez efektu" ?
+                    <Input
+                        label="Doba trvání speciálního efektu"
+                        control={control}
+                        name="specialEffectDuration"
+                        customError={customDurationError}
+                        maxLength={4}
+                        rules={{ 
+                            required: { message: "Vyplňte dobu trvání speciálního efektu", value: true },
+                            validate: (value: string) => validateIsNumber(
+                                value, 
+                                setCustomDurationError, 
+                                1800,
+                                true,
+                                {
+                                    negativeError: "Maximální doba trvání je 1800 minut",
+                                }
+                            )
+                        }}  
+                    /> : <></>
+                }
+            </AddOrEditModal>
+        </>
     );
 }
 

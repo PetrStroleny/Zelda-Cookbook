@@ -60,8 +60,8 @@ export function locationInitialValues(activeID: number, locations: IngredienceLo
 
     let data = {} as AddOrEditLocationInfo;
     data.id = activeID;
-    data.name = activeLocation.name;
-    data.regionName = locations.filter(location => location.subLocations.some(subLocation => subLocation.id == activeLocation.id))[0].name;
+    data.name = activeLocation?.name;
+    data.regionName = locations.filter(location => location.subLocations.some(subLocation => subLocation.id == activeLocation.id))[0]?.name;
     data.description = activeLocation.description;
     data.ingredients = activeLocation.ingredients;
     
@@ -83,9 +83,10 @@ export function validateIsNumber(value: string, setError: (value: string) => voi
         setError(errors?.negativeError ?? "Číslo nesmí být menší nežli 0");
         return false;
     }
+    console.log(value);
 
-    if((value.indexOf(".") != -1) && mustBeWhole) {
-        setError(errors?.wholeError ?? "Číslo musí být celé");
+    if((String(value).indexOf(".") != -1) && mustBeWhole) {
+        setError(errors?.wholeError ?? "Zadejte celé číslo");
         return false;
     }
 

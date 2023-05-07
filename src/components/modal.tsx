@@ -79,7 +79,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
           setDescription(activeLocaiton.description);
           setOnDeleteClick({
             setter: setLocations, 
-            newValue: locations.map(location => ({...location, subLocations: location.subLocations.filter(subLocation => subLocation.id == activeLocaiton.id)})),
+            newValue: locations.map(location => ({...location, subLocations: location.subLocations.filter(subLocation => subLocation.id != activeLocaiton.id)})),
           });
           setLinkCards([{
             label: "Ingredience", 
@@ -101,7 +101,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
         setImgSrc(`public/recipes/${recipeIcon}.png`);
         setLabel(activeRecipe.name);
         setDescription(activeRecipe.description);
-        setOnDeleteClick({ setter: setRecipes,  newValue: recipes.filter(recipe => recipe.id == activeRecipe.id)});
+        setOnDeleteClick({ setter: setRecipes,  newValue: recipes.filter(recipe => recipe.id != activeRecipe.id)});
         setLinkCards([{
           label: "Ingredience", 
           cards: ingredients.filter(ingredient => activeRecipe.ingredients.flat(1).includes(ingredient.id)).map(
@@ -140,6 +140,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
             <Buttons>
               {modalQuery.split("-")[modalQuery.split("-").length-1] == "1" ?
                 <Button 
+                  style={{zIndex: 4}}
                   onClick={() => history.back()}
                   variant={ButtonVariant.PRIMARY} 
                   rounded
@@ -245,10 +246,9 @@ const Image = styled("img")<{loacationActive: boolean}>`
   width: ${p => p.loacationActive ? "50%" : "20%"};
   height: ${p => p.loacationActive ? "380px" : "180px"};
   position: sticky;
-  top: 52px;
+  margin-top: 58px;
   
   @media only screen and (max-width: ${p => p.theme.breakPoints.mobile}px) {
-    margin-top: 52px;
     width: 100%;
     position: unset;
   }
@@ -274,7 +274,7 @@ const Header = styled("div")`
   > h2 {
     font-size: 24px;
     font-weight: 700;
-    padding-top: 54px;
+    padding-top: 58px;
     margin-bottom: 12px;
   }
 `;

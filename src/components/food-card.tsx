@@ -70,17 +70,19 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, speci
         <IconWrapper>
             <img src={`public/${isIngredient ? "ingredients": "recipes"}/${finalImageSource}.png`}/>
         </IconWrapper>
-
-        <Name>
-            {name}
-        </Name>
-        {specialEffect && 
-            <SpecialEffect>
-                    <img src={`public/icons/${specialEffect.name}.svg`}/>
-                    <img src="public/icons/time.svg"/>
-                    <p>{Math.floor(specialEffect.duration / 60)}:{specialEffect.duration % 60 < 10 ? `0${specialEffect.duration % 60}` : specialEffect.duration % 60}</p>
-            </SpecialEffect>
-        }
+        
+        <BottomInfoWrapper>
+            <Name>
+                {name}
+            </Name>
+            {specialEffect && 
+                <SpecialEffect>
+                        <img src={`public/icons/${specialEffect.name}.svg`}/>
+                        <img src="public/icons/time.svg"/>
+                        <p>{Math.floor(specialEffect.duration / 60)}:{specialEffect.duration % 60 < 10 ? `0${specialEffect.duration % 60}` : specialEffect.duration % 60}</p>
+                </SpecialEffect>
+            }
+        </BottomInfoWrapper>
     </Wrapper>
     );
 }
@@ -140,6 +142,14 @@ const Name = styled("p")`
     width: 100%;
 `;
 
+const BottomInfoWrapper = styled("div")`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: auto;
+    width: 100%;
+`;
 
 const SpecialEffect = styled("div")`
     display: flex;

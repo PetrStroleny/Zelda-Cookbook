@@ -78,12 +78,11 @@ export function editLocation(activeLocation: SubLocation, regionName: string, pr
       if (regionChanged) {
         editedLocations[i].subLocations = [activeLocation, ...activeLocations[i].subLocations];
       } else {
-        editedLocations[i].subLocations.map(subLocation => subLocation.id == activeLocation.id ?
+        editedLocations[i].subLocations = editedLocations[i].subLocations.map(subLocation => subLocation.id == activeLocation.id ?
           activeLocation 
           :
           subLocation
-        );
-      }
+      )}
       continue; 
     }
     if (activeLocations[i].name == previousRegionName && regionChanged) {
