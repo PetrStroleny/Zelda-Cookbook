@@ -2,13 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import AddOrEditRecipe from "../components/add-or-edit-recipe";
 import Button, { ButtonVariant } from "../components/button";
-import CardWrapper from "../components/cards";
-import FoodCard from "../components/food-card";
+import Cards from "../components/cards";
 import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 import { Ingredient } from "./ingredients";
-import Cards from "../components/cards";
 
 export interface Recipe extends Ingredient {
     ingredients: number[][]
@@ -29,7 +27,7 @@ const Recipes = () => {
             setLoading(true);
             let filteredIngrediences = [];
 
-            recipeLoop: for (const recipe of recipes) {
+            recipeLoop: for await (const recipe of recipes) {
                 if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
                 if (specialEffectQuery && recipe.specialEffect?.name != specialEffectQuery) continue recipeLoop;
                 if (locations) {

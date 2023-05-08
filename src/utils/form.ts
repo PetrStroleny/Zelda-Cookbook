@@ -84,7 +84,6 @@ export function validateIsNumber(value: string, setError: (value: string) => voi
         setError(errors?.negativeError ?? "Číslo nesmí být menší nežli 0");
         return false;
     }
-    console.log(value);
 
     if((String(value).indexOf(".") != -1) && mustBeWhole) {
         setError(errors?.wholeError ?? "Zadejte celé číslo");
@@ -105,15 +104,4 @@ export const locationDropdownItems = [
     {value: 3, label: "East Necluda"},
     {value: 2, label: "West Necluda"},
     {value: 1, label: "Necluda Sea"},
-];
-
-export const specialEffects = [
-    {value: "Bez efektu", label: "Bez efektu"},
-    {value: "electro", label: "electro"},
-    {value: "chilly", label: "chilly"},
-    {value: "mighty", label: "mighty"},
-    {value: "sneaky", label: "sneaky"},
-    {value: "spicy", label: "spicy"},
-    {value: "tough", label: "tough"},
-    {value: "hasty", label: "hasty"},
 ];

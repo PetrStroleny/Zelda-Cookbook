@@ -1,13 +1,14 @@
 
 import { FC, useContext, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { GlobalContext, addIngredient, editIngredient } from "../utils/global-context";
+import { addIngredient, editIngredient } from "../utils/adding-editing";
+import { locationDropdownItems, validateIsNumber } from "../utils/form";
+import { GlobalContext } from "../utils/global-context";
 import AddOrEditModal from "./add-or-edit-modal";
+import Dropdown from "./dropdown";
 import Input from "./input";
 import TextArea from "./text-area";
-import { locationDropdownItems, specialEffects, validateIsNumber } from "../utils/form";
-import Dropdown from "./dropdown";
-import { Helmet } from "react-helmet";
 
 interface AddOrEditIngredientProps {
     hide: () => void
@@ -26,7 +27,7 @@ export interface AddOrEditIngredientInfo {
 }
 
 const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}) => {
-    const {ingredients, setIngredients, setLocations, locations} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setLocations, locations, specialEffects} = useContext(GlobalContext);
     
     const { control, handleSubmit, reset, watch } = useForm<AddOrEditIngredientInfo>({defaultValues: initialValues ?? { 
         locations: [],
@@ -169,9 +170,8 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
                     multiple
                     name="locations"
                 />
-
                 <Dropdown
-                    items={specialEffects}
+                    items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffects.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name}))]}
                     label="Speciální effekt"
                     control={control}
                     name="specialEffect"

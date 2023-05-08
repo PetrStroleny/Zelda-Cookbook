@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-const LoadingFoodCard = () => (
+const LoadingLocationCard = () => (
     <Wrapper className="fading"/>
 );
 
@@ -10,4 +10,4 @@ const Wrapper = styled("div")`
     height: 300px;
 `;
 
-export default LoadingFoodCard;
+export default LoadingLocationCard;

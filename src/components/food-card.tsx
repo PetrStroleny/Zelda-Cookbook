@@ -22,9 +22,7 @@ export function removeSpecialEffectFromName(name: string, specialEffectNotNull: 
 }
 
 const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, onClick, isIngredient }) => {
-
     const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
-
     let finalImageSource = name.replaceAll(" ", "_");
     
     finalImageSource = removeSpecialEffectFromName(finalImageSource, specialEffect != null);

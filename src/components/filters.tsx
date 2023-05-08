@@ -20,8 +20,7 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
     const [searchActive, setSearchActive] = useState(false);
     const [location, _] = useLocation();
     useOpenAndClose(() => setSearchActive(true), () => {setSearchActive(false); setSearch("")});
-    const globalContext = useContext(GlobalContext);
-
+    const {locations, specialEffects} = useContext(GlobalContext);
 
     function searchButtonClick() {
         if (searchActive) {
@@ -46,27 +45,15 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
         <Wrapper>
             {location != "/lokace" && 
                 <SpecialEffects>
-                    <div className={specialEffectQuery == "electro" ? "active" : ""} onClick={() => specialEffectButtonClick("electro")} >
-                        <img src="public/icons/electro.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "chilly" ? "active" : ""} onClick={() => specialEffectButtonClick("chilly")}>
-                        <img src="public/icons/chilly.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "mighty" ? "active" : ""} onClick={() => specialEffectButtonClick("mighty")}>
-                        <img src="public/icons/mighty.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "sneaky" ? "active" : ""} onClick={() => specialEffectButtonClick("sneaky")}>
-                        <img src="public/icons/sneaky.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "spicy" ? "active" : ""} onClick={() => specialEffectButtonClick("spicy")}>
-                        <img src="public/icons/spicy.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "tough" ? "active" : ""} onClick={() => specialEffectButtonClick("tough")}>
-                        <img src="public/icons/tough.svg"/>
-                    </div>
-                    <div className={specialEffectQuery == "hasty" ? "active" : ""} onClick={() => specialEffectButtonClick("hasty")}>
-                        <img src="public/icons/hasty.svg"/>
-                    </div>
+                    {specialEffects.map((specialEffect, index) =>
+                        <div 
+                            key={index} 
+                            className={specialEffectQuery == specialEffect.name ? "active" : ""} 
+                            onClick={() => specialEffectButtonClick(specialEffect.name)} 
+                        >
+                            <img src={specialEffect.imgSrc}/>
+                        </div>
+                    )}
                 </SpecialEffects>
             }
             <div>
@@ -79,7 +66,7 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
                     <SearchInput value={searchQuery} onChange={setSearch}/>
                 :
                     <ButtonsWrapper>
-                        {globalContext.locations.map(mainLocation => 
+                        {locations.map(mainLocation => 
                             mainLocation.subLocations.map((subLocation, index) =>
                                 <Button 
                                     key={index}
@@ -131,7 +118,6 @@ const SpecialEffects = styled("div")`
             object-fit: contain;
         }
     }
-
 `;
 
 const Wrapper = styled("div")`

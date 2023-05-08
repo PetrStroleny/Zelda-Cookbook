@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { ChangeEvent, ComponentProps, FC, useRef } from "react";
-import { Control, useController, UseFormRegister } from "react-hook-form";
+import { ComponentProps, FC } from "react";
+import { Control, useController } from "react-hook-form";
 
 import ErrorMessage from "./error-message";
 import { InputLabel, InputUnderInformation, MaxLengthDiv } from "./input";

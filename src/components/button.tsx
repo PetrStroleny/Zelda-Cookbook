@@ -85,6 +85,4 @@ const Button = styled("button")<{rounded?: boolean, variant?: ButtonVariant}>`
     }
 `;
 
-
-
 export default Button;

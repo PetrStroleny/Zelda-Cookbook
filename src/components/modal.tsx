@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useContext, useEffect, useState, Fragment, FC } from "react";
+import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../utils/global-context";
 import Button, { ButtonVariant } from "./button";
 import { removeSpecialEffectFromName } from "./food-card";

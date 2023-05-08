@@ -2,12 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import AddOrEditIngredient from "../components/add-or-edit-ingredient";
 import Button, { ButtonVariant } from "../components/button";
-import CardWrapper from "../components/cards";
-import FoodCard from "../components/food-card";
+import Cards from "../components/cards";
 import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
-import Cards from "../components/cards";
 
 
 export interface SpecialEffect {
@@ -43,12 +41,12 @@ const Ingredients = () => {
 
     const [addModalActive, setAddModalActive] = useState(false);
 
-    function fetchIngedients() {
+    async function fetchIngedients() {
         try {
             setLoading(true);
             let filteredIngrediences = [];
 
-            ingredientLoop: for (const ingredient of ingredients) {
+            ingredientLoop: for await (const ingredient of ingredients) {
                 if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) continue ingredientLoop;
                 if (specialEffectQuery && ingredient.specialEffect?.name != specialEffectQuery) continue ingredientLoop;
                 if (locations) {

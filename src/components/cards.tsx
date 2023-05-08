@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext } from "react";
 import { Ingredient } from "../pages/ingredients";
 import { Recipe } from "../pages/recipes";
-import FoodCard from "./food-card";
 import { GlobalContext } from "../utils/global-context";
+import FoodCard from "./food-card";
 import LoadingFoodCard from "./loading-food-card";
 
 interface CardsProps {
@@ -15,15 +15,11 @@ interface CardsProps {
 const Cards: FC<CardsProps> = ({items, loading, isIngredient}) => {
     const {setModalQuery, searchQuery, locationQuery, specialEffectQuery} = useContext(GlobalContext);
 
-    useEffect(() => {
-        console.log(loading)
-    }, [loading]);
-
     return (
         (loading || items.length > 0) ?
             <CardWrapper>
                 {loading ? 
-                    new Array(15).fill("").map(_ => <LoadingFoodCard/>)
+                    new Array(15).fill("").map((_, index) => <LoadingFoodCard key={index}/>)
                     :
                     items.map((item, index) =>
                         <FoodCard

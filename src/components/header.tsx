@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useRoute } from "wouter";
 import { Theme } from "../style-variables";
 import Button from "./button";

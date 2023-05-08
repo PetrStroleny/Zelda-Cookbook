@@ -1,6 +1,6 @@
 
 import styled from "@emotion/styled";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import Button, { ButtonVariant } from "./button";
 import { useOpenAndClose } from "./search-input";
 interface AddOrEditModalProps {

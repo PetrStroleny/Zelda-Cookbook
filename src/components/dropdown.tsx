@@ -48,9 +48,8 @@ const Dropdown: FC<DropdownProps> = ({
                                 activeOptions.push(isNaN(Number(option.value)) ? option.value : Number(option.value));
                             }
                         }
-                        
+                    
                         field.onChange(activeOptions);
-
                         return;
                     }
 

@@ -8,7 +8,6 @@ interface LocationCardProps extends SubLocation {
 
 const LocationCard: FC<LocationCardProps> = ({ name, onClick }) => (
     <Wrapper onClick={onClick}>
-        
         <StyledImg src={`public/locations/${name.replaceAll(" ", "_")}.png`}/>
         <Name>
             {name}
