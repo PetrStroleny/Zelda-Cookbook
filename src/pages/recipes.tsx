@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddOrEditRecipe from "../components/add-or-edit-recipe";
+import AddOrEditRecipe from "../components/add-or-edit-modals/add-or-edit-recipe";
 import Button, { ButtonVariant } from "../components/button";
 import Cards from "../components/cards";
 import PageHeader from "../components/page-header";

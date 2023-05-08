@@ -1,6 +1,6 @@
-import { AddOrEditIngredientInfo } from "../components/add-or-edit-ingredient";
-import { AddOrEditLocationInfo } from "../components/add-or-edit-location";
-import { AddOrEditRecipeInfo } from "../components/add-or-edit-recipe";
+import { AddOrEditIngredientInfo } from "../components/add-or-edit-modals/add-or-edit-ingredient";
+import { AddOrEditLocationInfo } from "../components/add-or-edit-modals/add-or-edit-location";
+import { AddOrEditRecipeInfo } from "../components/add-or-edit-modals/add-or-edit-recipe";
 import { removeSpecialEffectFromName } from "../components/food-card";
 import { Ingredient } from "../pages/ingredients";
 import { IngredienceLocation } from "../pages/locations";

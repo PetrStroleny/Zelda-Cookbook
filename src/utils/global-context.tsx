@@ -156,7 +156,6 @@ function useGlobalContext() {
       modalQuery, setModalQuery,
       specialEffectQuery, setSpecialEffectQuery,
       locations, setLocations, recipes, setRecipes, ingredients, setIngredients
-
     }];
 }
 

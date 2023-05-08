@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { Route, Router, Switch, useLocation as useWouterLocation, } from 'wouter';
-import AddOrEditIngredient from './components/add-or-edit-ingredient';
-import AddOrEditLocation from './components/add-or-edit-location';
-import AddOrEditRecipe from './components/add-or-edit-recipe';
+import AddOrEditIngredient from './components/add-or-edit-modals/add-or-edit-ingredient';
+import AddOrEditLocation from './components/add-or-edit-modals/add-or-edit-location';
+import AddOrEditRecipe from './components/add-or-edit-modals/add-or-edit-recipe';
 import Filters from './components/filters';
 import Header from './components/header';
 import Modal from './components/modal';

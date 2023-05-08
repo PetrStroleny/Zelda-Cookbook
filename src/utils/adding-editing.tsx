@@ -2,17 +2,20 @@ import { Ingredient } from "../pages/ingredients";
 import { IngredienceLocation, SubLocation } from "../pages/locations";
 import { Recipe } from "../pages/recipes";
 
-export function editIngredient(activeIngredient: Ingredient, activeIngredients: Ingredient[], setActiveIngredients: (values: Ingredient[]) => void) {
+// Ingredient
+  export function editIngredient(activeIngredient: Ingredient, activeIngredients: Ingredient[], setActiveIngredients: (values: Ingredient[]) => void) {
     setActiveIngredients(activeIngredients.map(ingredient => ingredient.id == activeIngredient.id ? 
       activeIngredient 
       : 
       ingredient
     ));
   }
+
   export function addIngredient(ingredient: Ingredient, activeIngredients: Ingredient[], setActiveIngredients: (values: Ingredient[]) => void) {
     setActiveIngredients([ingredient, ...activeIngredients]);
   }
   
+// Recipe
   export function editRecipe(activeRecipe: Recipe, activeReceipts: Recipe[], setActiveReceipts: (values: Recipe[]) => void) {
     setActiveReceipts(activeReceipts.map(recipe => recipe.id == activeRecipe.id ? 
       activeRecipe 
@@ -23,7 +26,8 @@ export function editIngredient(activeIngredient: Ingredient, activeIngredients: 
   export function addReceipt(receipt: Recipe, activeReceipts: Recipe[], setActiveReceipts: (values: Recipe[]) => void) {
     setActiveReceipts([receipt, ...activeReceipts]);
   }
-  
+
+// Location
   export function editLocation(activeLocation: SubLocation, regionName: string, previousRegionName: string, activeLocations: IngredienceLocation[], setActiveLocations: (values: IngredienceLocation[]) => void) {
     let editedLocations = activeLocations;
     const regionChanged = regionName != previousRegionName;

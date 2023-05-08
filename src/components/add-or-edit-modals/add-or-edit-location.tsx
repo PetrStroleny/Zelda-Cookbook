@@ -2,12 +2,12 @@
 import { FC, useContext, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { addLocation, editLocation } from "../utils/adding-editing";
-import { GlobalContext } from "../utils/global-context";
-import AddOrEditModal from "./add-or-edit-modal";
-import Dropdown from "./dropdown";
-import Input from "./input";
-import TextArea from "./text-area";
+import { addLocation, editLocation } from "../../utils/adding-editing";
+import { GlobalContext } from "../../utils/global-context";
+import AddOrEditModal from ".";
+import Dropdown from "../dropdown";
+import Input from "../input";
+import TextArea from "../text-area";
 
 interface AddOrEditLocationProps {
     hide: () => void

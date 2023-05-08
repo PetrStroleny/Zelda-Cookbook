@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import AddOrEditLocation from "../components/add-or-edit-location";
+import AddOrEditLocation from "../components/add-or-edit-modals/add-or-edit-location";
 import Button, { ButtonVariant } from "../components/button";
 import { CardWrapper } from "../components/cards";
 import CardsLocation from "../components/cards-location";

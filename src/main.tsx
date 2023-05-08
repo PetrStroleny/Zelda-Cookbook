@@ -1,6 +1,5 @@
 import { css, Global, keyframes, ThemeProvider } from '@emotion/react';
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import ReactDOM from 'react-dom/client';
 import App from "./app";
 import { Theme } from './style-variables';
 

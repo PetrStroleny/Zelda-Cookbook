@@ -1,8 +1,8 @@
 
 import styled from "@emotion/styled";
 import { FC } from "react";
-import Button, { ButtonVariant } from "./button";
-import { useOpenAndClose } from "./search-input";
+import Button, { ButtonVariant } from "../button";
+import { useOpenAndClose } from "../search-input";
 interface AddOrEditModalProps {
     hide: () => void
     submit: (data: any) => void
