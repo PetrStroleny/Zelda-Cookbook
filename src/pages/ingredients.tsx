@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import AddOrEditIngredient from "../components/add-or-edit-ingredient";
 import Button, { ButtonVariant } from "../components/button";
-import CardWrapper from "../components/card-wrapper";
+import CardWrapper from "../components/cards";
 import FoodCard from "../components/food-card";
 import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
+import Cards from "../components/cards";
 
 
 export interface SpecialEffect {
@@ -36,7 +37,7 @@ interface AddIngredientInfo {
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {ingredients, setIngredients, setLocations, setModalQuery, locations, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
+    const {ingredients, locations, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
 
     const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
@@ -114,18 +115,11 @@ const Ingredients = () => {
                 }>
                 Ingredience
             </PageHeader>
-            <CardWrapper>
-                {!loading ? activeIngredients.map((ingredient, index) => (
-                        <FoodCard
-                            onClick={() => setModalQuery(`ingredient-${ingredient.id}-0`)}
-                            key={index}
-                            {...ingredient}
-                            isIngredient
-                        />
-                        )) :
-                        <div>Nacitani....</div>
-                    }
-            </CardWrapper>
+            <Cards 
+                items={activeIngredients} 
+                isIngredient={true} 
+                loading={loading}
+            />
         </>
     );
 }

@@ -1,6 +1,7 @@
 import { AddOrEditIngredientInfo } from "../components/add-or-edit-ingredient";
 import { AddOrEditLocationInfo } from "../components/add-or-edit-location";
 import { AddOrEditRecipeInfo } from "../components/add-or-edit-recipe";
+import { removeSpecialEffectFromName } from "../components/food-card";
 import { Ingredient } from "../pages/ingredients";
 import { IngredienceLocation } from "../pages/locations";
 import { Recipe } from "../pages/recipes";
@@ -23,13 +24,13 @@ export function ingredientInitialValues(activeID: number, ingredients: Ingredien
     let data = {} as AddOrEditIngredientInfo;
 
     data.id = activeID;
-    data.name = activeIngredient.name;
+    data.name = removeSpecialEffectFromName(activeIngredient.name, activeIngredient.specialEffect != undefined, false);
     data.description = activeIngredient.description;
     data.locations = locations.map(location => location.subLocations).flat(1).filter(subLocation => subLocation.ingredients.includes(activeID)).map(subLocation => subLocation.id);
     data.numberOfHearts = activeIngredient.numberOfHearts.toString();
     data.price = activeIngredient.price.toString();
     data.specialEffect = activeIngredient.specialEffect?.name ?? "Bez efektu";
-    if (activeIngredient.specialEffect?.name) {
+    if (activeIngredient.specialEffect) {
         data.specialEffectDuration = activeIngredient.specialEffect?.duration;
     }
 

@@ -7,13 +7,15 @@ interface FoodCardProps extends Ingredient {
     onClick?: () => void
 }
 
-export function removeSpecialEffectFromName(name: string, specialEffectNotNull: boolean) {
+export function removeSpecialEffectFromName(name: string, specialEffectNotNull: boolean, asSource = true) {
     let replacedName = name.replaceAll(" ", "_");
     if (specialEffectNotNull || name.includes("Hearty")) {
         let splittedImageSource = replacedName.split("_");
         splittedImageSource.shift();
-        splittedImageSource[0] = splittedImageSource[0][0].toUpperCase() + splittedImageSource[0].slice(1);
-        return splittedImageSource.join("_");
+        const firstLetter = splittedImageSource[0][0];
+        if (asSource) firstLetter.toUpperCase();
+        splittedImageSource[0] = firstLetter + splittedImageSource[0].slice(1);
+        return asSource ? splittedImageSource.join("_") : splittedImageSource.join(" ");
     }
 
     return replacedName;

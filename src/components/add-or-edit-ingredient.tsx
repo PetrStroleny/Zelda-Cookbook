@@ -26,7 +26,7 @@ export interface AddOrEditIngredientInfo {
 }
 
 const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}) => {
-    const {ingredients, setIngredients, setLocations, setModalQuery, locations, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setLocations, locations} = useContext(GlobalContext);
     
     const { control, handleSubmit, reset, watch } = useForm<AddOrEditIngredientInfo>({defaultValues: initialValues ?? { 
         locations: [],

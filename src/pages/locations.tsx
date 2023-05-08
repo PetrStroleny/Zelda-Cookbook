@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import CardWrapper from "../components/card-wrapper";
+import {CardWrapper} from "../components/cards";
 import LabelMain from "../components/label-main";
 import LocationCard from "../components/location-card";
 import PageHeader from "../components/page-header";
@@ -13,6 +13,7 @@ import TextArea from "../components/text-area";
 import Dropdown from "../components/dropdown";
 import Button, { ButtonVariant } from "../components/button";
 import AddOrEditLocation from "../components/add-or-edit-location";
+import CardsLocation from "../components/cards-location";
 
 export interface SubLocation {
     id: number
@@ -35,37 +36,22 @@ interface AddLocationInfo {
 }
 
 const Locations = () => {
-    const {locations, searchQuery, setModalQuery, ingredients, setLocations} = useContext(GlobalContext);
+    const {locations, searchQuery, setLocations} = useContext(GlobalContext);
     const [activeLocations, setActiveLocations] = useState<IngredienceLocation[]>([]);
     const [addModalActive, setAddModalActive] = useState(false);
-
-    const { control, handleSubmit, reset } = useForm<AddLocationInfo>({defaultValues: {
-        ingredients: [],
-        regionName: "Akkala"
-    }});
-    
-    function onSubmit(data: AddLocationInfo) {
-        const currentID = locations[0].subLocations[0].id + 1;
-        let editedData: any = data;
-        delete editedData.region;
-
-        addLocation({id: currentID, ...editedData}, data.regionName, locations, setLocations);
-
-        setAddModalActive(false);
-    }
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         let filteredLocations = [];
         for (const location of locations) {
             if (!location.name.toLowerCase().includes(searchQuery.toLowerCase())) continue;
             filteredLocations.push(location);
         }
         setActiveLocations(filteredLocations);
+        setLoading(false);
     }, [locations]);
 
-    useEffect(() => {
-        reset();
-    }, [addModalActive]);
     
     if (locations.length == 0) {
         return (
@@ -100,25 +86,7 @@ const Locations = () => {
             >
                 Lokace
             </PageHeader>
-                {activeLocations.map((location, index) => 
-                    <div key={index}>  
-                        <LabelMain>{location.name}</LabelMain>
-
-                        <StyledCardWrapper>
-                            {location.subLocations.map((subLocation, index) => {
-                                if (!subLocation.name.toLowerCase().includes(searchQuery.toLowerCase())) return;
-
-                                return(
-                                    <LocationCard
-                                        onClick={() => setModalQuery(`location-${subLocation.id}-0`)}
-                                        {...subLocation}
-                                        key={index}
-                                    />
-                                )
-                            })}
-                        </StyledCardWrapper>
-                    </div>
-                )}
+            <CardsLocation locations={activeLocations} loading={loading}/>
         </>
     );
 }

@@ -2,12 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import AddOrEditRecipe from "../components/add-or-edit-recipe";
 import Button, { ButtonVariant } from "../components/button";
-import CardWrapper from "../components/card-wrapper";
+import CardWrapper from "../components/cards";
 import FoodCard from "../components/food-card";
 import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 import { Ingredient } from "./ingredients";
+import Cards from "../components/cards";
 
 export interface Recipe extends Ingredient {
     ingredients: number[][]
@@ -102,16 +103,12 @@ const Recipes = () => {
             >
                 Recepty
             </PageHeader>
-            
-            <CardWrapper>
-                {!loading ? activeRecipes.map((recipe, index) => 
-                    <FoodCard
-                        onClick={() => setModalQuery(`recipe-${recipe.id}-0`)}
-                        key={index}
-                        {...recipe}
-                    />
-                ) : <div>Nacitani...</div>}
-            </CardWrapper>
+            <Cards 
+                items={activeRecipes} 
+                isIngredient={false} 
+                loading={loading}
+                
+            />
         </>
     );
 }
