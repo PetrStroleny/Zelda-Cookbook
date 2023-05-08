@@ -9,14 +9,14 @@ import ErrorPage from "./error-page";
 import { Ingredient } from "./ingredients";
 
 export interface Recipe extends Ingredient {
-    ingredients: number[][]
+    ingredients: number[]
 }
 
 const Recipes = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {recipes, locations, locationQuery, searchQuery, setModalQuery, specialEffectQuery} = useContext(GlobalContext);
+    const {recipes, regions, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
 
     const [activeRecipes, setActiveRecipes] = useState<Recipe[]>([]);
 
@@ -30,16 +30,14 @@ const Recipes = () => {
             recipeLoop: for await (const recipe of recipes) {
                 if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
                 if (specialEffectQuery && recipe.specialEffect?.name != specialEffectQuery) continue recipeLoop;
-                if (locations) {
-                    firstLoop: for (const location of locations) {
-                        for (const subLocation of location.subLocations) {
-                            if (subLocation.name == locationQuery) {
+                if (regions) {
+                    firstLoop: for (const region of regions) {
+                        for (const location of region.locations) {
+                            if (location.name == locationQuery) {
                                 for (let i = 0; i < recipe.ingredients.length; i++) {
-                                    for (let x = 0; x < recipe.ingredients[i].length; x++) {
-                                        if (subLocation.ingredients.includes(recipe.ingredients[i][x])) {
+                                        if (location.ingredients.includes(recipe.ingredients[i])) {
                                             continue recipeLoop;;
                                         }
-                                    }
                                 }
                                 break firstLoop;
                             }

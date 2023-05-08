@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { Ingredient } from "../pages/ingredients";
-import { IngredienceLocation } from "../pages/locations";
+import { Region } from "../pages/locations";
 import { Recipe } from "../pages/recipes";
 
 export function getModalValue(): string {
@@ -63,8 +63,8 @@ export const GlobalContext = createContext<{
   specialEffectQuery: string,
   setSpecialEffectQuery: (value: string) => void,
 
-  locations: IngredienceLocation[],
-  setLocations: (value: IngredienceLocation[]) => void,
+  regions: Region[],
+  setRegions: (value: Region[]) => void,
 
   recipes: Recipe[],
   setRecipes: (value: Recipe[]) => void,
@@ -86,8 +86,8 @@ export const GlobalContext = createContext<{
   specialEffectQuery: "",
   setSpecialEffectQuery: () => {},
 
-  locations: [],
-  setLocations: () => {},
+  regions: [],
+  setRegions: () => {},
 
   recipes: [],
   setRecipes: () => {},
@@ -103,7 +103,7 @@ function useGlobalContext() {
   const [modalQuery, setModalQuery] = useState(getModalValue());
   const [ignoreModalQueryChange, setIgnoreModalQueryChange] = useState(false);
   const [ignoreQueryChange, setIgnoreQueryChange] = useState(false);
-  const [locations, setLocations] = useState<IngredienceLocation[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
@@ -125,8 +125,8 @@ function useGlobalContext() {
   }, [ingredients]);
 
   useEffect(() => {
-    locations.length > 0 && localStorage.setItem("locations", JSON.stringify(locations))
-  }, [locations.map(location => location.subLocations).flat(1)]);
+    regions.length > 0 && localStorage.setItem("regions", JSON.stringify(regions))
+  }, [regions.map(location => location.locations).flat(1)]);
 
 
   useEffect(() => {
@@ -155,7 +155,7 @@ function useGlobalContext() {
       locationQuery, setLocationQuery,
       modalQuery, setModalQuery,
       specialEffectQuery, setSpecialEffectQuery,
-      locations, setLocations, recipes, setRecipes, ingredients, setIngredients
+      regions, setRegions, recipes, setRecipes, ingredients, setIngredients
     }];
 }
 

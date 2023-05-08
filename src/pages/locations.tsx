@@ -9,23 +9,23 @@ import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 
-export interface SubLocation {
+export interface ZeldaLocation {
     id: number
     name: string
     description: string
     ingredients: number[]
 }
-export interface IngredienceLocation {
+export interface Region {
     id: number
     name: string
     description: string
-    subLocations: SubLocation[]
+    locations: ZeldaLocation[]
 }
 
 const Locations = () => {
     const [errored, setErrored] = useState(false);
-    const {locations, searchQuery} = useContext(GlobalContext);
-    const [activeLocations, setActiveLocations] = useState<IngredienceLocation[]>([]);
+    const {regions: locations, searchQuery} = useContext(GlobalContext);
+    const [activeLocations, setActiveLocations] = useState<Region[]>([]);
     const [addModalActive, setAddModalActive] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -87,7 +87,7 @@ const Locations = () => {
             >
                 Lokace
             </PageHeader>
-            <CardsLocation locations={activeLocations} loading={loading}/>
+            <CardsLocation regions={activeLocations} loading={loading}/>
         </>
     );
 }

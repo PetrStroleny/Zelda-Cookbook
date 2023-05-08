@@ -29,16 +29,16 @@ function App() {
 
   async function fetchData() {
     try {
-        const localStorageLocations = JSON.parse(localStorage.getItem("locations") ?? "");
-        const localStorageRecipes = JSON.parse(localStorage.getItem("recipes") ?? "");
-        const localStorageIngredients = JSON.parse(localStorage.getItem("ingredients") ?? "");
+        const localStorageRegions = localStorage.getItem("regions") ? JSON.parse(localStorage.getItem("regions")!) : false;
+        const localStorageRecipes = localStorage.getItem("recipes") ? JSON.parse(localStorage.getItem("recipes")!) : false;
+        const localStorageIngredients = localStorage.getItem("ingredients") ? JSON.parse(localStorage.getItem("ingredients")!) : false;
 
-        if (localStorageLocations) {
-          globalContextValue.setLocations(localStorageLocations);
+        if (localStorageRegions) {
+          globalContextValue.setRegions(localStorageRegions);
         } else {
-          const resLoc = await fetch("../server/locations.json");
+          const resLoc = await fetch("../server/regions.json");
           const jsonLoc = await resLoc.json();
-          globalContextValue.setLocations(jsonLoc);
+          globalContextValue.setRegions(jsonLoc);
         }
 
         if (localStorageRecipes) {
@@ -80,7 +80,7 @@ function App() {
                       ingredientInitialValues(
                         Number(globalContextValue.modalQuery.split("-")[globalContextValue.modalQuery.split("-").length - 2]), 
                         globalContextValue.ingredients, 
-                        globalContextValue.locations
+                        globalContextValue.regions
                       )} 
                     hide={() => setEditModalActive(false)}
                   />
@@ -99,7 +99,7 @@ function App() {
                     initialValues={
                       locationInitialValues(
                         Number(globalContextValue.modalQuery.split("-")[globalContextValue.modalQuery.split("-").length - 2]), 
-                        globalContextValue.locations
+                        globalContextValue.regions
                       )} 
                     hide={() => setEditModalActive(false)}
                   />

@@ -3,6 +3,8 @@ import { FC, Fragment, useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../utils/global-context";
 import Button, { ButtonVariant } from "./button";
 import { removeSpecialEffectFromName } from "./food-card";
+import { ZeldaLocation } from "../pages/locations";
+import { Ingredient } from "../pages/ingredients";
 
 interface LinkCard {
   name: string
@@ -14,15 +16,33 @@ interface ModalProps {
   setEditModalActive: () => void
 }
 
+
 const Modal: FC<ModalProps> = ({setEditModalActive}) => {
   const [active, setActive] = useState("");
-  const {modalQuery, setModalQuery, ingredients, setIngredients, setRecipes, setLocations, recipes, locations} = useContext(GlobalContext);
+  const {modalQuery, setModalQuery, ingredients, setIngredients, setRecipes, setRegions, recipes, regions} = useContext(GlobalContext);
   const [imgSrc, setImgSrc] = useState("");
   const [label, setLabel] = useState("");
   const [description, setDescription] = useState("");
-  const [onDeleteClick, setOnDeleteClick] = useState<{setter: (value: any) => void, newValue: any[]}>();
+  const [price, setPrice] = useState<number>();
+  const [onDeleteClick, setOnDeleteClick] = useState<{setter: (value: any) => void, condition?: {mustPass: boolean, erorrText: string}, conditionAlert?: () => void, newValue: any[]}>();
   const [linkCards, setLinkCards] = useState<{label: string, cards:LinkCard[]}[]>([{label: "", cards: []}]);
 
+  function locationCanBeDeleted(activeLocaiton: ZeldaLocation): boolean {
+    const locations = regions.map(region => region.locations).flat(1);
+    const othersIngredients = locations.filter(location => location.id != activeLocaiton.id).map(location => location.ingredients).flat(1);
+    const activeLocationIngredients = locations.filter(location => location.id == activeLocaiton.id).map(location => location.ingredients).flat(1);
+
+    for (const ingredient of activeLocationIngredients) {
+      if (!othersIngredients.includes(ingredient)) return false;
+    }
+
+    return true;
+  }
+
+  function ingredientCanBeDeleted(activeIngredient: Ingredient): boolean {
+    return recipes.filter(recipe => recipe.ingredients.length == 1 && recipe.ingredients[0] == activeIngredient.id).length == 0;
+  }
+  
   useEffect(() => {
     if (active) {
         document.body.classList.add("scroll-disabled");
@@ -32,7 +52,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
 }, [active]);
 
   useEffect(() => {
-    if (ingredients.length == 0 && recipes.length == 0 && locations.length == 0) return;
+    if (ingredients.length == 0 && recipes.length == 0 && regions.length == 0) return;
 
     const activeID = modalQuery.split("-")[modalQuery.split("-").length - 2];
 
@@ -44,21 +64,29 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
         setImgSrc(`public/ingredients/${recipeIcon}.png`);
         setLabel(activeIngredient.name);
         setDescription(activeIngredient.description);
-        setOnDeleteClick({setter: setIngredients, newValue: ingredients.filter(ingredient => ingredient.id != activeIngredient.id)});
+        setPrice(activeIngredient.price);
+        setOnDeleteClick({
+          setter: setIngredients, 
+          condition: {
+            mustPass: ingredientCanBeDeleted(activeIngredient),
+            erorrText: "Tato ingredience je uvedená jako jediná ingredience v receptu, pro její smazaní tento recept smažte nebo v receptu nějaké ingredience přidejte."
+          },
+          newValue: ingredients.filter(ingredient => ingredient.id != activeIngredient.id)
+        });
         setLinkCards([
           {
             label: "Lokace", 
-            cards: locations.map(location => location.subLocations).flat(1).filter(subLocation => subLocation.id == Number(subLocation.id)).map(
-              subLocation => ({
-                    name: subLocation.name, 
-                    modalQuery: `location-${subLocation.id}-1`, 
-                    imgSrc: `public/locations/${subLocation.name.replaceAll(" ", "_")}.png`
+            cards: regions.map(region => region.locations).flat(1).filter(location => location.ingredients.includes(Number(activeIngredient.id))).map(
+              location => ({
+                    name: location.name, 
+                    modalQuery: `location-${location.id}-1`, 
+                    imgSrc: `public/locations/${location.name.replaceAll(" ", "_")}.png`
                   })
               )
           },
           {
           label: "Možné recepty", 
-          cards: recipes.filter(recipe => recipe.ingredients.flat(1).some(ingredientID => ingredientID == activeIngredient.id)).map(
+          cards: recipes.filter(recipe => recipe.ingredients.some(ingredientID => ingredientID == activeIngredient.id)).map(
               recipe => ({
                   name: recipe.name, 
                   modalQuery: `recipe-${recipe.id}-1`, 
@@ -70,16 +98,18 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
       }
 
       case "location": {
-        for (const location of locations) {
-          const activeLocaiton = location.subLocations.filter(subLocation => subLocation.id == Number(activeID))[0];  
+        for (const region of regions) {
+          const activeLocaiton = region.locations.filter(location => location.id == Number(activeID))[0];  
           if (!activeLocaiton) continue;
 
           setImgSrc(`public/locations/${activeLocaiton.name.replaceAll(" ", "_")}.png`);
           setLabel(activeLocaiton.name);
           setDescription(activeLocaiton.description);
+          setPrice(undefined);
           setOnDeleteClick({
-            setter: setLocations, 
-            newValue: locations.map(location => ({...location, subLocations: location.subLocations.filter(subLocation => subLocation.id != activeLocaiton.id)})),
+            setter: setRegions, 
+            condition: {mustPass: locationCanBeDeleted(activeLocaiton), erorrText: "Lokace obsahuje ingredience, které se nikde jinde nenacházejí, pro její smazání tyto ingredience odstraňtě, nebo je přidejte do další lokace."},
+            newValue: regions.map(region => ({...region, locations: region.locations.filter(location => location.id != activeLocaiton.id)})),
           });
           setLinkCards([{
             label: "Ingredience", 
@@ -102,9 +132,10 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
         setLabel(activeRecipe.name);
         setDescription(activeRecipe.description);
         setOnDeleteClick({ setter: setRecipes,  newValue: recipes.filter(recipe => recipe.id != activeRecipe.id)});
+        setPrice(activeRecipe.price);
         setLinkCards([{
           label: "Ingredience", 
-          cards: ingredients.filter(ingredient => activeRecipe.ingredients.flat(1).includes(ingredient.id)).map(
+          cards: ingredients.filter(ingredient => activeRecipe.ingredients.includes(ingredient.id)).map(
             ingredient => ({
                 name: ingredient.name, 
                 modalQuery: `ingredient-${ingredient.id}-1`, 
@@ -114,7 +145,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
         }]);
       }
     }
-  }, [modalQuery, ingredients.length > 0 && recipes.length > 0 && locations.length > 0]);
+  }, [modalQuery, ingredients.length > 0 && recipes.length > 0 && regions.length > 0]);
 
   useEffect(() => {
     if (modalQuery.length > 0) {
@@ -156,7 +187,13 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
                       <img src="public/icons/edit.svg"/>
                   </Button>
                   <Button 
-                      onClick={() => {onDeleteClick?.setter(onDeleteClick.newValue); setModalQuery("")}}
+                      onClick={() => {
+                        if (onDeleteClick?.condition?.mustPass) {
+                          onDeleteClick?.setter(onDeleteClick.newValue); setModalQuery("")
+                        } else {
+                          alert(onDeleteClick?.condition?.erorrText);
+                        }
+                      }}
                       variant={ButtonVariant.RED} 
                       rounded
                     >
@@ -178,7 +215,15 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
             />
             <ModalDetails loacationActive={active == "location"}>
               <Header>
-                <h2>{label}</h2>
+                <h5>
+                  {label}
+                </h5>
+                  {price != undefined &&
+                  <div>
+                    {price}
+                    <img src="public/icons/rupee.webp"/>
+                  </div>
+                  }
               </Header>
               <Description>{description}</Description>
               <Divider />
@@ -188,6 +233,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
                   <LinkCardsLabel>
                     {specificLinkCards.label}
                   </LinkCardsLabel>
+                  <Divider />
                   <LinkCardsWrapper>
                     {specificLinkCards.cards.map((linkCard, i) => 
                       <LinkCard onClick={() => setModalQuery(linkCard.modalQuery)} key={i}>
@@ -269,21 +315,28 @@ const ModalDetails = styled("div")<{loacationActive: boolean}>`
 
 const Header = styled("div")`
   display: flex;
-  justify-content: space-between;
+  padding-top: 58px;
+  flex-direction: column;
+  
+  > h5 {
+    ${p => p.theme.fontStyles.h5};
+  }
 
-  > h2 {
-    font-size: 24px;
-    font-weight: 700;
-    padding-top: 58px;
-    margin-bottom: 12px;
+  > div {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    ${p => p.theme.fontStyles.b2};
+    > img {
+      margin-left: 10px;
+      height: 21px;
+    }
   }
 `;
 
 const Description = styled("p")`
-  font-size: 18px;
-  line-height: 1.05;
   padding-top: 20px;
-  margin-bottom: 5px;
+  ${p => p.theme.fontStyles.b2};
 `;
 
 const Divider = styled("div")`
@@ -291,14 +344,12 @@ const Divider = styled("div")`
   height: 2px;
   background: ${p => p.theme.background.quarternaly};
   border-radius: 2px;
-  margin-top: 24px;
+  margin: 24px 0px;
 `;
 
 const LinkCardsLabel = styled("p")`
-  margin-top: 24px;
   color: ${p => p.theme.content.primary};
   ${p => p.theme.fontStyles.h4};
-  margin-bottom: 10px;
 `;
 
 const LinkCardsWrapper = styled("div")`

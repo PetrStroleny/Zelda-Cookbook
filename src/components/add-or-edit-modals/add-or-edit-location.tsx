@@ -23,7 +23,7 @@ export interface AddOrEditLocationInfo {
 }
 
 const AddOrEditLocation: FC<AddOrEditLocationProps> = ({hide, initialValues}) => {
-    const {ingredients, locations, setLocations } = useContext(GlobalContext);
+    const {ingredients, regions, setRegions } = useContext(GlobalContext);
     
     const { control, handleSubmit, reset } = useForm<AddOrEditLocationInfo>({defaultValues: initialValues ?? { 
         ingredients: [],
@@ -38,14 +38,14 @@ const AddOrEditLocation: FC<AddOrEditLocationProps> = ({hide, initialValues}) =>
     }, []);
 
     function onSubmit(data: AddOrEditLocationInfo) {
-        const currentID = initialValues?.id ?? (Math.max(...locations.map(location => location.subLocations).flat(1).map(subLocation => subLocation.id)) + 1);
+        const currentID = initialValues?.id ?? (Math.max(...regions.map(region => region.locations).flat(1).map(location => location.id)) + 1);
         let editedData: any = data;
         delete editedData.region;
 
         if (initialValues) {
-            editLocation({id: currentID, ...editedData}, data.regionName, initialValues.regionName, locations, setLocations)
+            editLocation({id: currentID, ...editedData}, data.regionName, initialValues.regionName, regions, setRegions)
         } else {
-            addLocation({id: currentID, ...editedData}, data.regionName, locations, setLocations);
+            addLocation({id: currentID, ...editedData}, data.regionName, regions, setRegions);
         }
 
         hide();
@@ -79,7 +79,7 @@ const AddOrEditLocation: FC<AddOrEditLocationProps> = ({hide, initialValues}) =>
                 />
 
                 <Dropdown
-                    items={locations.map(location => ({value: location.name, label: location.name}))}
+                    items={regions.map(region => ({value: region.name, label: region.name}))}
                     label="Region"
                     control={control}
                     rules={{required: { message: "Vyberte region lokace", value: true }}}

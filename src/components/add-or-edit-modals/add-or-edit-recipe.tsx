@@ -20,6 +20,7 @@ export interface AddOrEditRecipeInfo{
     name: string, 
     description: string,
     numberOfHearts: string,
+    extraHearts?: string,
     price: string,
     ingredients: number[],
     specialEffect: string,
@@ -50,6 +51,7 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, initialValues}) => {
         const currentID = initialValues?.id ?? recipes[0].id + 1;
         let editedData: any = data;
         editedData.numberOfHearts = Number(data.numberOfHearts);
+        if (data.extraHearts != undefined) editedData.extraHearts = Number(data.extraHearts);
         editedData.price = Number(editedData.price);
         editedData.ingrediences = [data.ingredients];
 
@@ -137,14 +139,34 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, initialValues}) => {
                         )
                     }}  
                 />
-                    <Dropdown
-                        items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
-                        label="Ingredience"
-                        control={control}
-                        rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
-                        multiple
-                        name="ingredients"
-                    />
+
+                <Input 
+                    label="Počet bonusových srdíček"
+                    control={control}
+                    name="extraHearts"
+                    maxLength={3}
+                    customError={customHeartsError}
+                    rules={{ 
+                        validate: (value: string) => validateIsNumber(
+                            value, 
+                            setCustomHeartsError, 
+                            999,
+                            false,
+                            {
+                                negativeError: "Počet bonusových srdíček musí být větší nežli 0",
+                            }
+                        )
+                    }}  
+                />
+
+                <Dropdown
+                    items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
+                    label="Ingredience"
+                    control={control}
+                    rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
+                    multiple
+                    name="ingredients"
+                />
 
                 <Dropdown
                     items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffects.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name}))]}

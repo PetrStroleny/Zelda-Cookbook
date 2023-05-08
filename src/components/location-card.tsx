@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-import { SubLocation } from "../pages/locations";
+import { ZeldaLocation } from "../pages/locations";
 
-interface LocationCardProps extends SubLocation {
+interface LocationCardProps extends ZeldaLocation {
     onClick: () => void
 }
 
@@ -21,6 +21,7 @@ const Wrapper = styled("div")`
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 2px 3px rgba(0, 0, 0, 0.1);
 
     &:hover {
         opacity: 0.8;

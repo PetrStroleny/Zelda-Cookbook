@@ -2,7 +2,7 @@
     {
         "name": "Akkala",
         "description": "Oblast Akkala je nebezpečná oblast na severovýchodě Hyrule. Je to krásný region s mnoha lesy, jezery a travnatými pláněmi – na západě se opírá o pohoří Eldin a na východě o břehy oceánu.",
-        "subLocations": [
+        "locations": [
             {
                 "id": 9,
                 "name":"Akkala Highlands",
@@ -20,7 +20,7 @@
     {
         "name": "Lanayru",
         "description": "Lanayru je provincie v Breath of the Wild. Je obýván rasou Zora a sídlí zde Božská bestie Váh Ruta. Provincie Lanyaru je domovem Naydry, jednoho ze tří draků v Breath of the Wild. Jeden ze šampionů, Mipha, pochází z provincie Lanayru.",
-        "subLocations": [
+        "locations": [
             {
                 "id": 7,
                 "name": "Lanayru Great Spring",
@@ -50,7 +50,7 @@
     {
         "name": "Necluda",
         "description": "Necluda pokrývá jihovýchodní část Hyrule. Je obklopena vysokými horami a vyznačuje se strmými útesy a rozmanitou topografií. Vzhledem k mírnému podnebí se zde nacházejí dvě osady: vesnice Kakariko, kde sídlí Sheikah, a vesnice Hateno, domov Hylianů.",
-        "subLocations": [
+        "locations": [
             {
                 "id": 3,
                 "name": "East Necluda",

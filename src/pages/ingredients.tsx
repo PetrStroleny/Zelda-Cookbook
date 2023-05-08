@@ -15,27 +15,17 @@ export interface SpecialEffect {
 export interface Ingredient {
     id: number
     numberOfHearts: number
-    extraHearths?: number
+    extraHearts?: number
     name: string
     description: string
     specialEffect?: SpecialEffect
     price: number
 }
 
-interface AddIngredientInfo {
-    name: string, 
-    description: string,
-    numberOfHearts: number,
-    locations: number[],
-    price: number,
-    specialEffect: string,
-    specialEffectDuration?: number
-}
-
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
-    const {ingredients, locations, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
+    const {ingredients, regions, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
 
     const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
 
@@ -49,11 +39,11 @@ const Ingredients = () => {
             ingredientLoop: for await (const ingredient of ingredients) {
                 if (!ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())) continue ingredientLoop;
                 if (specialEffectQuery && ingredient.specialEffect?.name != specialEffectQuery) continue ingredientLoop;
-                if (locations) {
-                    firstLoop: for (const location of locations) {
-                        for (const subLocation of location.subLocations) {
-                            if (subLocation.name == locationQuery) {
-                                if (!subLocation.ingredients.includes(ingredient.id)) continue ingredientLoop;
+                if (regions) {
+                    firstLoop: for (const region of regions) {
+                        for (const location of region.locations) {
+                            if (location.name == locationQuery) {
+                                if (!location.ingredients.includes(ingredient.id)) continue ingredientLoop;
                                 break firstLoop;
                             }
                         }

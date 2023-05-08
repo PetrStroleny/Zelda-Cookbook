@@ -1,5 +1,5 @@
 import { Ingredient } from "../pages/ingredients";
-import { IngredienceLocation, SubLocation } from "../pages/locations";
+import { Region, ZeldaLocation } from "../pages/locations";
 import { Recipe } from "../pages/recipes";
 
 // Ingredient
@@ -28,35 +28,35 @@ import { Recipe } from "../pages/recipes";
   }
 
 // Location
-  export function editLocation(activeLocation: SubLocation, regionName: string, previousRegionName: string, activeLocations: IngredienceLocation[], setActiveLocations: (values: IngredienceLocation[]) => void) {
+  export function editLocation(activeLocation: ZeldaLocation, regionName: string, previousRegionName: string, activeLocations: Region[], setActiveLocations: (values: Region[]) => void) {
     let editedLocations = activeLocations;
     const regionChanged = regionName != previousRegionName;
   
     for (let i = 0; i < activeLocations.length; i++) {
       if (activeLocations[i].name == regionName) {
         if (regionChanged) {
-          editedLocations[i].subLocations = [activeLocation, ...activeLocations[i].subLocations];
+          editedLocations[i].locations = [activeLocation, ...activeLocations[i].locations];
         } else {
-          editedLocations[i].subLocations = editedLocations[i].subLocations.map(subLocation => subLocation.id == activeLocation.id ?
+          editedLocations[i].locations = editedLocations[i].locations.map(location => location.id == activeLocation.id ?
             activeLocation 
             :
-            subLocation
+            location
         )}
         continue; 
       }
       if (activeLocations[i].name == previousRegionName && regionChanged) {
-        editedLocations[i].subLocations = editedLocations[i].subLocations.filter(subLocation => subLocation.id != activeLocation.id);
+        editedLocations[i].locations = editedLocations[i].locations.filter(location => location.id != activeLocation.id);
       }
     }
   
     setActiveLocations(editedLocations);
   }
-  export function addLocation(location: SubLocation, regionName: string, activeLocations: IngredienceLocation[], setActiveLocations: (values: IngredienceLocation[]) => void) {
+  export function addLocation(location: ZeldaLocation, regionName: string, activeLocations: Region[], setActiveLocations: (values: Region[]) => void) {
     let editedLocations = activeLocations;
   
     for (let i = 0; i < activeLocations.length; i++) {
       if (activeLocations[i].name == regionName) {
-        editedLocations[i].subLocations = [location, ...activeLocations[i].subLocations]
+        editedLocations[i].locations = [location, ...activeLocations[i].locations]
       }
     }
   

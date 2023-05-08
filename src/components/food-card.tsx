@@ -21,22 +21,22 @@ export function removeSpecialEffectFromName(name: string, specialEffectNotNull: 
     return replacedName;
 }
 
-const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, specialEffect, onClick, isIngredient }) => {
-    const numberOfSingleHearths = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
+const FoodCard: FC<FoodCardProps> = ({ name, extraHearts, numberOfHearts, specialEffect, onClick, isIngredient }) => {
+    const numberOfSingleHearts = numberOfHearts == 5 ? 5 : Math.floor(numberOfHearts % 5)
     let finalImageSource = name.replaceAll(" ", "_");
     
     finalImageSource = removeSpecialEffectFromName(finalImageSource, specialEffect != null);
 
     return (
         <Wrapper onClick={onClick}>
-        <HearthsWrapper>
+        <HeartsWrapper>
             <div>
-                {extraHearths != null && 
+                {extraHearts != null && 
                     <>
                         <img style={{marginRight: "6px"}} src="public/icons/extra-heart.svg"/> 
                         <p>
                             + 
-                            {" " + extraHearths}
+                            {" " + extraHearts}
                         </p>
                     </>
                 }
@@ -50,22 +50,25 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, speci
                             </FullRecovery> 
                         </>
                     :   
-                        <>
+                        <>  
+                            {numberOfHearts % 1 != 0 &&
+                             <img src="public/icons/heart-halfed.svg"/>
+                            }
                             {numberOfHearts >= 6 &&
-                                <HearthWithIndex>
+                                <HeartWithIndex>
                                     <img src="public/icons/heart.svg"/>
-                                    <p>{numberOfHearts - numberOfSingleHearths}</p>
-                                </HearthWithIndex>
+                                    <p>{numberOfHearts - numberOfSingleHearts}</p>
+                                </HeartWithIndex>
                             }
                                 
                                 
-                            {new Array(numberOfSingleHearths).fill("").map((_, i) => 
+                            {new Array(numberOfSingleHearts).fill("").map((_, i) => 
                                 <img key={i} src="public/icons/heart.svg"/>
                             )}  
                         </>
                 }
             </div>
-        </HearthsWrapper>
+        </HeartsWrapper>
 
         <IconWrapper>
             <img src={`public/${isIngredient ? "ingredients": "recipes"}/${finalImageSource}.png`}/>
@@ -87,7 +90,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearths, numberOfHearts, speci
     );
 }
     
-const HearthsWrapper = styled("div")`
+const HeartsWrapper = styled("div")`
     width: 100%;
     display: flex;
     align-items: center;
@@ -117,6 +120,7 @@ const Wrapper = styled("div")`
     align-items: center;
     align-content: flex-end;
     padding: 22px;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 2px 3px rgba(0, 0, 0, 0.1);
 
     &:hover {
         opacity: 0.8;
@@ -174,7 +178,7 @@ const FullRecovery = styled("p")`
     margin-left: 3px;
 `;
 
-const HearthWithIndex = styled("div")`
+const HeartWithIndex = styled("div")`
     position: relative;
 
     > p {

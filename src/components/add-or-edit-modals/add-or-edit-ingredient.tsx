@@ -20,6 +20,7 @@ export interface AddOrEditIngredientInfo {
     name: string, 
     description: string,
     numberOfHearts: string,
+    extraHearts?: string,
     locations: number[],
     price: string,
     specialEffect: string,
@@ -27,7 +28,7 @@ export interface AddOrEditIngredientInfo {
 }
 
 const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}) => {
-    const {ingredients, setIngredients, setLocations, locations, specialEffects} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setRegions: setLocations, regions: locations, specialEffects} = useContext(GlobalContext);
     
     const { control, handleSubmit, reset, watch } = useForm<AddOrEditIngredientInfo>({defaultValues: initialValues ?? { 
         locations: [],
@@ -50,6 +51,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
         const currentID = initialValues?.id ?? ingredients[0].id + 1;
         let editedData: any = data;
         editedData.numberOfHearts = Number(data.numberOfHearts);
+        if (data.extraHearts != undefined) editedData.extraHearts = Number(data.extraHearts);
         editedData.price = Number(editedData.price);
         
         if (data.specialEffect == "Bez efektu") {
@@ -74,20 +76,20 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
         let currentLocation = locations;
 
         for (let i = 0; i < locations.length; i++) {
-            for (let x = 0; x < locations[i].subLocations.length; x++) {
-                if (newLocations.includes(locations[i].subLocations[x].id)) {
-                    let editingLocation = locations[i].subLocations[x];
+            for (let x = 0; x < locations[i].locations.length; x++) {
+                if (newLocations.includes(locations[i].locations[x].id)) {
+                    let editingLocation = locations[i].locations[x];
 
                     editingLocation.ingredients = [...editingLocation.ingredients, currentID];
 
-                    currentLocation[i].subLocations[x] = editingLocation;
+                    currentLocation[i].locations[x] = editingLocation;
                     continue;
-                } else if(removedLocations.includes(locations[i].subLocations[x].id)) {
-                    let editingLocation = locations[i].subLocations[x];
+                } else if (removedLocations.includes(locations[i].locations[x].id)) {
+                    let editingLocation = locations[i].locations[x];
 
                     editingLocation.ingredients = editingLocation.ingredients.filter(ingredient => ingredient != currentID);
 
-                    currentLocation[i].subLocations[x] = editingLocation;
+                    currentLocation[i].locations[x] = editingLocation;
                 }
             }
         }
@@ -162,6 +164,26 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
                         )
                     }}  
                 />
+
+                <Input 
+                    label="Počet bonusových srdíček"
+                    control={control}
+                    name="extraHearts"
+                    maxLength={3}
+                    customError={customHeartsError}
+                    rules={{ 
+                        validate: (value: string) => validateIsNumber(
+                            value, 
+                            setCustomHeartsError, 
+                            999,
+                            false,
+                            {
+                                negativeError: "Počet bonusových srdíček musí být větší nežli 0",
+                            }
+                        )
+                    }}  
+                />          
+
                 <Dropdown
                     items={locationDropdownItems}
                     label="Lokace"

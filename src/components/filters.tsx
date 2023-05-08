@@ -20,7 +20,7 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
     const [searchActive, setSearchActive] = useState(false);
     const [location, _] = useLocation();
     useOpenAndClose(() => setSearchActive(true), () => {setSearchActive(false); setSearch("")});
-    const {locations, specialEffects} = useContext(GlobalContext);
+    const {regions, specialEffects} = useContext(GlobalContext);
 
     function searchButtonClick() {
         if (searchActive) {
@@ -66,14 +66,14 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
                     <SearchInput value={searchQuery} onChange={setSearch}/>
                 :
                     <ButtonsWrapper>
-                        {locations.map(mainLocation => 
-                            mainLocation.subLocations.map((subLocation, index) =>
+                        {regions.map(region => 
+                            region.locations.map((location, index) =>
                                 <Button 
                                     key={index}
-                                    onClick={() => locationQuery != subLocation.name ? setLocation(subLocation.name) : setLocation("")} 
-                                    className={locationQuery == subLocation.name ? "active" : ""}
+                                    onClick={() => locationQuery != location.name ? setLocation(location.name) : setLocation("")} 
+                                    className={locationQuery == location.name ? "active" : ""}
                                 >
-                                    {subLocation.name}
+                                    {location.name}
                                 </Button>
                             )
                         )}
