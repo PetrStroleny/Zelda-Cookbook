@@ -10,15 +10,24 @@ interface FoodCardProps extends Ingredient {
 export function removeSpecialEffectFromName(name: string, specialEffectNotNull: boolean, asSource = true) {
     let replacedName = name.replaceAll(" ", "_");
     if (specialEffectNotNull || name.includes("Hearty")) {
-        let splittedImageSource = replacedName.split("_");
+        let splittedImageSource;
+        if (replacedName.includes("_")) {
+            splittedImageSource = replacedName.split("_");
+        } else {
+            splittedImageSource = replacedName.split(" ");
+        }
         splittedImageSource.shift();
-        const firstLetter = splittedImageSource[0][0];
-        if (asSource) firstLetter.toUpperCase();
+        let firstLetter = splittedImageSource[0][0];
+        if (asSource) firstLetter = firstLetter.toUpperCase();
         splittedImageSource[0] = firstLetter + splittedImageSource[0].slice(1);
         return asSource ? splittedImageSource.join("_") : splittedImageSource.join(" ");
     }
 
     return replacedName;
+}
+
+export function formatDuration(duration: number) {
+    return `${Math.floor(duration / 60)}:${duration % 60 < 10 ? `0${duration % 60}` : duration % 60}`
 }
 
 const FoodCard: FC<FoodCardProps> = ({ name, extraHearts, numberOfHearts, specialEffect, onClick, isIngredient }) => {
@@ -82,7 +91,7 @@ const FoodCard: FC<FoodCardProps> = ({ name, extraHearts, numberOfHearts, specia
                 <SpecialEffect>
                         <img src={`public/icons/${specialEffect.name}.svg`}/>
                         <img src="public/icons/time.svg"/>
-                        <p>{Math.floor(specialEffect.duration / 60)}:{specialEffect.duration % 60 < 10 ? `0${specialEffect.duration % 60}` : specialEffect.duration % 60}</p>
+                        <p>{formatDuration(specialEffect.duration)}</p>
                 </SpecialEffect>
             }
         </BottomInfoWrapper>

@@ -4,32 +4,27 @@ import { Ingredient } from "../pages/ingredients";
 import { Recipe } from "../pages/recipes";
 import { GlobalContext } from "../utils/global-context";
 import FoodCard from "./food-card";
-import LoadingFoodCard from "./loading-food-card";
 
 interface CardsProps {
     items: (Ingredient | Recipe)[]
-    loading: boolean
+    transition: boolean
     isIngredient: boolean
 }
 
-const Cards: FC<CardsProps> = ({items, loading, isIngredient}) => {
+const Cards: FC<CardsProps> = ({items, transition, isIngredient}) => {
     const {setModalQuery, searchQuery, locationQuery, specialEffectQuery} = useContext(GlobalContext);
 
     return (
-        (loading || items.length > 0) ?
-            <CardWrapper>
-                {loading ? 
-                    new Array(15).fill("").map((_, index) => <LoadingFoodCard key={index}/>)
-                    :
-                    items.map((item, index) =>
-                        <FoodCard
-                            onClick={() => setModalQuery(isIngredient ? `ingredient-${item.id}-0` : `recipe-${item.id}-0`)}
-                            key={index}
-                            {...item}
-                            isIngredient={isIngredient}
-                        />
-                    )
-                }
+        (items.length > 0) ?
+            <CardWrapper className={transition ? "fading" : ""}>
+                {items.map((item, index) =>
+                    <FoodCard
+                        onClick={() => setModalQuery(isIngredient ? `ingredient-${item.id}-0` : `recipe-${item.id}-0`)}
+                        key={index}
+                        {...item}
+                        isIngredient={isIngredient}
+                    />
+                )}
             </CardWrapper>
             :
             <NotFoundText>

@@ -4,30 +4,23 @@ import { Region } from "../pages/locations";
 import { GlobalContext } from "../utils/global-context";
 import { CardWrapper, NotFoundText } from "./cards";
 import LabelMain from "./label-main";
-import LoadingLocationCard from "./loading-location-card";
 import LocationCard from "./location-card";
 
 interface CardsLocationProps {
     regions: Region[]
-    loading: boolean
+    transitioning: boolean
 }
 
-
-const CardsLocation: FC<CardsLocationProps> = ({regions, loading}) => {
+const CardsLocation: FC<CardsLocationProps> = ({regions, transitioning}) => {
     const {setModalQuery, searchQuery } = useContext(GlobalContext);
 
     return (
         <>
-            {loading || regions.map(region => region.locations).flat(1).filter(location => location.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 ?
-                loading ? 
-                    <StyledCardWrapper>
-                        {new Array(3).fill("").map((_, index) => <LoadingLocationCard key={index}/>)}
-                    </StyledCardWrapper>
-                    :
+            {regions.map(region => region.locations).flat(1).filter(location => location.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 ?
                     regions.map((region, index) => 
                     (
                         region.locations.filter(location => location.name.toLowerCase().includes(searchQuery.toLowerCase())).length > 0 &&
-                        <div key={index}>  
+                        <div className={transitioning ? "fading" : ""} key={index}>  
                             <LabelMain>{region.name}</LabelMain>
 
                             <StyledCardWrapper>
@@ -58,7 +51,7 @@ const CardsLocation: FC<CardsLocationProps> = ({regions, loading}) => {
     );
 }
 
-const StyledCardWrapper = styled(CardWrapper)`
+export const StyledCardWrapper = styled(CardWrapper)`
     grid-template-columns: repeat(auto-fill, minmax(316px, 1fr));
 `;
 

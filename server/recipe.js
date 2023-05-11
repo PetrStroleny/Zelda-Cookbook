@@ -1,55 +1,104 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const {returnJSONFromFile} = require("./fs-utils");
 
-router.post("/create-or-edit",  async (req, res) => {
-    console.log(req.body);
-});
+router.delete("/delete/:id",  async (req, res) => {
+    const jsonRecipes = await returnJSONFromFile("recipes", res);
 
-router.get("/",  async (req, res) => {
-    fs.readFile("./storage/recipes.json", "utf8", async (err, jsonString) => {
-        if (err) {
-            res.status(500).send({
-                errorMessage: "Internal server error",
-            });
-        }
-
-
-        try {
-            const jsonRecipes = await JSON.parse(jsonString);
-            res.send(jsonRecipes);
-        } catch (e) {
-            res.status(500).send({
-                errorMessage: "Internal server error",
-            });
-        }
-    })
-}
-);
-
-router.get("/:id",  async (req, res) => {
-fs.readFile("./storage/recipes.json", "utf8", async (err, jsonString) => {
-    if (err) {
+    try {
+        const newRecipes = jsonRecipes.filter(recipe => recipe.id != Number(req.params.id));
+        
+        fs.writeFileSync("./storage/recipes.json", JSON.stringify(newRecipes));
+        res.send({message: "Ok"});;
+    } catch (e) {
         res.status(500).send({
             errorMessage: "Internal server error",
         });
     }
+});
+
+router.post("/create-or-edit",  async (req, res) => {
+    const jsonRecipes = await returnJSONFromFile("recipes", res);
 
     try {
-        const jsonRecipes = await JSON.parse(jsonString);
+        const jsonData = req.body;
+        const editing = jsonData.id != 0;
+        let newRecipes = jsonRecipes;
+
+        if (editing) {
+            newRecipes = newRecipes.map(recipe => recipe.id == jsonData.id ? jsonData : recipe);
+        } else {
+            newRecipes = [{...jsonData, id: jsonRecipes[0].id + 1}, ...newRecipes];
+        }
+        
+        fs.writeFileSync("./storage/recipes.json", JSON.stringify(newRecipes));
+        res.send({message: "Ok"});;
+    } catch (e) {
+        res.status(500).send({
+            errorMessage: "Internal server error",
+        });
+    }
+});
+
+router.get("/",  async (req, res) => {
+    let jsonRecipes = await returnJSONFromFile("recipes", res);
+    
+    try {
+        if (req?.query["special-effect"]?.length > 0) {
+            jsonRecipes = jsonRecipes.filter(recipe => recipe?.specialEffect?.name == req?.query["special-effect"]);
+        }
+        
+        if (req?.query["search"]?.length > 0) {
+            jsonRecipes = jsonRecipes.filter(recipe => recipe.name.toLowerCase().includes(req?.query["search"].toLowerCase()));
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        if (req?.query["location"].length > 0) {
+            fs.readFile("./storage/locations.json", "utf8", async (err, jsonString) => {
+                if (err) {
+                    res.status(500).send({
+                        errorMessage: "Internal server error",
+                    });
+                }
+                const regions = await JSON.parse(jsonString);
+                const ingredientsInLocation = regions.map(region => region.locations).flat(1).filter(location => location.name == req?.query["location"])[0].ingredients;
+                res.send(jsonRecipes.filter(recipe => recipe.ingredients.some(ingredient => ingredientsInLocation.includes(ingredient))));
+            });
+        } else {
+            res.send(jsonRecipes);
+        }
+    } catch (e) {
+        res.status(500).send({
+            errorMessage: "Internal server error",
+        });
+    }
+});
+
+router.get("/:id",  async (req, res) => {
+    const jsonRecipes = await returnJSONFromFile("recipes", res);
+    const jsonIngredients = await returnJSONFromFile("ingredients", res);
+    const jsonSpecialEffects = await returnJSONFromFile("special-effects", res);
+
+    try {
         const wantedRecipe = jsonRecipes.filter(recipe => recipe.id == Number(req.params.id))[0];
+        const wantedIngrediences = jsonIngredients.filter(ingredient => wantedRecipe.ingredients.includes(ingredient.id));
         
         if (!wantedRecipe) return res.status(404).send({
             errorMessage: "Recipe not found",
         });
+
+        let wantedSpecialEffect;
+        if (wantedRecipe?.specialEffect?.name) {
+            wantedSpecialEffect = jsonSpecialEffects.filter(specialEffect => specialEffect.name == wantedRecipe.specialEffect.name)[0];
+        }
         
-        res.send(wantedRecipe);
+        res.send({recipe: wantedRecipe, ingredients: wantedIngrediences, specialEffect: wantedSpecialEffect});
     } catch (e) {
-        console.log(e);
         res.status(500).send({
             errorMessage: "Internal server error",
         });
     }
-});
 });
 
 module.exports = router;

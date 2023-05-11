@@ -9,6 +9,7 @@ import { Recipe } from "../pages/recipes";
 interface ValidateNumberErrors {
     baseError?: string
     maxValueError?: string
+    minValueError?: string
     negativeError?: string
     wholeError?: string
 }
@@ -71,7 +72,7 @@ export function locationInitialValues(activeID: number, regions: Region[]): AddO
     return data;
 }
 
-export function validateIsNumber(value: string, setError: (value: string) => void, maxNumber: number, mustBeWhole?: boolean, errors?: ValidateNumberErrors): boolean {
+export function validateIsNumber(value: string, setError: (value: string) => void, maxNumber: number, mustBeWhole?: boolean, errors?: ValidateNumberErrors, minNumber?: number): boolean {
     if (value == undefined || value.length == 0) {
         setError(""); 
         return true;
@@ -89,6 +90,11 @@ export function validateIsNumber(value: string, setError: (value: string) => voi
 
     if(Number(value) < 0) {
         setError(errors?.negativeError ?? "Číslo nesmí být menší nežli 0");
+        return false;
+    }
+
+    if(minNumber && Number(value) < minNumber) {
+        setError(errors?.minValueError ?? `Číslo nesmí být menší nežli ${minNumber}`);
         return false;
     }
 

@@ -1,16 +1,17 @@
 import styled from "@emotion/styled";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
-import { GlobalContext } from "../utils/global-context";
+import { getData } from "../network";
+import { Region } from "../pages/locations";
 import Button from "./button";
 import SearchInput, { useOpenAndClose } from "./search-input";
-import { Region } from "../pages/locations";
-import { SpecialEffect } from "../pages/ingredients";
-import { getData } from "../network";
+import { debounce } from "../utils/debounce";
 
 interface FoodFiltersQuery {
     searchQuery: string
-    setSearch: (value: string) => void
+    setSearchQuery: (value: string) => void
+
+    setTransitioning: (value: boolean) => void
 
     specialEffectQuery: string
     setSpecialEffectQuery: (value: string) => void
@@ -19,19 +20,23 @@ interface FoodFiltersQuery {
     setLocation: (value: string) => void
 }
 
-const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQuery, setSpecialEffectQuery, locationQuery, setLocation}) => {
+const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearchQuery, specialEffectQuery, setTransitioning, setSpecialEffectQuery, locationQuery, setLocation}) => {
     const [searchActive, setSearchActive] = useState(false);
     const [location, _] = useLocation();
-    useOpenAndClose(() => setSearchActive(true), () => {setSearchActive(false); setSearch("")});
+    const [search, setSearch] = useState(searchQuery);
+    useOpenAndClose(() => {setSearchActive(true); searchInputRef.current.focus()}, () => {setSearchActive(false); setSearchQuery("")});
     const [regions, setRegions] = useState<Region[]>([]);
-    const [specialEffects, setSpecialEffects] = useState<SpecialEffect[]>([]);
+    const [specialEffects, setSpecialEffects] = useState<{name: string, imgSrc: string}[]>([]);
+    const searchInputRef = useRef();
+
+    const { debounced, clearDebounceTimeout } = debounce((value: string) => {setSearchQuery(value); setTransitioning(false)}, 300);
 
     useEffect(() => {
         const fetchRegionsAndSpecialEffects = async () => {
             try {
                 const regionsData = await getData("location");
                 const specialEffectsData = await getData("special-effect");
-                console.log(regionsData)
+
                 setRegions(regionsData);
                 setSpecialEffects(specialEffectsData);
             } catch(e) {
@@ -45,7 +50,9 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
     function searchButtonClick() {
         if (searchActive) {
             setSearchActive(false);
-            setSearch("");
+            setSearchQuery("");
+            clearDebounceTimeout();
+            setTransitioning(false);
             return;
         }
 
@@ -83,7 +90,7 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearch, specialEffectQue
                     </Button>
                 }
                 {searchActive || location == "/lokace" ?
-                    <SearchInput value={searchQuery} onChange={setSearch}/>
+                    <SearchInput ref={searchInputRef} value={search} onChange={(value) => {setTransitioning(true); setSearch(value); debounced(value);}}/>
                 :
                     <ButtonsWrapper>
                         {regions.map(region => 

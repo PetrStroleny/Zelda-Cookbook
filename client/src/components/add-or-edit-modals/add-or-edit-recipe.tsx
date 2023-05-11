@@ -2,22 +2,19 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { addReceipt, editRecipe } from "../../utils/adding-editing";
+import AddOrEditModal from ".";
+import { GENERAL_ERROR_MESSAGE, getData, postData } from "../../network";
+import { Ingredient, SpecialEffectBackend } from "../../pages/ingredients";
+import { Recipe } from "../../pages/recipes";
 import { validateIsNumber } from "../../utils/form";
 import { GlobalContext } from "../../utils/global-context";
-import AddOrEditModal from ".";
-import Dropdown from "../dropdown";
+import Dropdown, { DropdownItem } from "../dropdown";
 import Input from "../input";
 import TextArea from "../text-area";
-import {Region} from "../../pages/locations";
-import {Ingredient, SpecialEffect} from "../../pages/ingredients";
 
 interface AddOrEditRecipeProps {
     hide: () => void
     edit?: boolean
-    specialEffects: SpecialEffect[]
-    ingredients: Ingredient[]
-    regions: Region[]
 }
 
 export interface AddOrEditRecipeInfo{
@@ -32,28 +29,69 @@ export interface AddOrEditRecipeInfo{
     specialEffectDuration?: number
 }
 
-const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit, regions, ingredients, specialEffects}) => {
+const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit}) => {
     
     const { control, handleSubmit, reset, watch, getValues } = useForm<AddOrEditRecipeInfo>({defaultValues: { 
         specialEffect: "Bez efektu",
         ingredients: [],
     }});
 
+    const {modalQuery} = useContext(GlobalContext);
     const specialEffectValue = watch("specialEffect");
     const [customHeartsError, setCustomHeartsError] = useState("");
     const [customPriceError, setCustomPriceError] = useState("");
     const [customDurationError, setCustomDurationError] = useState("");
+    const [ingredientDropdownItems, setIngredientDropdownItems] = useState<DropdownItem[]>([]);
+    const [specialEffectsDropdownItems, setSpecialEffectsDropdownItems] = useState<DropdownItem[]>([]);
 
     useEffect(() => {
+        const fetchIngredientsAndRegions = async () => {
+            try {
+                const ingredientsData: Ingredient[] = await getData("ingredient");
+                const specialEffectsData: SpecialEffectBackend[] = await getData("special-effect");
+
+                if (edit) {
+                    const activeID = modalQuery.split("-")[modalQuery.split("-").length - 2];
+                    const editingRecipe: {recipe: Recipe, ingredients: Ingredient[]} = await getData(`recipe/${activeID}`);
+
+                    let newValues: AddOrEditRecipeInfo = {
+                        id: Number(editingRecipe.recipe.id),
+                        name: editingRecipe.recipe.name,
+                        description: editingRecipe.recipe.description,
+                        price: String(editingRecipe.recipe.price),
+                        numberOfHearts: String(editingRecipe.recipe.numberOfHearts),
+                        specialEffect:editingRecipe.recipe.specialEffect ? editingRecipe.recipe.specialEffect.name : "Bez efektu",
+                        ingredients: editingRecipe.ingredients.map(ingredient => ingredient.id)
+                    };
+
+                    if (editingRecipe.recipe.specialEffect) {
+                        newValues.specialEffectDuration = editingRecipe.recipe.specialEffect.duration
+                    }
+
+                    if (editingRecipe.recipe.extraHearts) {
+                        newValues.extraHearts = String(editingRecipe.recipe.extraHearts);
+                    }
+
+                    reset(newValues);
+                }
+
+                setIngredientDropdownItems(ingredientsData.map(ingredient => ({value: ingredient.id, label: ingredient.name})));
+                setSpecialEffectsDropdownItems(specialEffectsData.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name})));
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
         reset();
         document.body.classList.add("scroll-disabled");
+        fetchIngredientsAndRegions();
 
         return () => document.body.classList.remove("scroll-disabled");
     }, []);
 
-    function onSubmit(data: AddOrEditRecipeInfo) {
-        const currentID = getValues()?.id ?? 0;
+    async function onSubmit(data: AddOrEditRecipeInfo) {
         let editedData: any = data;
+        editedData.id = getValues()?.id ?? 0;
         editedData.numberOfHearts = Number(data.numberOfHearts);
         if (data.extraHearts != undefined) editedData.extraHearts = Number(data.extraHearts);
         editedData.price = Number(editedData.price);
@@ -69,11 +107,13 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit, regions, ingredi
             }
         }
 
-        if (edit) {
-           // editRecipe({id: currentID, ...editedData}, recipes, setRecipes)
-        } else {
-           // addReceipt({id: currentID, ...editedData}, recipes, setRecipes);
+        try {
+            await postData("recipe/create-or-edit", editedData);
+            hide();
+        } catch(e) {
+            alert(GENERAL_ERROR_MESSAGE);
         }
+
         hide();
     }
 
@@ -164,7 +204,7 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit, regions, ingredi
                 />
 
                 <Dropdown
-                    items={ingredients.map(ingredient => ({value: ingredient.id, label: ingredient.name}))}
+                    items={ingredientDropdownItems}
                     label="Ingredience"
                     control={control}
                     rules={{required: { message: "Vyberte alespoň jednu ingredienci", value: true }}}
@@ -173,7 +213,7 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit, regions, ingredi
                 />
 
                 <Dropdown
-                    items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffects.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name}))]}
+                    items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffectsDropdownItems]}
                     label="Speciální effekt"
                     control={control}
                     name="specialEffect"
@@ -194,7 +234,8 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit, regions, ingredi
                                 true,
                                 {
                                     negativeError: "Maximální doba trvání je 1800 minut",
-                                }
+                                },
+                                1
                             )
                         }}  
                     /> : <></>

@@ -5,6 +5,7 @@ const cors = require("cors");
 const ingredientRouter = require("./ingredient.js");
 const recipeRouter = require("./recipe.js");
 const locationRouter = require("./location.js");
+const specialEffectRouter = require("./specialEffects.js");
 
 //inicializace nového Express.js serveru
 const app = express();
@@ -18,18 +19,18 @@ app.use(express.urlencoded({ extended: true })); // podpora pro application/x-ww
 const corsOptions = {
   origin: 'http://localhost:5173',
 }
-app.use(cors())
+app.use(cors(corsOptions))
 
 app.use("/ingredient", ingredientRouter);
 app.use("/recipe", recipeRouter);
 app.use("/location", locationRouter);
-app.use("/special-effect", locationRouter);
+app.use("/special-effect", specialEffectRouter);
 
-app.get("/*", (req, res) => {
+app.get("/*", (_, res) => {
   res.send("Unknown path!");
 });
 
 //nastavení portu, na kterém má běžet HTTP server
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Listening at http://localhost:${port}`);
 });

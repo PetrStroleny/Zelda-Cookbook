@@ -7,7 +7,12 @@ import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import { getData } from "../network";
 import ErrorPage from "./error-page";
+import CardsLocation from "../components/cards-loading";
 
+export interface SpecialEffectBackend {
+    name: string
+    imgSrc: string
+}
 
 export interface SpecialEffect {
     name: string
@@ -27,31 +32,32 @@ const Ingredients = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
     const [ingredients, setIngredients] = useState<Ingredient[]>();
-    const {locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
-
-    const [activeIngredients, setAcitiveIngredients] = useState<Ingredient[]>([]);
+    const {locationQuery, searchQuery, specialEffectQuery, modalQuery, transitioning, setTransitioning} = useContext(GlobalContext);
 
     const [addModalActive, setAddModalActive] = useState(false);
 
     async function fetchIngedients() {
         try {
-            setLoading(true);
-            let filteredIngrediences = [];
+            if (!ingredients) {
+                setLoading(true);
+            } else {
+                setTransitioning(true);
+            }
 
-            const newIngrediences = await getData("ingredient");
-
+            const newIngrediences = await getData(`ingredient?special-effect=${encodeURIComponent(specialEffectQuery)}&search=${encodeURIComponent(searchQuery)}&location=${encodeURIComponent(locationQuery)}`);
             setIngredients(newIngrediences);
         } catch (e) {
             console.error(e);
             setErrored(true);
         } finally {
             setLoading(false);
+            setTransitioning(false);
         }
     }
 
     useEffect(() => {
         fetchIngedients();
-    }, [locationQuery, searchQuery, specialEffectQuery]);
+    }, [locationQuery, searchQuery, specialEffectQuery, modalQuery, addModalActive]);
     
     if (errored) {
         return <ErrorPage/>;
@@ -91,11 +97,15 @@ const Ingredients = () => {
                 }>
                 Ingredience
             </PageHeader>
-            <Cards 
-                items={activeIngredients} 
-                isIngredient={true} 
-                loading={loading}
-            />
+            {loading ?
+                <CardsLocation/>
+                :
+                <Cards 
+                    transition={transitioning}
+                    items={ingredients} 
+                    isIngredient={true} 
+                />
+            }
         </>
     );
 }

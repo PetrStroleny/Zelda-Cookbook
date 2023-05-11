@@ -4,10 +4,11 @@ import { Helmet } from "react-helmet";
 import AddOrEditLocation from "../components/add-or-edit-modals/add-or-edit-location";
 import Button, { ButtonVariant } from "../components/button";
 import { CardWrapper } from "../components/cards";
-import CardsLocation from "../components/cards-location";
+import CardsLocation from "../components/location-cards";
 import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
+import { getData } from "../network";
 
 export interface ZeldaLocation {
     id: number
@@ -24,37 +25,39 @@ export interface Region {
 
 const Locations = () => {
     const [errored, setErrored] = useState(false);
-    const {regions: locations, searchQuery} = useContext(GlobalContext);
-    const [activeLocations, setActiveLocations] = useState<Region[]>([]);
+    const {searchQuery, modalQuery, transitioning, setTransitioning} = useContext(GlobalContext);
+    const [regions, setRegions] = useState<Region[]>([]);
     const [addModalActive, setAddModalActive] = useState(false);
     const [loading, setLoading] = useState(false);
 
     async function fetchLocations() {
         try {
-            setLoading(true);
-            let filteredLocations = [];
-            for await (const location of locations) {
-                if (!location.name.toLowerCase().includes(searchQuery.toLowerCase())) continue;
-                filteredLocations.push(location);
+            if (!regions) {
+                setLoading(true);
+            } else {
+                setTransitioning(true);
             }
-            setActiveLocations(filteredLocations);
+
+            const newLocations = await getData(`location?search=${encodeURIComponent(searchQuery)}`);
+            setRegions(newLocations);
         } catch(e) {
             console.error(e);
             setErrored(true);
         } finally {
             setLoading(false);
+            setTransitioning(false);
         }
     }
 
     useEffect(() => {
         fetchLocations();
-    }, [locations]);
+    }, [searchQuery, addModalActive, modalQuery]);
 
     if (errored) {
         return <ErrorPage/>;
     }
 
-    if (locations.length == 0) {
+    if (!regions) {
         return (
             <>
                 <Helmet>
@@ -87,13 +90,9 @@ const Locations = () => {
             >
                 Lokace
             </PageHeader>
-            <CardsLocation regions={activeLocations} loading={loading}/>
+            <CardsLocation regions={regions} transitioning={transitioning}/>
         </>
     );
 }
-
-const StyledCardWrapper = styled(CardWrapper)`
-    grid-template-columns: repeat(auto-fill, minmax(316px, 1fr));
-`;
 
 export default Locations;

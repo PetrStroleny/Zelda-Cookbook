@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
-import { FC, useEffect } from "react";
+import { FC, useEffect, forwardRef } from "react";
 
 interface SearchInputProps {
     value: string
     onChange: (value: string) => void
+    ref: any
 }
 
 
@@ -36,18 +37,17 @@ export function getSearchValue(): string {
     return "";
 }
 
-const SearchInput: FC<SearchInputProps> = ({ value, onChange }) => (
-    <Wrapper 
+const SearchInput: FC<SearchInputProps> = forwardRef(({ value, onChange }, ref: any) => (
+    <StyledInput 
+        ref={ref}
         placeholder="Hledat"
         autoFocus
         value={value}
         onChange={(e) => onChange(e.target.value)}
-    >
+    />
+));
 
-    </Wrapper>
-);
-
-const Wrapper = styled("input")`
+const StyledInput = styled("input")`
     border: none;
     outline: none;
     background-color: ${p => p.theme.background.tertiary};

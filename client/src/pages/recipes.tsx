@@ -7,6 +7,8 @@ import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 import { Ingredient } from "./ingredients";
+import { getData } from "../network";
+import CardsLoading from "../components/cards-loading";
 
 export interface Recipe extends Ingredient {
     ingredients: number[]
@@ -16,56 +18,39 @@ const Recipes = () => {
     const [errored, setErrored] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const {recipes, regions, locationQuery, searchQuery, specialEffectQuery} = useContext(GlobalContext);
+    const {locationQuery, searchQuery, specialEffectQuery, modalQuery, setTransitioning, transitioning} = useContext(GlobalContext);
 
-    const [activeRecipes, setActiveRecipes] = useState<Recipe[]>([]);
+    const [recipes, setRecipes] = useState<Recipe[]>([]);
 
     const [addModalActive, setAddModalActive] = useState(false);
 
     async function fetchRecipes() {
         try {
-            setLoading(true);
-            let filteredIngrediences = [];
-
-            recipeLoop: for await (const recipe of recipes) {
-                if (!recipe.name.toLowerCase().includes(searchQuery.toLowerCase())) continue recipeLoop;
-                if (specialEffectQuery && recipe.specialEffect?.name != specialEffectQuery) continue recipeLoop;
-                if (regions) {
-                    firstLoop: for (const region of regions) {
-                        for (const location of region.locations) {
-                            if (location.name == locationQuery) {
-                                for (let i = 0; i < recipe.ingredients.length; i++) {
-                                        if (location.ingredients.includes(recipe.ingredients[i])) {
-                                            continue recipeLoop;;
-                                        }
-                                }
-                                break firstLoop;
-                            }
-                        }
-                    }
-                }
-
-                filteredIngrediences.push(recipe);
-            }
-            
-            setActiveRecipes(filteredIngrediences);
+            if (!recipes) {
+                setLoading(true);
+            } else {
+                setTransitioning(true);
+            }            
+            const newRecipes = await getData(`recipe?special-effect=${encodeURIComponent(specialEffectQuery)}&search=${encodeURIComponent(searchQuery)}&location=${encodeURIComponent(locationQuery)}`);
+            setRecipes(newRecipes);
         } catch (e) {
             console.error(e);
             setErrored(true);
         } finally {
             setLoading(false);
+            setTransitioning(false);
         }
     }
     
     useEffect(() => {
         fetchRecipes();
-    }, [locationQuery, searchQuery, recipes, specialEffectQuery]);
+    }, [locationQuery, searchQuery, specialEffectQuery, addModalActive, modalQuery]);
 
     if (errored) {
         return <ErrorPage/>;
     }
 
-    if (recipes.length == 0) {
+    if (!recipes) {
         return (
             <>
                 <Helmet>
@@ -99,12 +84,15 @@ const Recipes = () => {
             >
                 Recepty
             </PageHeader>
-            <Cards 
-                items={activeRecipes} 
-                isIngredient={false} 
-                loading={loading}
-                
-            />
+            {loading ?
+                <CardsLoading/>
+                :
+                <Cards 
+                    transition={transitioning}
+                    items={recipes} 
+                    isIngredient={false} 
+                />
+            }
         </>
     );
 }

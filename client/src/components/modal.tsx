@@ -1,14 +1,12 @@
 import styled from "@emotion/styled";
 import { FC, Fragment, useContext, useEffect, useState } from "react";
+import { deleteData } from "../network";
 import { GlobalContext } from "../utils/global-context";
 import Button, { ButtonVariant } from "./button";
-import { removeSpecialEffectFromName } from "./food-card";
-import { ZeldaLocation } from "../pages/locations";
-import { Ingredient } from "../pages/ingredients";
-import { deleteData, getData } from "../network";
-import { Recipe } from "../pages/recipes";
+import { formatDuration } from "./food-card";
+import { useModalActions } from "./modal-actions";
 
-interface LinkCard {
+export interface LinkCard {
   name: string
   modalQuery: string
   imgSrc: string
@@ -18,126 +16,20 @@ interface ModalProps {
   setEditModalActive: () => void
 }
 
-interface IngredientWithInfo {
-  ingredient: Ingredient
-  recipes: Recipe[]
-  locations: ZeldaLocation[]
-}
-
-interface ZeldaLocationWithInfo {
-  location: ZeldaLocation
-  ingredients: Ingredient[]
-}
-
-interface RecipeWithInfo {
-  recipe: Recipe
-  ingredients: Ingredient[]
-}
-
 
 const Modal: FC<ModalProps> = ({setEditModalActive}) => {
   const [active, setActive] = useState("");
   const {modalQuery, setModalQuery} = useContext(GlobalContext);
-  const [imgSrc, setImgSrc] = useState("");
-  const [label, setLabel] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState<number>();
-  const [onDeleteClick, setOnDeleteClick] = useState<() => void>(() => {});
-  const [linkCards, setLinkCards] = useState<{label: string, cards:LinkCard[]}[]>([{label: "", cards: []}]);
+
+  const {imgSrc, label, description, price, specialEffect, linkCards, deleteIngredient, deleteLocation, deleteRecipe} = useModalActions();
   
   useEffect(() => {
-    if (active) {
-        document.body.classList.add("scroll-disabled");
-    } else {
-        document.body.classList.remove("scroll-disabled");
-    }
-}, [active]);
-
-  useEffect(() => { async() => {
-      const activeID = modalQuery.split("-")[modalQuery.split("-").length - 2];
-
-      switch (modalQuery.split("-")[0]) {
-        case "ingredient": {
-          try {
-            const activeIngredient: IngredientWithInfo = await getData(`ingredient/${activeID}`);
-            const recipeIcon = removeSpecialEffectFromName(activeIngredient.ingredient.name, activeIngredient.ingredient.specialEffect != null);
-
-            setImgSrc(`public/ingredients/${recipeIcon}.png`);
-            setLabel(activeIngredient.ingredient.name);
-            setDescription(activeIngredient.ingredient.description);
-            setPrice(activeIngredient.ingredient.price);
-            setOnDeleteClick(() => {async() => await deleteData(`ingredient/${activeID}`)});
-            setLinkCards([
-              {
-                label: "Lokace", 
-                cards: activeIngredient.locations.map(
-                  location => ({
-                        name: location.name, 
-                        modalQuery: `location-${location.id}-1`, 
-                        imgSrc: `public/locations/${location.name.replaceAll(" ", "_")}.png`
-                      })
-                  )
-              },
-              {
-              label: "Možné recepty", 
-              cards: activeIngredient.recipes.map(
-                  recipe => ({
-                      name: recipe.name, 
-                      modalQuery: `recipe-${recipe.id}-1`, 
-                      imgSrc: `public/recipes/${removeSpecialEffectFromName(recipe.name, recipe.specialEffect != null)}.png`
-                    })
-                )
-            }]);
-          } catch(e) {
-
-          }
-
-          return;
-        }
-
-        case "location": {
-          const activeLocaiton: ZeldaLocationWithInfo = await getData(`ingredient/${activeID}`);
-
-          setImgSrc(`public/locations/${activeLocaiton.location.name.replaceAll(" ", "_")}.png`);
-          setLabel(activeLocaiton.location.name);
-          setDescription(activeLocaiton.location.description);
-          setPrice(undefined);
-          setOnDeleteClick(() => {async() => await deleteData(`location/${activeID}`)});
-          setLinkCards([{
-            label: "Ingredience", 
-            cards: activeLocaiton.ingredients.map(
-                ingredient => ({
-                    name: ingredient.name, 
-                    modalQuery: `ingredient-${ingredient.id}-1`, 
-                    imgSrc: `public/ingredients/${removeSpecialEffectFromName(ingredient.name, ingredient.specialEffect != null)}.png`
-                  })
-              )
-          }]);
-          return;
-        }
-
-        case "recipe": {
-          const activeRecipe: RecipeWithInfo = await getData(`recipe/${activeID}`);
-          const recipeIcon = removeSpecialEffectFromName(activeRecipe.recipe.name, activeRecipe.recipe.specialEffect != null);
-          setImgSrc(`public/recipes/${recipeIcon}.png`);
-          setLabel(activeRecipe.recipe.name);
-          setDescription(activeRecipe.recipe.description);
-          setOnDeleteClick(() => {async() => await deleteData(`recipe/${activeID}`)});
-          setPrice(activeRecipe.recipe.price);
-          setLinkCards([{
-            label: "Ingredience", 
-            cards: activeRecipe.ingredients.map(
-              ingredient => ({
-                  name: ingredient.name, 
-                  modalQuery: `ingredient-${ingredient.id}-1`, 
-                  imgSrc: `public/ingredients/${removeSpecialEffectFromName(ingredient.name, ingredient.specialEffect != null)}.png`
-                })
-            )
-          }]);
-        }
+      if (active) {
+          document.body.classList.add("scroll-disabled");
+      } else {
+          document.body.classList.remove("scroll-disabled");
       }
-    }
-  }, [modalQuery]);
+  }, [active]);
 
   useEffect(() => {
     if (modalQuery.length > 0) {
@@ -179,16 +71,24 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
                       <img src="public/icons/edit.svg"/>
                   </Button>
                   <Button 
-                      onClick={() => {
-                          async() => {
-                            try {
-                              await onDeleteClick();
-                            } catch (e) {
-                              console.error(e);
-                            }
+                      onClick={async () => {
+                        switch(modalQuery.split("-")[0]) {
+                          case "ingredient": {
+                            await deleteIngredient();
+                            return;
+                          }
+                  
+                          case "location": {
+                            await deleteLocation();
+                            return;
+                          }
+                  
+                          case "recipe": {
+                            await deleteRecipe();
+                            setModalQuery("");
                           }
                         }
-                      }
+                      }}
                       variant={ButtonVariant.RED} 
                       rounded
                     >
@@ -213,10 +113,17 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
                 <h5>
                   {label}
                 </h5>
-                  {price != undefined &&
+                  {(price != undefined || specialEffect != undefined) &&
                   <div>
-                    {price}
-                    <img src="public/icons/rupee.webp"/>
+                    {price != undefined && <>
+                      {price}
+                      <img src="public/icons/rupee.webp"/>
+                    </>}
+                    {specialEffect != undefined && <>
+                        <img style={{margin: "0px 10px"}} src={specialEffect.imgSrc}/>
+                        {formatDuration(specialEffect.duration)}
+                      </>
+                    }
                   </div>
                   }
               </Header>

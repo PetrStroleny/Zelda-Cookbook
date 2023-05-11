@@ -2,15 +2,15 @@
 import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { addIngredient, editIngredient } from "../../utils/adding-editing";
 import { validateIsNumber } from "../../utils/form";
 import { GlobalContext } from "../../utils/global-context";
 import AddOrEditModal from ".";
-import Dropdown from "../dropdown";
-import {Region} from "../../pages/locations";
-import {Ingredient, SpecialEffect} from "../../pages/ingredients";
+import Dropdown, { DropdownItem } from "../dropdown";
+import {Region, ZeldaLocation} from "../../pages/locations";
+import {Ingredient, SpecialEffect, SpecialEffectBackend} from "../../pages/ingredients";
 import Input from "../input";
 import TextArea from "../text-area";
+import { GENERAL_ERROR_MESSAGE, getData, postData } from "../../network";
 
 interface AddOrEditIngredientProps {
     hide: () => void
@@ -30,10 +30,11 @@ export interface AddOrEditIngredientInfo {
 }
 
 const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
-    const [locationDropdownItems, setLocationDropdownItems] = useState<Region[]>();
-    const [specialEffects, setSpecialEffects] = useState<Region[]>();
+    const [locationDropdownItems, setLocationDropdownItems] = useState<DropdownItem[]>([]);
+    const [specialEffectsDropdownItems, setSpecialEffectsDropdownItems] = useState<DropdownItem[]>([]);
+    const {modalQuery} = useContext(GlobalContext);
     
-    const { control, handleSubmit, reset, watch, getValues } = useForm<AddOrEditIngredientInfo>({defaultValues: { 
+    const { control, handleSubmit, reset, watch, getValues, setValue } = useForm<AddOrEditIngredientInfo>({defaultValues: { 
         locations: [],
         specialEffect: "Bez efektu",
     }});
@@ -44,20 +45,52 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
     const specialEffectValue = watch("specialEffect");
 
     useEffect(() => {
+        const fetchLocationsAndSpecialEffects = async () => {
+            try {
+                const regionsData: Region[] = await getData("location");
+                const specialEffectsData: SpecialEffectBackend[] = await getData("special-effect");
+                if (edit) {
+                    const activeID = modalQuery.split("-")[modalQuery.split("-").length - 2];
+                    const editingIngredient: {ingredient: Ingredient, locations: ZeldaLocation[]} = await getData(`ingredient/${activeID}`);
+
+                    let newValues: AddOrEditIngredientInfo = {
+                        id: Number(editingIngredient.ingredient.id),
+                        name: editingIngredient.ingredient.name,
+                        description: editingIngredient.ingredient.description,
+                        price: String(editingIngredient.ingredient.price),
+                        numberOfHearts: String(editingIngredient.ingredient.numberOfHearts),
+                        locations: editingIngredient.locations.map(location => location.id),
+                        specialEffect: editingIngredient.ingredient.specialEffect ? editingIngredient.ingredient.specialEffect.name : "Bez efektu",
+                    };
+
+                    if (editingIngredient.ingredient.specialEffect) {
+                        newValues.specialEffectDuration = editingIngredient.ingredient.specialEffect.duration
+                    }
+
+                    if (editingIngredient.ingredient.extraHearts) {
+                        newValues.extraHearts = String(editingIngredient.ingredient.extraHearts);
+                    }
+
+                    reset(newValues);
+                }
+
+                setLocationDropdownItems(regionsData.map(region => region.locations).flat(1).map(location => ({value: location.id, label: location.name})));
+                setSpecialEffectsDropdownItems(specialEffectsData.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name})));
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
         reset();
         document.body.classList.add("scroll-disabled");
-
-
-        if (edit) {
-
-        }
+        fetchLocationsAndSpecialEffects();
 
         return () => document.body.classList.remove("scroll-disabled");
     }, []);
 
-    function onSubmit(data: AddOrEditIngredientInfo) {
-        const currentID = getValues()?.id ?? 0;
+    async function onSubmit(data: AddOrEditIngredientInfo) {
         let editedData: any = data;
+        editedData.id = getValues()?.id ?? 0;
         editedData.numberOfHearts = Number(data.numberOfHearts);
 
         if (data.extraHearts != undefined && data.extraHearts.length != 0) {
@@ -76,14 +109,13 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                 duration: Number(data.specialEffectDuration)
             }
         }
-
-        if (edit) {
-            //editIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
-        } else {
-            //addIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
+        
+        try {
+            await postData("ingredient/create-or-edit", editedData);
+            hide();
+        } catch(e) {
+            alert(GENERAL_ERROR_MESSAGE);
         }
-
-        hide();
     }
 
     return (
@@ -181,7 +213,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                     name="locations"
                 />
                 <Dropdown
-                    items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffects.map(specialEffect => ({value: specialEffect.name, label: specialEffect.name}))]}
+                    items={[{value: "Bez efektu", label: "Bez efektu"}, ...specialEffectsDropdownItems]}
                     label="Speciální effekt"
                     control={control}
                     name="specialEffect"
@@ -202,7 +234,8 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                                 true,
                                 {
                                     negativeError: "Maximální doba trvání je 1800 minut",
-                                }
+                                },
+                                1
                             )
                         }}  
                     /> : <></>

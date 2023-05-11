@@ -4,7 +4,7 @@ import { Control, useController } from "react-hook-form";
 import ErrorMessage from "./error-message";
 import { InputLabel, InputUnderInformation } from "./input";
 
-interface DropdownItem {
+export interface DropdownItem {
     value: any
     label: string
 }

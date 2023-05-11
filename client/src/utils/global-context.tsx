@@ -43,14 +43,12 @@ export function getLocationValue(): string {
   return "";
 }
 
-export interface GlobalContextSpecialEffect {
-  name: string
-  imgSrc: string
-}
-
 export const GlobalContext = createContext<{
   searchQuery: string,
   setSearchQuery: (value: string) => void,
+
+  transitioning: boolean,
+  setTransitioning: (value: boolean) => void,
   
   modalQuery: string,
   setModalQuery: (value: string) => void,
@@ -63,6 +61,9 @@ export const GlobalContext = createContext<{
 }>({
   searchQuery: "",
   setSearchQuery: () => {},
+
+  transitioning: false,
+  setTransitioning: () => {},
 
   modalQuery: "",
   setModalQuery: () => {},
@@ -81,6 +82,7 @@ function useGlobalContext() {
   const [modalQuery, setModalQuery] = useState(getModalValue());
   const [ignoreModalQueryChange, setIgnoreModalQueryChange] = useState(false);
   const [ignoreQueryChange, setIgnoreQueryChange] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
 
   function handleLocationChange() {
     setIgnoreModalQueryChange(true);
@@ -101,7 +103,7 @@ function useGlobalContext() {
       setIgnoreModalQueryChange(false);
       return;
     }
-    window.history.pushState({}, "", `${window.location.pathname}${(locationQuery || searchQuery || specialEffectQuery || modalQuery) ? "?" : ""}${searchQuery ? `q=${encodeURI(searchQuery)}` : ""}${specialEffectQuery ? `special-effect=${encodeURI(specialEffectQuery)}` : ""}${locationQuery ? `location=${encodeURI(locationQuery)}` : ""}${modalQuery ? `modal=${encodeURI(modalQuery)}` : ""}`);
+    window.history.pushState({}, "", `${window.location.pathname}?q=${encodeURI(searchQuery)}&special-effect=${encodeURI(specialEffectQuery)}&location=${encodeURI(locationQuery)}&modal=${encodeURI(modalQuery)}`);
   }, [modalQuery])
 
   useEffect(() => {
@@ -109,11 +111,12 @@ function useGlobalContext() {
       setIgnoreQueryChange(false);
       return;
     }
-    window.history.replaceState({}, "", `${window.location.pathname}${(locationQuery || searchQuery || specialEffectQuery || modalQuery) ? "?" : ""}${searchQuery ? `q=${encodeURI(searchQuery)}` : ""}${specialEffectQuery ? `special-effect=${encodeURI(specialEffectQuery)}` : ""}${locationQuery ? `location=${encodeURI(locationQuery)}` : ""}${modalQuery ? `modal=${encodeURI(modalQuery)}` : ""}`);
+    window.history.replaceState({}, "", `?q=${encodeURI(searchQuery)}&special-effect=${encodeURI(specialEffectQuery)}&location=${encodeURI(locationQuery)}&modal=${encodeURI(modalQuery)}`);
   }, [searchQuery, locationQuery, location, specialEffectQuery]);
 
     return [{
       searchQuery, setSearchQuery,
+      transitioning, setTransitioning,
       locationQuery, setLocationQuery,
       modalQuery, setModalQuery,
       specialEffectQuery, setSpecialEffectQuery
