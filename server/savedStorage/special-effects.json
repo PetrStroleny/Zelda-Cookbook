@@ -1,0 +1,30 @@
+[
+    {
+        "name": "electro",
+        "imgSrc": "public/icons/electro.svg"
+    },
+    {
+        "name": "chilly",
+        "imgSrc": "public/icons/chilly.svg"
+    },
+    {
+        "name": "mighty",
+        "imgSrc": "public/icons/mighty.svg"
+    },
+    {
+        "name": "sneaky",
+        "imgSrc": "public/icons/sneaky.svg"
+    },
+    {
+        "name": "spicy",
+        "imgSrc": "public/icons/spicy.svg"
+    },
+    {
+        "name": "tough",
+        "imgSrc": "public/icons/tough.svg"
+    },
+    {
+        "name": "hasty",
+        "imgSrc": "public/icons/hasty.svg"
+    }
+]
