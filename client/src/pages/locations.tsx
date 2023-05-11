@@ -9,6 +9,7 @@ import PageHeader from "../components/page-header";
 import { GlobalContext } from "../utils/global-context";
 import ErrorPage from "./error-page";
 import { getData } from "../network";
+import LocationCardsLoading from "../components/location-cards-loading";
 
 export interface ZeldaLocation {
     id: number
@@ -28,7 +29,7 @@ const Locations = () => {
     const {searchQuery, modalQuery, transitioning, setTransitioning} = useContext(GlobalContext);
     const [regions, setRegions] = useState<Region[]>([]);
     const [addModalActive, setAddModalActive] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     async function fetchLocations() {
         try {
@@ -90,7 +91,11 @@ const Locations = () => {
             >
                 Lokace
             </PageHeader>
-            <CardsLocation regions={regions} transitioning={transitioning}/>
+            {loading ?
+                <LocationCardsLoading/>
+            :    
+                <CardsLocation regions={regions} transitioning={transitioning}/>
+        }
         </>
     );
 }

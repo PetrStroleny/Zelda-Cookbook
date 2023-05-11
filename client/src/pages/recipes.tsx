@@ -16,7 +16,7 @@ export interface Recipe extends Ingredient {
 
 const Recipes = () => {
     const [errored, setErrored] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const {locationQuery, searchQuery, specialEffectQuery, modalQuery, setTransitioning, transitioning} = useContext(GlobalContext);
 

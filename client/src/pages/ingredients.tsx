@@ -30,7 +30,7 @@ export interface Ingredient {
 
 const Ingredients = () => {
     const [errored, setErrored] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [ingredients, setIngredients] = useState<Ingredient[]>();
     const {locationQuery, searchQuery, specialEffectQuery, modalQuery, transitioning, setTransitioning} = useContext(GlobalContext);
 
