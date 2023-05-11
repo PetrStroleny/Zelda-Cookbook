@@ -3,7 +3,7 @@ import { FC, useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { addIngredient, editIngredient } from "../../utils/adding-editing";
-import { locationDropdownItems, validateIsNumber } from "../../utils/form";
+import { validateIsNumber } from "../../utils/form";
 import { GlobalContext } from "../../utils/global-context";
 import AddOrEditModal from ".";
 import Dropdown from "../dropdown";
@@ -28,12 +28,14 @@ export interface AddOrEditIngredientInfo {
 }
 
 const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}) => {
-    const {ingredients, setIngredients, setRegions: setLocations, regions: locations, specialEffects} = useContext(GlobalContext);
+    const {ingredients, setIngredients, setRegions, regions, specialEffects} = useContext(GlobalContext);
     
     const { control, handleSubmit, reset, watch } = useForm<AddOrEditIngredientInfo>({defaultValues: initialValues ?? { 
         locations: [],
         specialEffect: "Bez efektu",
     }});
+
+    const locationDropdownItems = regions.map(region => region.locations).flat(1).map(location => ({value: location.id, label: location.name}));
 
     const [customHeartsError, setCustomHeartsError] = useState("");
     const [customPriceError, setCustomPriceError] = useState("");
@@ -51,7 +53,12 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
         const currentID = initialValues?.id ?? ingredients[0].id + 1;
         let editedData: any = data;
         editedData.numberOfHearts = Number(data.numberOfHearts);
-        if (data.extraHearts != undefined) editedData.extraHearts = Number(data.extraHearts);
+
+        if (data.extraHearts != undefined && data.extraHearts.length != 0) {
+            editedData.extraHearts = Number(data.extraHearts);
+        } else {
+            delete editedData.extraHearts;
+        }
         editedData.price = Number(editedData.price);
         
         if (data.specialEffect == "Bez efektu") {
@@ -73,28 +80,28 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, initialValues}
             addIngredient({id: currentID, ...editedData}, ingredients, setIngredients);
         }
 
-        let currentLocation = locations;
+        let currentRegions = regions;
 
-        for (let i = 0; i < locations.length; i++) {
-            for (let x = 0; x < locations[i].locations.length; x++) {
-                if (newLocations.includes(locations[i].locations[x].id)) {
-                    let editingLocation = locations[i].locations[x];
+        for (let i = 0; i < regions.length; i++) {
+            for (let x = 0; x < regions[i].locations.length; x++) {
+                if (newLocations.includes(regions[i].locations[x].id)) {
+                    let editingLocation = regions[i].locations[x];
 
                     editingLocation.ingredients = [...editingLocation.ingredients, currentID];
 
-                    currentLocation[i].locations[x] = editingLocation;
+                    currentRegions[i].locations[x] = editingLocation;
                     continue;
-                } else if (removedLocations.includes(locations[i].locations[x].id)) {
-                    let editingLocation = locations[i].locations[x];
+                } else if (removedLocations.includes(regions[i].locations[x].id)) {
+                    let editingLocation = regions[i].locations[x];
 
                     editingLocation.ingredients = editingLocation.ingredients.filter(ingredient => ingredient != currentID);
 
-                    currentLocation[i].locations[x] = editingLocation;
+                    currentRegions[i].locations[x] = editingLocation;
                 }
             }
         }
 
-        setLocations(currentLocation);
+        setRegions(currentRegions);
         hide();
     }
 

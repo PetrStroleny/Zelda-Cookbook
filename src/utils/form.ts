@@ -72,6 +72,11 @@ export function locationInitialValues(activeID: number, regions: Region[]): AddO
 }
 
 export function validateIsNumber(value: string, setError: (value: string) => void, maxNumber: number, mustBeWhole?: boolean, errors?: ValidateNumberErrors): boolean {
+    if (value == undefined || value.length == 0) {
+        setError(""); 
+        return true;
+    }
+
     if(isNaN(Number(value))) {
         setError(errors?.baseError ?? "Zadejte číslo");
         return false;
@@ -100,15 +105,3 @@ export function validateIsNumber(value: string, setError: (value: string) => voi
     setError("");
     return true;
 }
-
-export const locationDropdownItems = [
-    {value: 9, label: "Akkala Highlands"},
-    {value: 8, label: "Deep Akkkala"},
-    {value: 7, label: "Lanayru Great Spring"},
-    {value: 6, label: "Lanayru Sea"},
-    {value: 5, label: "Lanayru Wetlands"},
-    {value: 4, label: "Mount Lanayru"},
-    {value: 3, label: "East Necluda"},
-    {value: 2, label: "West Necluda"},
-    {value: 1, label: "Necluda Sea"},
-];

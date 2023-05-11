@@ -188,7 +188,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
                   </Button>
                   <Button 
                       onClick={() => {
-                        if (onDeleteClick?.condition?.mustPass) {
+                        if (onDeleteClick?.condition?.mustPass != false) {
                           onDeleteClick?.setter(onDeleteClick.newValue); setModalQuery("")
                         } else {
                           alert(onDeleteClick?.condition?.erorrText);
