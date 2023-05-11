@@ -27,7 +27,7 @@ const Filters: FC<FoodFiltersQuery> = ({searchQuery, setSearchQuery, specialEffe
     useOpenAndClose(() => {setSearchActive(true); searchInputRef.current.focus()}, () => {setSearchActive(false); setSearchQuery("")});
     const [regions, setRegions] = useState<Region[]>([]);
     const [specialEffects, setSpecialEffects] = useState<{name: string, imgSrc: string}[]>([]);
-    const searchInputRef = useRef();
+    const searchInputRef = useRef<any>();
 
     const { debounced, clearDebounceTimeout } = debounce((value: string) => {setSearchQuery(value); setTransitioning(false)}, 300);
 
