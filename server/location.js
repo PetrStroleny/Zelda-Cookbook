@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const {returnJSONFromFile} = require("./fs-utils");
 const fs = require("fs");
+const {validate} = require("./validation");
+const { body } = require('express-validator');
 
 function locationCanBeDeleted(activeLocationID, regions) {
     const locations = regions.map(region => region.locations).flat(1);
@@ -40,7 +42,12 @@ router.delete("/delete/:id",  async (req, res) => {
     }
 });
 
-router.post("/create-or-edit",  async (req, res) => {
+router.post("/create-or-edit", 
+    validate([
+        body("name").isLength({min: 1, max: 150}),  
+        body("description").isLength({min: 1, max: 750}),  
+    ]),  
+    async (req, res) => {
     const jsonLocations = await returnJSONFromFile("locations", res);
 
     try {
@@ -55,12 +62,14 @@ router.post("/create-or-edit",  async (req, res) => {
         });
 
         let editedLocations = jsonLocations;
+        let editedLocationFound = false;
         if (editing) {
             let regionChangedIndex = -1;
 
             for (let i = 0; i < jsonLocations.length; i++) {
                 if (jsonLocations[i].locations.filter(location => location.id == jsonData.id).length > 0 && jsonLocations[i].name != jsonData.regionName) {
                     regionChangedIndex = i;
+                    editedLocationFound = true;
                 }
             }
 
@@ -68,8 +77,15 @@ router.post("/create-or-edit",  async (req, res) => {
                 editedLocations[regionChangedIndex].locations = editedLocations[regionChangedIndex].locations.filter(location => location.id != jsonData.id);
                 editedLocations[newRegionIndex].locations = [...editedLocations[newRegionIndex].locations, jsonData]
             } else {
-                editedLocations[newRegionIndex].locations = editedLocations[newRegionIndex].locations.map(location => location.id == jsonData.id ? jsonData : location);
+                editedLocations[newRegionIndex].locations = editedLocations[newRegionIndex].locations.map(location => {
+                    let locationIsEdited = location.id == jsonData.id;
+                    if (locationIsEdited) editedLocationFound = true;
+                    return locationIsEdited ? jsonData : location});
             }
+
+            if(!editedLocationFound) return res.status(404).send({
+                errorMessage: "Location not found",
+            });
 
         } else {
             let biggestLocationID = 1;

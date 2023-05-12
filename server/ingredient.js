@@ -3,6 +3,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const fs = require("fs");
 const {returnJSONFromFile} = require("./fs-utils");
+const {validate} = require("./validation");
 
 router.delete("/delete/:id",  async (req, res) => {
     const jsonIngredients = await returnJSONFromFile("ingredients", res);
@@ -29,12 +30,14 @@ router.delete("/delete/:id",  async (req, res) => {
 });
 
 router.post("/create-or-edit", 
+validate([
     body("name").isLength({min: 1, max: 150}),  
     body("description").isLength({min: 1, max: 750}),  
     body("specialEffectDuration").isInt({min: 1, max: 9999}).optional(),  
     body("extraHearts").isInt({min: 1, max: 999}).optional(),  
     body("numberOfHearts").isInt({min: 0.5, max: 999}),  
-    body("price").isInt({min: 0, max: 999}),
+    body("price").isInt({min: 0, max: 999})
+]),
     async (req, res) => {
     const jsonIngredients = await returnJSONFromFile("ingredients", res);
     const jsonLocations = await returnJSONFromFile("locations", res);
