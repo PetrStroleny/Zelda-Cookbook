@@ -47,7 +47,7 @@ const Modal: FC<ModalProps> = ({setEditModalActive}) => {
     }
 
     setActive("");
-  }, [modalQuery.length > 0])
+  }, [modalQuery])
 
   return (
        active ? <Wrapper onClick={() => setModalQuery("")}>

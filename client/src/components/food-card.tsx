@@ -8,9 +8,9 @@ interface FoodCardProps extends Ingredient {
 }
 
 export function removeSpecialEffectFromName(name: string, specialEffectNotNull: boolean, asSource = true) {
-    let replacedName = name.replaceAll(" ", "_");
+    let replacedName = asSource ? name.replaceAll(" ", "_") : name;
     if (specialEffectNotNull || name.includes("Hearty")) {
-        let splittedImageSource;
+        let splittedImageSource = replacedName.split("_");
         if (replacedName.includes("_")) {
             splittedImageSource = replacedName.split("_");
         } else {

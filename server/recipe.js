@@ -26,7 +26,7 @@ validate([
     body("description").isLength({min: 1, max: 750}),  
     body("specialEffectDuration").isInt({min: 1, max: 9999}).optional(),  
     body("extraHearts").isInt({min: 1, max: 999}).optional(),  
-    body("numberOfHearts").isInt({min: 0.5, max: 999}),  
+    body("numberOfHearts").isDecimal({min: 0.5, max: 999}),  
     body("price").isInt({min: 0, max: 999})
 ]),
   async (req, res) => {

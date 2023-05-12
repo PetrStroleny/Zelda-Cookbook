@@ -136,9 +136,7 @@ export function useModalActions() {
 
       async function deleteIngredient() {
         try {
-            console.log("dsadsa");
             await deleteData(`ingredient/delete/${activeID}`);
-            console.log("Laaaaa");
             setModalQuery("");
         } catch (e: any) {
             if (e.errorMessage) alert(e.errorMessage);

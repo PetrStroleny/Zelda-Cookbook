@@ -41,6 +41,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
     }});
 
     const [customHeartsError, setCustomHeartsError] = useState("");
+    const [customBonusHeartsError, setCustomBonusHeartsError] = useState("");
     const [customPriceError, setCustomPriceError] = useState("");
     const [customDurationError, setCustomDurationError] = useState("");
     const specialEffectValue = watch("specialEffect");
@@ -160,7 +161,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                             999,
                             false,
                             {
-                                negativeError: "Cena ingredience musí být menší nežli 999",
+                                negativeError: "Cena ingredience musí být menší než-li 999",
                             }
                         )
                     }}  
@@ -180,7 +181,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                             999,
                             false,
                             {
-                                negativeError: "Počet srdíček musí být větší nežli 0",
+                                negativeError: "Počet srdíček musí být větší než-li 0",
                             }
                         )
                     }}  
@@ -191,15 +192,15 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
                     control={control}
                     name="extraHearts"
                     maxLength={3}
-                    customError={customHeartsError}
+                    customError={customBonusHeartsError}
                     rules={{ 
                         validate: (value: string) => validateIsNumber(
                             value, 
-                            setCustomHeartsError, 
+                            setCustomBonusHeartsError, 
                             999,
                             false,
                             {
-                                negativeError: "Počet bonusových srdíček musí být větší nežli 0",
+                                negativeError: "Počet bonusových srdíček musí být větší než-li 0",
                             }
                         )
                     }}  

@@ -84,17 +84,20 @@ export function validateIsNumber(value: string, setError: (value: string) => voi
     }
 
     if(Number(value) > maxNumber) {
-        setError(errors?.maxValueError ?? `Číslo nesmí být větší nežli ${maxNumber}`);
+        setError(errors?.maxValueError ?? `Číslo nesmí být větší než-li ${maxNumber}`);
         return false;
     }
 
     if(Number(value) < 0) {
-        setError(errors?.negativeError ?? "Číslo nesmí být menší nežli 0");
+        setError(errors?.negativeError ?? "Číslo nesmí být menší než-li 0");
         return false;
     }
 
     if(minNumber && Number(value) < minNumber) {
-        setError(errors?.minValueError ?? `Číslo nesmí být menší nežli ${minNumber}`);
+        console.log("dsadasdsa");
+        console.log("minNumber");
+        console.log(errors?.minValueError ?? `Číslo nesmí být menší než-li ${minNumber}`)
+        setError(errors?.minValueError ?? `Číslo nesmí být menší než-li ${minNumber}`);
         return false;
     }
 
