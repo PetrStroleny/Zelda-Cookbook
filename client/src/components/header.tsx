@@ -4,12 +4,15 @@ import { Link, useRoute } from "wouter";
 import { Theme } from "../style-variables";
 import Button from "./button";
 import { useOpenAndClose } from "./search-input";
+import { useContext  } from "react";
+import { GlobalContext } from "../utils/global-context";
 
 const Header = () => {
 
     const [homeActive] = useRoute("/");
     const [recipesActive] = useRoute("/recepty");
     const [locationsActive] = useRoute("/lokace");
+    const {setSearchQuery, setSpecialEffectQuery, setModalQuery, setLocationQuery} = useContext(GlobalContext);
 
     const [mobileMenuActive, setMobileMenuActive] = useState(false);
 
@@ -17,7 +20,7 @@ const Header = () => {
 
     return(
         <Wrapper>
-            <Link className="active" href="/">
+            <Link className="active" onClick={() => {setModalQuery(""); setLocationQuery(""); setSearchQuery(""); setSpecialEffectQuery("")}} href="/">
                 Zelda Cookbook
             </Link>
                 <Button 
