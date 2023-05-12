@@ -48,7 +48,16 @@ validate([
         let newIngredients = jsonIngredients;
 
         if (editing) {
-            newIngredients = newIngredients.map(ingredient => ingredient.id == jsonData.id ? jsonData : ingredient);
+            let editedIngredientFound = false;
+            newIngredients = newIngredients.map(ingredient => {
+
+                let isEditingIngredient = ingredient.id == jsonData.id;
+                if (isEditingIngredient) editedIngredientFound = true;
+                return isEditingIngredient ? jsonData : ingredient
+            });
+            if (!editedIngredientFound) res.status(404).send({
+                errorMessage: "Ingredient not found",
+            });
         } else {
             newIngredients = [{...jsonData, id: jsonIngredients[0].id + 1}, ...newIngredients];
         }

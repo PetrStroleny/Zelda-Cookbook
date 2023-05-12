@@ -38,7 +38,16 @@ validate([
         let newRecipes = jsonRecipes;
 
         if (editing) {
-            newRecipes = newRecipes.map(recipe => recipe.id == jsonData.id ? jsonData : recipe);
+            let editedRecipeFound = false;
+            newRecipes = newRecipes.map(recipe => {
+                const isEditingRecipe = recipe.id == jsonData.id;
+                if (isEditingRecipe) editedRecipeFound = true;
+                return isEditingRecipe ? jsonData : recipe
+            });
+
+            if (!editedRecipeFound) res.status(404).send({
+                errorMessage: "Recipe not found",
+            });
         } else {
             newRecipes = [{...jsonData, id: jsonRecipes[0].id + 1}, ...newRecipes];
         }

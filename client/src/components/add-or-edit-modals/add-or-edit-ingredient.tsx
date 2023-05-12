@@ -11,6 +11,7 @@ import {Ingredient, SpecialEffect, SpecialEffectBackend} from "../../pages/ingre
 import Input from "../input";
 import TextArea from "../text-area";
 import { GENERAL_ERROR_MESSAGE, getData, postData } from "../../network";
+import { removeSpecialEffectFromName } from "../food-card";
 
 interface AddOrEditIngredientProps {
     hide: () => void
@@ -55,7 +56,7 @@ const AddOrEditIngredient: FC<AddOrEditIngredientProps> = ({hide, edit}) => {
 
                     let newValues: AddOrEditIngredientInfo = {
                         id: Number(editingIngredient.ingredient.id),
-                        name: editingIngredient.ingredient.name,
+                        name: removeSpecialEffectFromName(editingIngredient.ingredient.name, editingIngredient.ingredient.specialEffect != null, false),
                         description: editingIngredient.ingredient.description,
                         price: String(editingIngredient.ingredient.price),
                         numberOfHearts: String(editingIngredient.ingredient.numberOfHearts),
