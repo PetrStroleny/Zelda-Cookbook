@@ -11,6 +11,7 @@ import { GlobalContext } from "../../utils/global-context";
 import Dropdown, { DropdownItem } from "../dropdown";
 import Input from "../input";
 import TextArea from "../text-area";
+import { removeSpecialEffectFromName } from "../food-card";
 
 interface AddOrEditRecipeProps {
     hide: () => void
@@ -56,7 +57,7 @@ const AddOrEditRecipe: FC<AddOrEditRecipeProps> = ({hide, edit}) => {
 
                     let newValues: AddOrEditRecipeInfo = {
                         id: Number(editingRecipe.recipe.id),
-                        name: editingRecipe.recipe.name,
+                        name: removeSpecialEffectFromName(editingRecipe.recipe.name, editingRecipe.recipe.specialEffect != null, false),
                         description: editingRecipe.recipe.description,
                         price: String(editingRecipe.recipe.price),
                         numberOfHearts: String(editingRecipe.recipe.numberOfHearts),

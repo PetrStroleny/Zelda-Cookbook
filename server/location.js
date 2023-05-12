@@ -62,8 +62,9 @@ router.post("/create-or-edit",
         });
 
         let editedLocations = jsonLocations;
-        let editedLocationFound = false;
+        
         if (editing) {
+            let editedLocationFound = false;
             let regionChangedIndex = -1;
 
             for (let i = 0; i < jsonLocations.length; i++) {
